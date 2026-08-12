@@ -155,6 +155,8 @@ const EXCLUDED: &[u8] = b"ILOU";
 /// under test would move with it.
 const TWITTER_EPOCH_MS: i64 = 1_288_834_974_657;
 const DISCORD_EPOCH_MS: i64 = 1_420_070_400_000;
+/// 22 bits of worker id and sequence sit below the timestamp.
+const TIMESTAMP_SHIFT: u32 = 22;
 
 fn run_of(seeded: &mut Seeded, alphabet: &[u8], length: usize) -> String {
     (0..length).map(|_| seeded.pick(alphabet)).collect()
@@ -348,7 +350,8 @@ fn snowflake_case(seeded: &mut Seeded, index: usize) -> Case {
     if both_epochs_fit {
         let discord_ms = seeded.between(1_577_836_800_000, 1_767_225_600_000);
         let shifted = discord_ms - DISCORD_EPOCH_MS;
-        let value = (u64::try_from(shifted).unwrap_or(0) << 22) | (seeded.next() % (1 << 22));
+        let value =
+            (u64::try_from(shifted).unwrap_or(0) << TIMESTAMP_SHIFT) | (seeded.next() % (1 << 22));
         return Case {
             key: format!("k{index}_user_id"),
             token: value.to_string(),
@@ -783,26 +786,70 @@ fn every_candidate_length_is_survivable() {
 
 /// The two epochs, restated: a Snowflake sitting where only one of them
 /// gives a plausible instant **is** named, and the row says which
-/// instant. Pinned so that the refusal above reads as a decision rather
-/// than an inability.
+/// instant. So the refusal above reads as a decision rather than an
+/// inability.
+///
+/// **The token is built from the clock, and that is the point rather than
+/// a compromise.** Discord's epoch is 4.16 years after Twitter's and the
+/// plausibility window ends a year past now, so the band where exactly
+/// one epoch fits is 4.16 years wide and slides with the calendar. A
+/// pinned token sits in it only for a while: the one that used to be here
+/// decoded to 2025 under Twitter and 2029 under Discord, and would have
+/// started failing in March 2028 when the window's upper edge reached the
+/// second of those. A test with a shelf life is a test that will one day
+/// be deleted by whoever is unlucky enough to be on shift.
+///
+/// Built from `now`, Twitter's decode is this instant and Discord's is
+/// four years out, whenever this runs.
+///
+/// The assertion is not a literal timestamp — there is none to write —
+/// but something stronger: the same integer under a key that names
+/// Twitter outright must decode identically. If the unkeyed row had
+/// picked Discord's epoch, the two would differ by 4.16 years.
 #[test]
 fn a_snowflake_only_one_epoch_can_explain_is_named() {
-    // Twitter's epoch puts this in 2025; Discord's puts it four years
-    // later, past the end of the window.
-    let shifted = 1_735_689_600_000 - TWITTER_EPOCH_MS;
-    let value = u64::try_from(shifted).expect("a positive offset") << 22;
-    let cases = vec![Case {
-        key: "session_id".to_string(),
-        token: value.to_string(),
-        expect: Expect::Named("snowflake"),
-        family: "one epoch fits",
-    }];
+    let now = i64::try_from(
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .expect("a clock after 1970")
+            .as_millis(),
+    )
+    .expect("an instant that fits i64");
+    let shifted = u64::try_from(now - TWITTER_EPOCH_MS).expect("a clock after 2010");
+    let token = (shifted << TIMESTAMP_SHIFT).to_string();
+    assert!(
+        (17..=19).contains(&token.len()),
+        "the generated snowflake left the router's window: {token}"
+    );
+
+    let cases = vec![
+        Case {
+            key: "session_id".to_string(),
+            token: token.clone(),
+            expect: Expect::Named("snowflake"),
+            family: "one epoch fits",
+        },
+        Case {
+            key: "tweet_id".to_string(),
+            token,
+            expect: Expect::Named("snowflake"),
+            family: "twitter named outright",
+        },
+    ];
 
     let label = "one epoch fits";
     let rows = scan(label, &cases);
     check_batch(label, &cases, &rows);
+
+    let decoded = |key: &str| {
+        rows.iter()
+            .find(|row| row["key"] == key)
+            .unwrap_or_else(|| panic!("no row under {key}"))["timestamp"]
+            .clone()
+    };
     assert_eq!(
-        rows[0]["timestamp"], "2025-01-01T00:00:00.000Z",
-        "the named epoch is the one that fits"
+        decoded("session_id"),
+        decoded("tweet_id"),
+        "the epoch the clock chose is not the one that fits"
     );
 }
