@@ -274,3 +274,18 @@ jobs:
           set -o pipefail
           cargo test --locked --test coverage_matrix -- --nocapture | tee matrix.log
           grep -q 'coverage-matrix: complete' matrix.log
+
+  # A gated tier is a tier that does not run. `versions-le` shipped a
+  # scenarios suite that had never been executed once — it asserted a shape
+  # the code stopped producing — because nothing ever set its variable.
+  scenarios:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772 # master
+        with:
+          toolchain: stable
+      - name: The gated scenario tier
+        env:
+          IDS_LE_SCENARIOS: "1"
+        run: cargo test --test scenarios -- --test-threads=1
