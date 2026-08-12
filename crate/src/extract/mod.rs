@@ -77,8 +77,7 @@ pub(crate) struct Found {
 
 /// Every identifier and every refusal in a document, in document order.
 pub(crate) fn extract(text: &str, format: &str, options: Options) -> Vec<Found> {
-    let reader = format::canonical(format);
-    let spans = locate::key_spans(text, reader);
+    let spans = locate::key_spans(text, format::canonical(format));
     let index = PositionIndex::new(text);
 
     candidate::candidates(text)

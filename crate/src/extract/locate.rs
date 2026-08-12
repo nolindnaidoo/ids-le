@@ -21,6 +21,7 @@
 //! states its limits in its own module, and none of them reconstructs a
 //! document — they read as far as a line goes, and stop.
 
+use super::format::Reader;
 use super::{csv, dotenv, ini, json, toml, yaml};
 
 /// One value region, and the key path that names it.
@@ -41,15 +42,17 @@ pub(crate) struct KeySpan {
 /// rather than a missing feature: a `.md` file has no keys, so its
 /// findings carry no key and — by the rule in `snowflake.rs` — a bare
 /// integer in one is never an identifier.
-pub(crate) fn key_spans(text: &str, format: &str) -> Vec<KeySpan> {
-    match format {
-        "json" => json::key_spans(text),
-        "yaml" => yaml::key_spans(text),
-        "toml" => toml::key_spans(text),
-        "ini" => ini::key_spans(text),
-        "env" => dotenv::key_spans(text),
-        "csv" => csv::key_spans(text),
-        _ => Vec::new(),
+pub(crate) fn key_spans(text: &str, reader: Reader) -> Vec<KeySpan> {
+    match reader {
+        Reader::Json => json::key_spans(text),
+        Reader::Yaml => yaml::key_spans(text),
+        Reader::Toml => toml::key_spans(text),
+        Reader::Ini => ini::key_spans(text),
+        Reader::Dotenv => dotenv::key_spans(text),
+        Reader::Csv => csv::key_spans(text),
+        // Exhaustive on purpose: a reader added to `format.rs` does not
+        // compile until it says what it does here.
+        Reader::Text => Vec::new(),
     }
 }
 
@@ -189,10 +192,12 @@ mod tests {
         assert_eq!(key_at(&[], 0), None);
     }
 
+    /// A plain-text document has no keys. There is no longer a case
+    /// for "a format nobody recognised" — that resolves to `Text` in
+    /// `format.rs` and cannot reach here as anything else.
     #[test]
-    fn a_document_of_an_unreadable_format_has_no_spans() {
-        assert!(key_spans("id = 1\n", "text").is_empty());
-        assert!(key_spans("id = 1\n", "nonsense").is_empty());
+    fn a_plain_text_document_has_no_spans() {
+        assert!(key_spans("id = 1\n", Reader::Text).is_empty());
     }
 
     #[test]

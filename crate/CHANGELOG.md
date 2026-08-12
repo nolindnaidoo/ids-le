@@ -9,6 +9,15 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- **Which reader a document gets is a type, not a string.** `key_spans`
+  dispatched on `&str` with a `_ => Vec::new()` catch-all, so a reader
+  added to `format.rs` and not wired up in `locate.rs` would have
+  silently cost every key path in that format — and a key path is
+  evidence, so it would have cost verdicts too. Three tests noticed that
+  class of drift between them; `Reader` makes it two compile errors. No
+  name on the wire moves: `Reader::name` is the single place a reader is
+  spelled, and `FALLBACK_FORMAT` is defined from it.
+
 - **Every kind reads the same part of the key path to decide what a field
   is.** ULID and NanoID asked whether the *whole* path mentioned their
   scheme, while ObjectId and Snowflake asked whether the *leaf* did — so

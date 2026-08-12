@@ -14,26 +14,65 @@
 //! identifier quoted or bare — so no format here can change which
 //! findings exist, only how they are addressed.
 
-/// Every name a caller might send, mapped to the reader key it means.
+/// Which key-path reader a document gets.
+///
+/// **A type, not the reader's name as a string.** `locate::key_spans`
+/// dispatched on `&str` with a `_ => Vec::new()` catch-all, so a reader
+/// added to this file and not wired up over there would have cost every
+/// key path in that format and failed no build — and a key path is
+/// evidence, so it would have cost verdicts too. Three tests caught that
+/// drift between them; a variant that does not compile is better than
+/// three tests that notice.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) enum Reader {
+    Json,
+    Yaml,
+    Toml,
+    Ini,
+    Dotenv,
+    Csv,
+    /// No keys at all. The honest answer for a `.md` or a `.rs`, not a
+    /// degraded mode — see `FALLBACK_FORMAT`.
+    Text,
+}
+
+impl Reader {
+    /// The name this reader goes by on the wire, in `--format` and in the
+    /// tool schema. One place, so the report and the flag cannot
+    /// disagree.
+    pub(crate) const fn name(self) -> &'static str {
+        match self {
+            Self::Json => "json",
+            Self::Yaml => "yaml",
+            Self::Toml => "toml",
+            Self::Ini => "ini",
+            Self::Dotenv => "env",
+            Self::Csv => "csv",
+            Self::Text => "text",
+        }
+    }
+}
+
+/// Every name a caller might send, mapped to the reader it means.
 ///
 /// Both a VS Code `languageId` and a file extension appear here, because
 /// an editor resolves by the first and this crate by the second.
-const ALIASES: [(&str, &str); 15] = [
-    ("json", "json"),
-    ("jsonc", "json"),
-    ("yaml", "yaml"),
-    ("yml", "yaml"),
-    ("csv", "csv"),
-    ("tsv", "csv"),
-    ("toml", "toml"),
-    ("ini", "ini"),
-    ("cfg", "ini"),
-    ("conf", "ini"),
-    ("properties", "ini"),
-    ("env", "env"),
-    ("dotenv", "env"),
-    ("text", "text"),
-    ("txt", "text"),
+const ALIASES: [(&str, Reader); 15] = [
+    ("json", Reader::Json),
+    ("jsonc", Reader::Json),
+    ("yaml", Reader::Yaml),
+    ("yml", Reader::Yaml),
+    ("csv", Reader::Csv),
+    ("tsv", Reader::Csv),
+    ("toml", Reader::Toml),
+    ("ini", Reader::Ini),
+    ("cfg", Reader::Ini),
+    ("conf", Reader::Ini),
+    ("properties", Reader::Ini),
+    ("env", Reader::Dotenv),
+    ("dotenv", Reader::Dotenv),
+    ("text", Reader::Text),
+    ("txt", Reader::Text),
 ];
 
 /// The formats a caller can name, for the tool schema's enum. Held equal
@@ -50,7 +89,7 @@ pub(crate) const SUPPORTED_FORMATS: [&str; 7] =
 /// Naming it `unknown` would tell a reader the document was not
 /// understood, when what actually happened is that it had no keys to
 /// report.
-pub(crate) const FALLBACK_FORMAT: &str = "text";
+pub(crate) const FALLBACK_FORMAT: &str = Reader::Text.name();
 
 /// Case folded last, so the whole thing is one allocation: no lowercase
 /// mapping produces or consumes a leading `.`, which is the only
@@ -59,39 +98,43 @@ fn normalise(value: &str) -> String {
     value.trim().trim_start_matches('.').to_lowercase()
 }
 
-/// The reader key for an already-canonical format name, or the fallback.
+/// The reader for an already-canonical format name, or the fallback.
 /// Used on the hot path, where the caller has resolved once.
-pub(crate) fn canonical(format: &str) -> &'static str {
+pub(crate) fn canonical(format: &str) -> Reader {
     ALIASES
         .iter()
         .find(|(alias, _)| *alias == format)
-        .map_or(FALLBACK_FORMAT, |(_, key)| *key)
+        .map_or(Reader::Text, |(_, reader)| *reader)
 }
 
 /// Resolve a reader key from an explicit format, else from a filename,
 /// else the fallback.
 pub(crate) fn resolve_format(format: Option<&str>, filename: Option<&str>) -> &'static str {
+    resolve_reader(format, filename).name()
+}
+
+fn resolve_reader(format: Option<&str>, filename: Option<&str>) -> Reader {
     if let Some(name) = format {
         let direct = canonical(&normalise(name));
-        if direct != FALLBACK_FORMAT {
+        if direct != Reader::Text {
             return direct;
         }
     }
 
     let Some(filename) = filename else {
-        return FALLBACK_FORMAT;
+        return Reader::Text;
     };
 
     // A dotfile like `.env` has no extension to split on; its whole name
     // is the type.
     let whole = canonical(&normalise(filename));
-    if whole != FALLBACK_FORMAT {
+    if whole != Reader::Text {
         return whole;
     }
 
     filename
         .rsplit_once('.')
-        .map_or(FALLBACK_FORMAT, |(_, extension)| {
+        .map_or(Reader::Text, |(_, extension)| {
             canonical(&normalise(extension))
         })
 }
@@ -163,15 +206,51 @@ mod tests {
     fn the_offered_list_matches_the_alias_table() {
         for format in SUPPORTED_FORMATS {
             assert!(
-                ALIASES.iter().any(|(_, key)| *key == format),
+                ALIASES.iter().any(|(_, reader)| reader.name() == format),
                 "{format} is offered but no alias produces it"
             );
         }
-        for (_, key) in ALIASES {
+        for (_, reader) in ALIASES {
             assert!(
-                SUPPORTED_FORMATS.contains(&key),
-                "{key} is produced but not offered"
+                SUPPORTED_FORMATS.contains(&reader.name()),
+                "{} is produced but not offered",
+                reader.name()
             );
+        }
+    }
+
+    /// **Every reader is offered, and every offered name resolves back to
+    /// it.** The match is exhaustive on purpose: a new variant does not
+    /// compile until it is named here, does not pass until
+    /// `SUPPORTED_FORMATS` offers it, and does not compile at all until
+    /// `locate::key_spans` says what it does. That chain is what replaced
+    /// a `_ => Vec::new()` nobody would have noticed going quiet.
+    #[test]
+    fn every_reader_is_offered_and_resolves_back_to_itself() {
+        for reader in [
+            Reader::Json,
+            Reader::Yaml,
+            Reader::Toml,
+            Reader::Ini,
+            Reader::Dotenv,
+            Reader::Csv,
+            Reader::Text,
+        ] {
+            let name = match reader {
+                Reader::Json => "json",
+                Reader::Yaml => "yaml",
+                Reader::Toml => "toml",
+                Reader::Ini => "ini",
+                Reader::Dotenv => "env",
+                Reader::Csv => "csv",
+                Reader::Text => "text",
+            };
+            assert_eq!(reader.name(), name);
+            assert!(
+                SUPPORTED_FORMATS.contains(&name),
+                "{name} is a reader and is not offered"
+            );
+            assert_eq!(canonical(name), reader, "{name} does not resolve to itself");
         }
     }
 }
