@@ -40,7 +40,8 @@ crate/src/
 ├── scan.rs      one file end to end — the only path either surface
 │                calls, and the only place the wall clock is read
 ├── cli.rs       the terminal surface
-└── mcp/         the agent surface
+└── mcp/         the agent surface: mod.rs is the transport and the
+                 envelope, and each tool is a module beside it
 ```
 
 Inside `extract/`:
@@ -51,10 +52,10 @@ Inside `extract/`:
 | `policy.rs` | `Kind`, `Reason`, `Verdict`, the `Clock`, and the length router that sends a candidate to its kind. |
 | `uuid.rs` `ulid.rs` `nanoid.rs` `objectid.rs` `snowflake.rs` | One scheme each: its structure, its decode, its refusals. |
 | `time.rs` | Epoch milliseconds → ISO-8601 UTC. Hand-written civil-date arithmetic. |
-| `locate.rs` | `KeySpan`, the offset → key-path lookup, and the shared line iterator. |
+| `locate.rs` | `KeySpan`, the offset → key-path lookup, the shared line iterator, and `value_length` — where a value ends on a line that may carry a comment. |
 | `json.rs` `yaml.rs` `toml.rs` `ini.rs` `dotenv.rs` `csv.rs` | Key paths only. Which byte ranges are values, and what names them. |
 | `position.rs` | Byte offset → line/UTF-16 column, over a checkpoint index. The checkpoints are what keep a minified line linear; see the note there. |
-| `format.rs` | Which key-path reader a document gets. |
+| `format.rs` | `Reader`, and which one a document gets. The alias table and the wire name live here; `Reader::name` is the only place a format is spelled. |
 | `corpus.rs` | `#[cfg(test)]`. The pinned fixtures. |
 
 - **`extract/` touches no filesystem and reads no clock.** Both would
@@ -92,7 +93,17 @@ Inside `extract/`:
 - **The key path is evidence, not decoration.** Four kinds ask it whether
   a run is what its shape suggests. A reader that mislabels a value can
   turn a refusal into a finding, which is why each one states its limits
-  in its own module doc.
+  in its own module doc — and why a trailing comment is not part of a
+  value. `locate::value_length` is that rule, written once, quote-aware,
+  and every reader with comment characters passes its own.
+- **The leaf of the key path is the field's own name, and that is what
+  decides what a field *is*.** `policy::names_an_id` for the two
+  structureless kinds, `policy::names_scheme` for the three a key can name
+  outright. The whole path is read in exactly one place —
+  `policy::key_mentions`, choosing a Snowflake's platform epoch — because
+  which platform minted an identifier is a fact about the structure it
+  hangs off. Anything else reading the whole path is a bug; ULID and
+  NanoID once did, and named `ulids.count` a ULID.
 - **A run with no structure to check is named only where the document
   names the field an identifier.** Snowflake and ObjectId are the two:
   a large integer and 24 hex digits, neither carrying a version, a
@@ -174,6 +185,13 @@ of it and not the rest, so it is written down rather than assumed.
   definitions of the same question drift, and the drift shows up as one
   caller answering what the other refused — which is exactly how each of
   those four was found.
+- **A set the code branches on is a type, not a string.** `Reader`,
+  `Kind`, `Reason`, `Variant`, `Severity`, `Code`. Every match over one is
+  exhaustive with no catch-all, so a variant that arrives without a
+  handler is a compile error rather than a quiet default — a
+  `_ => Vec::new()` on the reader key, and an `"error"` severity nothing
+  emitted, are both in the changelog. A single-variant enum is fine and
+  carries the argument for being one on the type.
 - **A kind that legitimately differs says so where the difference is.**
   `key_mentions` reads the whole key path and exists for one caller:
   choosing a Snowflake's platform epoch, because which platform minted an

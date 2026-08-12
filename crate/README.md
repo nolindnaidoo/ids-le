@@ -9,8 +9,9 @@ key path — whether it is valid, and, where the identifier embeds a
 timestamp, that timestamp as an ISO-8601 UTC string.
 
 That last part is the point. Six of these carry a clock — UUID v1, v6 and
-v7, ULID, ObjectId, Snowflake — in six unrelated bit layouts, over three
-different epochs, one of which starts in 1582. Reading them uniformly is
+v7, ULID, ObjectId, Snowflake — in six unrelated bit layouts, over four
+different epochs: the Gregorian reform of 1582, the Unix epoch, and the
+two a Snowflake might have been minted against. Reading them uniformly is
 work nobody wants to do twice.
 
 ```console
