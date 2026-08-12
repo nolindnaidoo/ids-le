@@ -255,7 +255,7 @@ fixture was supposed to provide, and a panic is the failure report.
 - **The corpus is the composition test.** `fixtures/extraction.json` pins
   whole documents through every reader; `ambiguous.json` pins twelve runs
   that must all be refused, with each reason asserted; `timestamps.json`
-  pins six decodes across four schemes. A change that keeps every unit
+  pins seven decodes across four schemes. A change that keeps every unit
   test true and still moves the report fails here.
 - **The corpus runs against a pinned clock** (`CORPUS_CLOCK`,
   2026-08-12), because the plausibility window ends a year past now and a

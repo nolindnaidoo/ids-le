@@ -11,10 +11,13 @@
 //!   refuses, and the corpus asserts the *reason* for each. A change
 //!   that starts naming one of them is a change from "refuses rather
 //!   than guesses" to "guesses", and it cannot happen quietly.
-//! - `timestamps.json` pins six decodes across four schemes and three
-//!   completely different bit layouts. The values were computed outside
-//!   this implementation; three of them are RFC 9562's own examples,
-//!   which the RFC states name one instant.
+//! - `timestamps.json` pins seven decodes across four schemes and six
+//!   unrelated bit layouts — the v1 and v6 orderings of a Gregorian
+//!   tick count, v7's 48 Unix milliseconds, a ULID's base32 48, an
+//!   ObjectId's 32 seconds, and a Snowflake's top 42 over each of two
+//!   epochs. The values were computed outside this implementation;
+//!   three of them are RFC 9562's own examples, which the RFC states
+//!   name one instant.
 //!
 //! Unlike the sibling crates there is no editor extension on the other
 //! side of this corpus to be held equal to. It is a characterisation
