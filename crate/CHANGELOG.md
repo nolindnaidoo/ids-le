@@ -7,6 +7,49 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- **Reported paths use `/` on every platform.** On Windows the report
+  carried whatever separator the filesystem handed back, so the same tree
+  scanned on Windows and on Linux produced two different reports for no
+  reason a reader could see. A report is diffed against one produced
+  somewhere else; that is most of what a report in CI is for.
+
+- **A minified document carrying a non-ASCII character is no longer
+  quadratic.** Column lookup counts UTF-16 code units, and a document
+  with any non-ASCII byte in it took the counting path — which re-counted
+  from the start of the line on every identifier. On one very long line
+  that is a square: 10,000 identifiers took 1.11 s and 20,000 took 4.03 s
+  on the release binary. `extract/position.rs` now carries a checkpoint
+  every kilobyte, and the same documents take 0.03 s and 0.05 s. The
+  answers are unchanged, and a test asserts the indexed path agrees with
+  the counted one at every offset.
+
+### Added
+
+- **Five test suites**, each with its own CI job: `hazards` (a
+  runtime-built tree of a BOM, invalid UTF-8, UTF-16, a FIFO, a mode-000
+  file, a symlink loop, a 300-character path, a multi-megabyte minified line and a
+  3 MB base64 blob, on three platforms), `platform` (path separators,
+  case folding, reserved names, CRLF, stdin, and the whole suite under
+  three time zones), `fuzz` (generated runs at every boundary the
+  classifier decides on, time-boxed and seeded), `budget` (a wall-clock
+  ceiling plus three linearity checks) and `coverage_matrix` (every kind,
+  reason, UUID version, variant and format reachable from a real
+  fixture).
+
+- **`fixtures/documents/versions.json`** — one UUID of every version
+  RFC 9562 defines and one of every variant, so "all versions" is a claim
+  with a document behind it. The corpus previously held v1, v4, v6 and
+  v7.
+
+- **`fixtures/documents/hashes.txt`** — 600 abbreviated SHA-1 and MD5
+  digests, and the measurement they exist for: **27.2% of ordinary 24-hex
+  runs are named ObjectIds** (163 of 600), against a plausibility window
+  covering 27.6% of the 32-bit second space. The behaviour is unchanged
+  and documented in SPEC.md, which now carries the arithmetic; the matrix
+  prints the measured rate on every run.
+
 ## [0.1.0]
 
 First release. Core functionality; not yet hardened.

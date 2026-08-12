@@ -53,7 +53,7 @@ Inside `extract/`:
 | `time.rs` | Epoch milliseconds → ISO-8601 UTC. Hand-written civil-date arithmetic. |
 | `locate.rs` | `KeySpan`, the offset → key-path lookup, and the shared line iterator. |
 | `json.rs` `yaml.rs` `toml.rs` `ini.rs` `dotenv.rs` `csv.rs` | Key paths only. Which byte ranges are values, and what names them. |
-| `position.rs` | Byte offset → line/UTF-16 column. |
+| `position.rs` | Byte offset → line/UTF-16 column, over a checkpoint index. The checkpoints are what keep a minified line linear; see the note there. |
 | `format.rs` | Which key-path reader a document gets. |
 | `corpus.rs` | `#[cfg(test)]`. The pinned fixtures. |
 
@@ -189,6 +189,24 @@ pixelactions and scrape-le:
   fix.
 - Tests are deterministic: no wall clock, no randomness, and no network.
 
+Five suites beyond those, each with its own CI job:
+
+| Suite | Holds | Gate |
+|---|---|---|
+| `tests/hazards.rs` | What a real machine holds and a fixture directory cannot: a BOM, invalid UTF-8, UTF-16, a FIFO, a mode-000 file, a symlink loop, a 300-character path, an empty file, a multi-megabyte minified line, a 3 MB base64 blob. The tree is built at runtime and a case the platform cannot express **is skipped by name**. | 3-OS matrix |
+| `tests/platform.rs` | Forward slashes in every reported path, case folding, reserved Windows names, CRLF, stdin — and that no decode moves with the machine's time zone. The job runs the whole suite under `TZ=UTC`, under none, and under `Pacific/Kiritimati`. | 3-OS matrix |
+| `tests/fuzz.rs` | Generated runs at every boundary the classifier decides on, time-boxed by `IDS_LE_FUZZ_SECONDS` and seeded from `IDS_LE_FUZZ_SEED`, both printed. Asserts no panic, no stall, a well-formed row — and **never a kind named where two schemes fit**. | 60 s in CI |
+| `tests/budget.rs` | A wall-clock ceiling on a generated 500-file corpus, plus linearity across files, across identifiers in one file, and across identifiers on one non-ASCII line. Gated behind `IDS_LE_BUDGET`; the measurement and the machine it came from are in the module doc. | release, `--test-threads=1` |
+| `tests/coverage_matrix.rs` | Every kind, reason, UUID version, variant and format reachable from a real fixture — with `Kind`, `Reason`, `Variant` and `SUPPORTED_FORMATS` read out of `src/extract/` rather than typed into the test. Also measures the rate at which ordinary 24-hex hashes are named ObjectIds. | greps its own marker |
+
+- **The matrix prints `coverage-matrix: complete` and CI greps for it.**
+  `cargo test <filter>` exits 0 when the filter matches nothing, so a
+  renamed or deleted test would otherwise leave a green job that asserted
+  nothing. Do not change the string without changing the job.
+- **A timing number in a module doc names the machine it came from.** If a
+  ceiling is tight on a runner, re-measure there and record it — never
+  quietly raise the number.
+
 ## Verification — the definition of done
 
 All of it, before every push:
@@ -198,7 +216,13 @@ cargo fmt --all --check
 cargo clippy --all-targets -- -D warnings
 cargo test --locked
 IDS_LE_SCENARIOS=1 cargo test --release --test scenarios
+IDS_LE_FUZZ_SECONDS=60 cargo test --release --test fuzz -- --nocapture
+IDS_LE_BUDGET=1 cargo test --release --test budget -- --nocapture --test-threads=1
 ```
+
+`cargo test --locked` already runs `hazards`, `platform` and
+`coverage_matrix`; add `-- --nocapture` to see what a platform skipped and
+what the matrix measured.
 
 **Run the binary, not only the tests.** Point it at `fixtures/documents/`
 and read the output. The scenario suite caught a generated fixture whose
@@ -213,11 +237,9 @@ this file), and honest — claims in docs must match the code.
 
 Named here so nobody mistakes them for oversights:
 
-- **No CI workflow, no release workflow, no coverage gate.** The sibling
-  crates carry `ci-crate.yml` and `release-crate.yml` and a 90% per-module
-  floor in `extract/`; this crate has neither yet, and the no-inline-
-  `#[allow]` rule above is currently enforced by review rather than by a
-  grep job.
+- **Not published.** `cargo install ids-le` does not work yet; the README
+  says so plainly rather than printing a line that fails. Publication is a
+  release decision, not a code one.
 - **No VS Code extension beside it**, so unlike the siblings there is no
   parity corpus and no second implementation to be held equal to.
   `fixtures/extraction.json` is a characterisation record of this crate's
