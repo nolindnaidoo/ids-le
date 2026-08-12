@@ -1,0 +1,612 @@
+[
+  {
+    "arguments": {
+      "format": "json"
+    },
+    "expected": {
+      "data": {
+        "fileType": "json",
+        "ids": [
+          {
+            "column": 12,
+            "key": "service.id",
+            "kind": "uuid",
+            "line": 3,
+            "valid": true,
+            "value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+            "variant": "rfc4122",
+            "version": 4
+          },
+          {
+            "column": 19,
+            "key": "service.requestId",
+            "kind": "uuid",
+            "line": 4,
+            "timestamp": "2026-08-12T00:00:00.000Z",
+            "valid": true,
+            "value": "019ff344-cc00-7abc-8def-0123456789ab",
+            "variant": "rfc4122",
+            "version": 7
+          },
+          {
+            "column": 14,
+            "key": "session.ulid",
+            "kind": "ulid",
+            "line": 7,
+            "timestamp": "2026-08-12T00:00:00.000Z",
+            "valid": true,
+            "value": "01KZSM9K00ABCDEFGH12345678"
+          },
+          {
+            "column": 16,
+            "key": "session.nanoId",
+            "kind": "nanoid",
+            "line": 8,
+            "valid": true,
+            "value": "V1StGXR8_Z5jdHi6B-myT"
+          },
+          {
+            "column": 15,
+            "key": "documents.[0]._id",
+            "kind": "objectid",
+            "line": 11,
+            "timestamp": "2026-08-12T00:00:00.000Z",
+            "valid": true,
+            "value": "6a7bb780a1b2c3d4e5f60718"
+          },
+          {
+            "column": 30,
+            "key": "discord.channel_id",
+            "kind": "snowflake",
+            "line": 13,
+            "timestamp": "2026-08-12T00:00:00.000Z",
+            "valid": true,
+            "value": "1536886938009600000"
+          },
+          {
+            "column": 19,
+            "detail": "the nil UUID: 128 zero bits, which RFC 9562 defines as naming nothing",
+            "key": "placeholder",
+            "kind": "uuid",
+            "line": 14,
+            "refused": "nil_or_max",
+            "valid": false,
+            "value": "00000000-0000-0000-0000-000000000000"
+          }
+        ],
+        "named": 6,
+        "refused": 1
+      },
+      "diagnostics": [
+        {
+          "code": "refused",
+          "message": "1 run(s) could not be named; each is returned with `valid: false` and a reason",
+          "severity": "warning"
+        }
+      ],
+      "meta": {
+        "count": 7,
+        "tool": "extract_ids",
+        "truncated": false
+      },
+      "ok": true
+    },
+    "file": "ids.json",
+    "name": "a json document"
+  },
+  {
+    "arguments": {
+      "filename": "ids.toml"
+    },
+    "expected": {
+      "data": {
+        "fileType": "toml",
+        "ids": [
+          {
+            "column": 16,
+            "detail": "the nil UUID: 128 zero bits, which RFC 9562 defines as naming nothing",
+            "key": "placeholder",
+            "kind": "uuid",
+            "line": 1,
+            "refused": "nil_or_max",
+            "valid": false,
+            "value": "00000000-0000-0000-0000-000000000000"
+          },
+          {
+            "column": 7,
+            "key": "service.id",
+            "kind": "uuid",
+            "line": 4,
+            "valid": true,
+            "value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+            "variant": "rfc4122",
+            "version": 4
+          },
+          {
+            "column": 14,
+            "key": "service.requestId",
+            "kind": "uuid",
+            "line": 5,
+            "timestamp": "2026-08-12T00:00:00.000Z",
+            "valid": true,
+            "value": "019ff344-cc00-7abc-8def-0123456789ab",
+            "variant": "rfc4122",
+            "version": 7
+          },
+          {
+            "column": 9,
+            "key": "session.ulid",
+            "kind": "ulid",
+            "line": 8,
+            "timestamp": "2026-08-12T00:00:00.000Z",
+            "valid": true,
+            "value": "01KZSM9K00ABCDEFGH12345678"
+          },
+          {
+            "column": 11,
+            "key": "session.nanoId",
+            "kind": "nanoid",
+            "line": 9,
+            "valid": true,
+            "value": "V1StGXR8_Z5jdHi6B-myT"
+          },
+          {
+            "column": 14,
+            "key": "discord.channel_id",
+            "kind": "snowflake",
+            "line": 12,
+            "timestamp": "2026-08-12T00:00:00.000Z",
+            "valid": true,
+            "value": "1536886938009600000"
+          }
+        ],
+        "named": 5,
+        "refused": 1
+      },
+      "diagnostics": [
+        {
+          "code": "refused",
+          "message": "1 run(s) could not be named; each is returned with `valid: false` and a reason",
+          "severity": "warning"
+        }
+      ],
+      "meta": {
+        "count": 6,
+        "tool": "extract_ids",
+        "truncated": false
+      },
+      "ok": true
+    },
+    "file": "ids.toml",
+    "name": "the format inferred from a filename"
+  },
+  {
+    "arguments": {
+      "format": "json"
+    },
+    "expected": {
+      "data": {
+        "fileType": "json",
+        "ids": [
+          {
+            "column": 14,
+            "detail": "32 hex digits are an unhyphenated UUID and an MD5 digest in equal measure; nothing in this document chooses between them",
+            "key": "digest",
+            "kind": null,
+            "line": 2,
+            "refused": "ambiguous_kind",
+            "valid": false,
+            "value": "5d41402abc4b2a76b9719d911017c592"
+          },
+          {
+            "column": 13,
+            "detail": "a valid ULID is canonically uppercase; in this case it is equally a token from another 26-character scheme, and no key here says which",
+            "key": "token",
+            "kind": null,
+            "line": 3,
+            "refused": "ambiguous_kind",
+            "valid": false,
+            "value": "01kzsm9k00AbCdEfGh12345678"
+          },
+          {
+            "column": 14,
+            "detail": "24 hex digits are an ObjectId only if the leading four bytes are a time, and these are not; a truncated hash fits the same shape",
+            "key": "commit",
+            "kind": null,
+            "line": 4,
+            "refused": "ambiguous_kind",
+            "timestamp": "2093-06-19T16:25:07.000Z",
+            "valid": false,
+            "value": "e83c5163316f89bfbde7d9ab"
+          },
+          {
+            "column": 14,
+            "detail": "21 base62 characters are a NanoID, a short token and a truncated hash in equal measure; only a `-` or `_`, or a key naming the scheme, separates them",
+            "key": "secret",
+            "kind": null,
+            "line": 5,
+            "refused": "ambiguous_kind",
+            "valid": false,
+            "value": "V1StGXR8xZ5jdHi6BxmyT"
+          },
+          {
+            "column": 14,
+            "detail": "the Twitter epoch decodes this to 2022-06-15T01:42:54.657Z and the Discord epoch to 2026-08-12T00:00:00.000Z; both are plausible and no key here names the platform",
+            "key": "user_id",
+            "kind": "snowflake",
+            "line": 6,
+            "refused": "ambiguous_kind",
+            "timestamp": "2022-06-15T01:42:54.657Z",
+            "valid": false,
+            "value": "1536886938009600000"
+          },
+          {
+            "column": 14,
+            "detail": "the variant bits say NCS, not RFC 4122, so the version nibble is not a version",
+            "key": "legacy",
+            "kind": "uuid",
+            "line": 7,
+            "refused": "malformed",
+            "valid": false,
+            "value": "f47ac10b-58cc-4372-1567-0e02b2c3d479",
+            "variant": "ncs"
+          },
+          {
+            "column": 16,
+            "detail": "26 characters is a ULID's length, and Crockford base32 excludes I, L, O and U",
+            "key": "mistyped",
+            "kind": "ulid",
+            "line": 8,
+            "refused": "malformed",
+            "valid": false,
+            "value": "01KZSM9K00ABCDEFGH123456I8"
+          },
+          {
+            "column": 17,
+            "detail": "23 hex digits is not a whole number of bytes and is one digit from a hex identifier this tool knows",
+            "key": "truncated",
+            "kind": null,
+            "line": 9,
+            "refused": "malformed",
+            "valid": false,
+            "value": "6a7bb780a1b2c3d4e5f6071"
+          },
+          {
+            "column": 11,
+            "detail": "the nil UUID: 128 zero bits, which RFC 9562 defines as naming nothing",
+            "key": "nil",
+            "kind": "uuid",
+            "line": 10,
+            "refused": "nil_or_max",
+            "valid": false,
+            "value": "00000000-0000-0000-0000-000000000000"
+          },
+          {
+            "column": 11,
+            "detail": "the max UUID: 128 one bits, which RFC 9562 defines as naming nothing",
+            "key": "max",
+            "kind": "uuid",
+            "line": 11,
+            "refused": "nil_or_max",
+            "valid": false,
+            "value": "ffffffff-ffff-ffff-ffff-ffffffffffff"
+          },
+          {
+            "column": 14,
+            "detail": "the version nibble claims v4, which is 122 random bits, and 15 of its nibbles in a row are zero",
+            "key": "zeroed",
+            "kind": "uuid",
+            "line": 12,
+            "refused": "version_claim_mismatch",
+            "valid": false,
+            "value": "00000000-0000-4000-8000-000000000000",
+            "variant": "rfc4122",
+            "version": 4
+          },
+          {
+            "column": 15,
+            "detail": "the v7 time field decodes outside the plausible range",
+            "key": "faraway",
+            "kind": "uuid",
+            "line": 13,
+            "refused": "timestamp_implausible",
+            "timestamp": "6429-10-17T02:45:55.327Z",
+            "valid": false,
+            "value": "7fffffff-ffff-7abc-8def-0123456789ab",
+            "variant": "rfc4122",
+            "version": 7
+          }
+        ],
+        "named": 0,
+        "refused": 12
+      },
+      "diagnostics": [
+        {
+          "code": "refused",
+          "message": "12 run(s) could not be named; each is returned with `valid: false` and a reason",
+          "severity": "warning"
+        }
+      ],
+      "meta": {
+        "count": 12,
+        "tool": "extract_ids",
+        "truncated": false
+      },
+      "ok": true
+    },
+    "file": "ambiguous.json",
+    "name": "every ambiguity case comes back as a row"
+  },
+  {
+    "arguments": {
+      "format": "json"
+    },
+    "expected": {
+      "data": {
+        "fileType": "json",
+        "ids": [
+          {
+            "column": 15,
+            "key": "uuid_v1",
+            "kind": "uuid",
+            "line": 2,
+            "timestamp": "2022-02-22T19:22:22.000Z",
+            "valid": true,
+            "value": "c232ab00-9414-11ec-b3c8-9e6bdeced846",
+            "variant": "rfc4122",
+            "version": 1
+          },
+          {
+            "column": 15,
+            "key": "uuid_v6",
+            "kind": "uuid",
+            "line": 3,
+            "timestamp": "2022-02-22T19:22:22.000Z",
+            "valid": true,
+            "value": "1ec9414c-232a-6b00-b3c8-9e6bdeced846",
+            "variant": "rfc4122",
+            "version": 6
+          },
+          {
+            "column": 15,
+            "key": "uuid_v7",
+            "kind": "uuid",
+            "line": 4,
+            "timestamp": "2026-08-12T00:00:00.000Z",
+            "valid": true,
+            "value": "019ff344-cc00-7abc-8def-0123456789ab",
+            "variant": "rfc4122",
+            "version": 7
+          },
+          {
+            "column": 12,
+            "key": "ulid",
+            "kind": "ulid",
+            "line": 5,
+            "timestamp": "2026-08-12T00:00:00.000Z",
+            "valid": true,
+            "value": "01KZSM9K00ABCDEFGH12345678"
+          },
+          {
+            "column": 16,
+            "key": "objectid",
+            "kind": "objectid",
+            "line": 6,
+            "timestamp": "2026-08-12T00:00:00.000Z",
+            "valid": true,
+            "value": "6a7bb780a1b2c3d4e5f60718"
+          },
+          {
+            "column": 30,
+            "key": "discord.message_id",
+            "kind": "snowflake",
+            "line": 7,
+            "timestamp": "2026-08-12T00:00:00.000Z",
+            "valid": true,
+            "value": "1536886938009600000"
+          },
+          {
+            "column": 28,
+            "key": "twitter.tweet_id",
+            "kind": "snowflake",
+            "line": 8,
+            "timestamp": "2026-08-12T00:00:00.000Z",
+            "valid": true,
+            "value": "2087328207467446272"
+          }
+        ],
+        "named": 7,
+        "refused": 0
+      },
+      "diagnostics": [],
+      "meta": {
+        "count": 7,
+        "tool": "extract_ids",
+        "truncated": false
+      },
+      "ok": true
+    },
+    "file": "timestamps.json",
+    "name": "every pinned timestamp decodes"
+  },
+  {
+    "arguments": {
+      "format": "json",
+      "kind": "uuid"
+    },
+    "expected": {
+      "data": {
+        "fileType": "json",
+        "ids": [
+          {
+            "column": 12,
+            "key": "service.id",
+            "kind": "uuid",
+            "line": 3,
+            "valid": true,
+            "value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+            "variant": "rfc4122",
+            "version": 4
+          },
+          {
+            "column": 19,
+            "key": "service.requestId",
+            "kind": "uuid",
+            "line": 4,
+            "timestamp": "2026-08-12T00:00:00.000Z",
+            "valid": true,
+            "value": "019ff344-cc00-7abc-8def-0123456789ab",
+            "variant": "rfc4122",
+            "version": 7
+          },
+          {
+            "column": 19,
+            "detail": "the nil UUID: 128 zero bits, which RFC 9562 defines as naming nothing",
+            "key": "placeholder",
+            "kind": "uuid",
+            "line": 14,
+            "refused": "nil_or_max",
+            "valid": false,
+            "value": "00000000-0000-0000-0000-000000000000"
+          }
+        ],
+        "named": 2,
+        "refused": 1
+      },
+      "diagnostics": [
+        {
+          "code": "refused",
+          "message": "1 run(s) could not be named; each is returned with `valid: false` and a reason",
+          "severity": "warning"
+        }
+      ],
+      "meta": {
+        "count": 3,
+        "tool": "extract_ids",
+        "truncated": false
+      },
+      "ok": true
+    },
+    "file": "ids.json",
+    "name": "a kind narrows the report"
+  },
+  {
+    "arguments": {
+      "format": "handwriting"
+    },
+    "content": "the id f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "expected": {
+      "data": {
+        "fileType": "text",
+        "ids": [
+          {
+            "column": 8,
+            "kind": "uuid",
+            "line": 1,
+            "valid": true,
+            "value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+            "variant": "rfc4122",
+            "version": 4
+          }
+        ],
+        "named": 1,
+        "refused": 0
+      },
+      "diagnostics": [],
+      "meta": {
+        "count": 1,
+        "tool": "extract_ids",
+        "truncated": false
+      },
+      "ok": true
+    },
+    "name": "an unknown format reads the text"
+  },
+  {
+    "arguments": {},
+    "content": "no identifiers here",
+    "expected": {
+      "data": {
+        "fileType": "text",
+        "ids": [],
+        "named": 0,
+        "refused": 0
+      },
+      "diagnostics": [],
+      "meta": {
+        "count": 0,
+        "tool": "extract_ids",
+        "truncated": false
+      },
+      "ok": true
+    },
+    "name": "a document with no identifiers"
+  },
+  {
+    "arguments": {
+      "format": "json",
+      "maxResults": 2
+    },
+    "expected": {
+      "data": {
+        "fileType": "json",
+        "ids": [
+          {
+            "column": 12,
+            "key": "service.id",
+            "kind": "uuid",
+            "line": 3,
+            "valid": true,
+            "value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+            "variant": "rfc4122",
+            "version": 4
+          },
+          {
+            "column": 19,
+            "key": "service.requestId",
+            "kind": "uuid",
+            "line": 4,
+            "timestamp": "2026-08-12T00:00:00.000Z",
+            "valid": true,
+            "value": "019ff344-cc00-7abc-8def-0123456789ab",
+            "variant": "rfc4122",
+            "version": 7
+          }
+        ],
+        "named": 6,
+        "refused": 1
+      },
+      "diagnostics": [
+        {
+          "code": "refused",
+          "message": "1 run(s) could not be named; each is returned with `valid: false` and a reason",
+          "severity": "warning"
+        }
+      ],
+      "meta": {
+        "count": 2,
+        "tool": "extract_ids",
+        "truncated": true
+      },
+      "ok": true
+    },
+    "file": "ids.json",
+    "name": "a cap that drops rows says so"
+  },
+  {
+    "arguments": {
+      "content": "x",
+      "maxResults": 1.5
+    },
+    "expectedError": "maxResults must be a positive integer",
+    "name": "a fractional cap is refused"
+  },
+  {
+    "arguments": {
+      "content": "x",
+      "kind": "guid"
+    },
+    "expectedError": "guid is not a kind; it is one of uuid, ulid, nanoid, objectid, snowflake",
+    "name": "an unknown kind is refused"
+  }
+]

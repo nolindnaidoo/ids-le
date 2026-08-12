@@ -1,0 +1,14 @@
+{
+  "digest": "5d41402abc4b2a76b9719d911017c592",
+  "token": "01kzsm9k00AbCdEfGh12345678",
+  "commit": "e83c5163316f89bfbde7d9ab",
+  "secret": "V1StGXR8xZ5jdHi6BxmyT",
+  "user_id": 1536886938009600000,
+  "legacy": "f47ac10b-58cc-4372-1567-0e02b2c3d479",
+  "mistyped": "01KZSM9K00ABCDEFGH123456I8",
+  "truncated": "6a7bb780a1b2c3d4e5f6071",
+  "nil": "00000000-0000-0000-0000-000000000000",
+  "max": "ffffffff-ffff-ffff-ffff-ffffffffffff",
+  "zeroed": "00000000-0000-4000-8000-000000000000",
+  "faraway": "7fffffff-ffff-7abc-8def-0123456789ab"
+}

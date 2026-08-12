@@ -1,0 +1,8 @@
+Release notes.
+
+The service ran under f47ac10b-58cc-4372-a567-0e02b2c3d479 and the
+request that failed was 019ff344-cc00-7abc-8def-0123456789ab. The
+session was 01KZSM9K00ABCDEFGH12345678 and the document was
+6a7bb780a1b2c3d4e5f60718.
+
+The number 1536886938009600000 appears here with nothing naming it.
