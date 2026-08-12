@@ -25,18 +25,30 @@ pub(crate) struct Position {
 
 /// A prepared index over one document. Building it is O(bytes). A lookup
 /// is a binary search, then a column: arithmetic when the document is
-/// ASCII, and a UTF-16 count of the current line's prefix when it is not.
+/// ASCII, and a bounded scan from the nearest checkpoint when it is not.
 pub(crate) struct PositionIndex<'a> {
     content: &'a str,
     /// Byte offset of the first character of each line.
     line_starts: Vec<usize>,
-    /// Whether the whole document is ASCII, in which case a byte offset
-    /// **is** a UTF-16 offset and a column is arithmetic rather than a
-    /// scan. Without it, `at()` re-counts code units from the line start
-    /// on every call — invisible on ordinary source, quadratic on a
-    /// minified file whose content sits on one very long line.
-    all_ascii: bool,
+    /// `(byte offset, UTF-16 code units before it)`, every
+    /// `CHECKPOINT_BYTES` or so.
+    ///
+    /// **Empty when the document is ASCII**, where a byte offset *is* a
+    /// UTF-16 offset and a column is arithmetic. Without the
+    /// checkpoints, a non-ASCII document re-counts code units from the
+    /// line start on every lookup — invisible on a config file,
+    /// quadratic on a minified bundle whose content sits on one very
+    /// long line and carries a single accented character. Measured on
+    /// the release binary before this index existed: 10,000 identifiers
+    /// on one such line took 1.11 s and 20,000 took 4.03 s, which is the
+    /// shape of a square.
+    checkpoints: Vec<(usize, usize)>,
 }
+
+/// How far a lookup may have to scan. Small enough that the scan is
+/// irrelevant, large enough that the index is a rounding error on a
+/// document's size.
+const CHECKPOINT_BYTES: usize = 1024;
 
 impl<'a> PositionIndex<'a> {
     pub(crate) fn new(content: &'a str) -> Self {
@@ -51,7 +63,7 @@ impl<'a> PositionIndex<'a> {
         Self {
             content,
             line_starts,
-            all_ascii: content.is_ascii(),
+            checkpoints: checkpoints(content),
         }
     }
 
@@ -64,16 +76,24 @@ impl<'a> PositionIndex<'a> {
         let clamped = self.floor_to_boundary(offset.min(self.content.len()));
         let line_index = self.line_starts.partition_point(|&start| start <= clamped) - 1;
         let line_start = self.line_starts[line_index];
-        let prefix = &self.content[line_start..clamped];
-        let column = if self.all_ascii {
-            prefix.len() + 1
-        } else {
-            prefix.encode_utf16().count() + 1
-        };
         Position {
             line: line_index + 1,
-            column,
+            column: self.units_before(clamped) - self.units_before(line_start) + 1,
         }
+    }
+
+    /// UTF-16 code units before a byte offset, counted from the nearest
+    /// checkpoint at or below it.
+    fn units_before(&self, offset: usize) -> usize {
+        // ASCII: one byte, one code unit, and no index was built.
+        let Some(&(byte, units)) = self.checkpoints.get(
+            self.checkpoints
+                .partition_point(|(at, _)| *at <= offset)
+                .wrapping_sub(1),
+        ) else {
+            return offset;
+        };
+        units + self.content[byte..offset].encode_utf16().count()
     }
 
     fn floor_to_boundary(&self, mut offset: usize) -> usize {
@@ -82,6 +102,26 @@ impl<'a> PositionIndex<'a> {
         }
         offset
     }
+}
+
+/// Running UTF-16 counts at character boundaries roughly
+/// `CHECKPOINT_BYTES` apart. Empty for an ASCII document, which needs
+/// none.
+fn checkpoints(content: &str) -> Vec<(usize, usize)> {
+    if content.is_ascii() {
+        return Vec::new();
+    }
+    let mut out = vec![(0, 0)];
+    let mut units = 0;
+    let mut next = CHECKPOINT_BYTES;
+    for (offset, character) in content.char_indices() {
+        if offset >= next {
+            out.push((offset, units));
+            next = offset + CHECKPOINT_BYTES;
+        }
+        units += character.len_utf16();
+    }
+    out
 }
 
 #[cfg(test)]
@@ -148,25 +188,74 @@ mod tests {
         );
     }
 
-    /// The fast path and the counted path must agree at every offset, or
-    /// the optimisation is a second implementation with its own answers.
-    #[test]
-    fn the_ascii_fast_path_agrees_with_the_counted_path() {
-        let ascii = "abc\ndef";
-        let index = PositionIndex::new(ascii);
-        assert!(index.all_ascii);
-        for offset in 0..=ascii.len() {
-            let line_index = index.line_starts.partition_point(|&start| start <= offset) - 1;
-            let line_start = index.line_starts[line_index];
-            assert_eq!(
-                index.at(offset),
-                Position {
-                    line: line_index + 1,
-                    column: ascii[line_start..offset].encode_utf16().count() + 1,
-                },
-                "at offset {offset}"
-            );
+    /// The naive answer, written out once so the indexed one has
+    /// something to be held to.
+    fn counted(content: &str, offset: usize) -> Position {
+        let line = content[..offset]
+            .bytes()
+            .filter(|byte| *byte == b'\n')
+            .count();
+        let line_start = content[..offset].rfind('\n').map_or(0, |index| index + 1);
+        Position {
+            line: line + 1,
+            column: content[line_start..offset].encode_utf16().count() + 1,
         }
+    }
+
+    /// The indexed path and the counted path must agree at **every**
+    /// offset, or the index is a second implementation with its own
+    /// answers. Run over an ASCII document, which builds no index at
+    /// all, and a non-ASCII one long enough to cross several
+    /// checkpoints.
+    #[test]
+    fn the_indexed_path_agrees_with_the_counted_path_everywhere() {
+        let ascii = "abc\ndef\nghi";
+        let mut long = String::new();
+        for row in 0..400 {
+            use std::fmt::Write as _;
+            let _ = writeln!(long, "café {row} 🎯");
+        }
+        for content in [ascii, long.as_str()] {
+            let index = PositionIndex::new(content);
+            assert!(
+                content.is_ascii() || index.checkpoints.len() > 3,
+                "the long document must cross several checkpoints"
+            );
+            for offset in 0..=content.len() {
+                if !content.is_char_boundary(offset) {
+                    continue;
+                }
+                assert_eq!(index.at(offset), counted(content, offset), "at {offset}");
+            }
+        }
+    }
+
+    /// An ASCII document builds no index at all — the cheapest path is
+    /// also the common one.
+    #[test]
+    fn an_ascii_document_needs_no_checkpoints() {
+        assert!(PositionIndex::new("abc\ndef").checkpoints.is_empty());
+    }
+
+    /// One accented character in a megabyte of ASCII is the case that
+    /// was quadratic: the whole document left the arithmetic path, and
+    /// every lookup re-counted the line from its start. A checkpoint
+    /// every kilobyte bounds the scan whatever the line length.
+    #[test]
+    fn a_long_line_carrying_one_non_ascii_character_is_still_bounded() {
+        let content = format!("é{}", "a".repeat(100_000));
+        let index = PositionIndex::new(&content);
+        assert!(
+            index.checkpoints.len() > 90,
+            "a checkpoint roughly every {CHECKPOINT_BYTES} bytes"
+        );
+        assert_eq!(
+            index.at(content.len()),
+            Position {
+                line: 1,
+                column: 100_002,
+            }
+        );
     }
 
     /// A carriage return is an ordinary character, not a line break.
