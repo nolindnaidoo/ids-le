@@ -1,0 +1,636 @@
+Release audit — abbreviated object names and checksum digests.
+
+Nothing in this file is an identifier. The left column of the log is
+`git log --abbrev=24`, and the manifest below holds MD5 digests both
+whole and abbreviated to the same width. Twenty-four hex digits are
+also an ObjectId's shape, which is the point: this is what a repository
+full of hashes looks like to a tool that reads shapes.
+
+commit log
+
+  d51a59eb7e29370718dc06d1  fix: hold the reader to the report
+  afc80c48cd36c99b03a4c049  feat: decode the v6 field order
+  99d88e2277e6e96e759d7ec3  docs: state the false-positive rate
+  3ed99a2d9d5fce5c97f6a98e  refactor: one scanner for every format
+  b91622c7a476d032eacc95b8  test: pin the RFC 9562 examples
+  fd48946fb8a5632b4efe00d7  chore: bump the toolchain pin
+  96a30de515cc8a461ecde88d  fix: do not name a truncated hash
+  9de4616c65b26cf83f283b17  perf: index the columns once
+  27e28373d27e33cf04c33063  docs: name the boundary in SPEC
+  eca1f807285307645f09de62  test: a refusal is a row
+  f18805aa97f3108214ba655c  fix: hold the reader to the report
+  05b38154caad99b79a2ea4f2  feat: decode the v6 field order
+  6ea47edc04adb5d452768c23  docs: state the false-positive rate
+  92e646cc09bbed1a6974dae9  refactor: one scanner for every format
+  407b6d07d476ee41060012c7  test: pin the RFC 9562 examples
+  c32cfbab91933ec6b43d3229  chore: bump the toolchain pin
+  36f3c856288dce96d93c1463  fix: do not name a truncated hash
+  74574f683a0188684ef2c3cf  perf: index the columns once
+  bd2e5981032403b8f38e4471  docs: name the boundary in SPEC
+  08f183ac10e1319455ec7ccb  test: a refusal is a row
+  9d56f2fec812dea3adb0a4f8  fix: hold the reader to the report
+  80f936d0f97baa55c156548f  feat: decode the v6 field order
+  ae7c0982649afc9f6433b454  docs: state the false-positive rate
+  e350cf8da95b505da0875767  refactor: one scanner for every format
+  8a305c745f6ad4179eb6c1b4  test: pin the RFC 9562 examples
+  60ff12d2fde0dafe9562ddd1  chore: bump the toolchain pin
+  6249cf174f737576829258fa  fix: do not name a truncated hash
+  1876e20a2335be1ae7045b59  perf: index the columns once
+  6122424ed8f9b299f34a9508  docs: name the boundary in SPEC
+  757cc8aefc67238173896527  test: a refusal is a row
+  52781dfbe613c87ecc40f14b  fix: hold the reader to the report
+  0fea318c2f6c78ffc3f51817  feat: decode the v6 field order
+  14dab647f38d3b0b2199eebf  docs: state the false-positive rate
+  26a37920ca6ae6dcb89ead95  refactor: one scanner for every format
+  ab78289a4c32d2a007e446e7  test: pin the RFC 9562 examples
+  9a0b8d8155fb64e9f84e9db8  chore: bump the toolchain pin
+  14e2817527534b05eeb1ce11  fix: do not name a truncated hash
+  3b67ceba5156e7cd7c9afb9b  perf: index the columns once
+  b9f0beec02ad301be5d37726  docs: name the boundary in SPEC
+  d6c907e2de069685695b4095  test: a refusal is a row
+  fddbc07769ca6c889e00a356  fix: hold the reader to the report
+  446d9f684a5034ffe1125b54  feat: decode the v6 field order
+  482a3f8d9e2377894b6ee498  docs: state the false-positive rate
+  7e702c5b78df0038619acbac  refactor: one scanner for every format
+  09577275c704f4eb00c34200  test: pin the RFC 9562 examples
+  f9fc76a5ab2ad4ab4be6ca88  chore: bump the toolchain pin
+  df4b86999331f56f0c0591d5  fix: do not name a truncated hash
+  6b8875d48143dd872304431e  perf: index the columns once
+  6f33e7cc063f53c65345e442  docs: name the boundary in SPEC
+  114fe3049bb37c247e776aa6  test: a refusal is a row
+  52a6925c97ed70e355549ed6  fix: hold the reader to the report
+  ec0c21ae6a2404f9eef54520  feat: decode the v6 field order
+  a09bbd527ff6dc7bc4fde11b  docs: state the false-positive rate
+  1a70507cf11429839729b754  refactor: one scanner for every format
+  6ff9ae0911bfd41be9ee34ad  test: pin the RFC 9562 examples
+  c6e1f27a40253e1b59303c60  chore: bump the toolchain pin
+  64fb1272a0471013c7deea9a  fix: do not name a truncated hash
+  8d65a99202d1cd2885b27aec  perf: index the columns once
+  23690bc2a6e90cea781084ca  docs: name the boundary in SPEC
+  848128b3ed7b7e33a5fa7521  test: a refusal is a row
+  382953f053fc478ae7c41350  fix: hold the reader to the report
+  e6a15c848557973de42c92b9  feat: decode the v6 field order
+  8d4212e6cd0c7940cad8712b  docs: state the false-positive rate
+  4d3352caf35437bcf4125d4f  refactor: one scanner for every format
+  9534d2b5388273985149692f  test: pin the RFC 9562 examples
+  1dd1d2b3dfda0eda263b2fcf  chore: bump the toolchain pin
+  83e5d8bc0c5016eac1349249  fix: do not name a truncated hash
+  f9151d9116063739877d815c  perf: index the columns once
+  973d2c4cd74214466723e14c  docs: name the boundary in SPEC
+  28363726ef908a17ecf64594  test: a refusal is a row
+  cc079e06b94820092a82464a  fix: hold the reader to the report
+  49974e3b7ca6d109853a1e59  feat: decode the v6 field order
+  ae0f6b2f64c458f4470df1d2  docs: state the false-positive rate
+  fd1c249fb164d76de20db6f6  refactor: one scanner for every format
+  2ab399aeacd4776ab96fe5b0  test: pin the RFC 9562 examples
+  3f0fa8934788a25102e33fc7  chore: bump the toolchain pin
+  9245154e89f124279f578ea9  fix: do not name a truncated hash
+  c37e8ef7846ebf96f66dd4c7  perf: index the columns once
+  9755830a9dd4980f2cc5ff11  docs: name the boundary in SPEC
+  11924ded9882a428c2ebf5f4  test: a refusal is a row
+  c247cb32cb6184d881ce8e11  fix: hold the reader to the report
+  03f8afb273bffe6ea6438e37  feat: decode the v6 field order
+  910c8616ccfec09851adf8ba  docs: state the false-positive rate
+  6412e4cdf51323f60c630f97  refactor: one scanner for every format
+  f077622d6bb3c2a660663e96  test: pin the RFC 9562 examples
+  63c00d711649ca7e04dbcf1a  chore: bump the toolchain pin
+  c7c92223e4026f8fa2cfad1a  fix: do not name a truncated hash
+  b41210078f08793f0011e6be  perf: index the columns once
+  3454df842e50fb2a9d4ca9cb  docs: name the boundary in SPEC
+  2771d83abd0fe2ebef1015cc  test: a refusal is a row
+  c58045a3cf8888e9a4aabdf6  fix: hold the reader to the report
+  ee6d3dfa0788e9ac5071d786  feat: decode the v6 field order
+  874f6720e66c0ae37d494263  docs: state the false-positive rate
+  8e4da23604822532705e8cba  refactor: one scanner for every format
+  a9b807a911d1a47eb6d8c5de  test: pin the RFC 9562 examples
+  03eb656b2f80d2b9d73aa15c  chore: bump the toolchain pin
+  886d1e3a855613ef84c406d8  fix: do not name a truncated hash
+  10e84a8b842054e13cf7bc9b  perf: index the columns once
+  9ae2119342ec4665cdd0c3eb  docs: name the boundary in SPEC
+  99481384c93a6b20563f9830  test: a refusal is a row
+  f1f368358647e0cb48f5b25b  fix: hold the reader to the report
+  6c96d7bdbcd627e2ebecd85c  feat: decode the v6 field order
+  accc20e7a89de6a5adfb57ec  docs: state the false-positive rate
+  43694933751f611a57967995  refactor: one scanner for every format
+  b9eabe048ee767320459ac2d  test: pin the RFC 9562 examples
+  f5381a7f2d7b6f2331c68b6d  chore: bump the toolchain pin
+  21f7970693541260a54b977a  fix: do not name a truncated hash
+  f4fba5e48278c6f95f159a6e  perf: index the columns once
+  ebe45c571031db47084941d2  docs: name the boundary in SPEC
+  ea1b66d319504867ad7ab97d  test: a refusal is a row
+  148b08e84498d4de87cb12a2  fix: hold the reader to the report
+  da5280885bae3d4efd944245  feat: decode the v6 field order
+  996ebf88844697b475ac46b4  docs: state the false-positive rate
+  94697e0ada37d2ff9fca4cf2  refactor: one scanner for every format
+  11768b388d08f02996b0efe7  test: pin the RFC 9562 examples
+  78ed2be99bee3c3ffd120a59  chore: bump the toolchain pin
+  4e92684f190f17b957cd3053  fix: do not name a truncated hash
+  128fc836bc093eb6cf0d9030  perf: index the columns once
+  7fab6403532ad7253f4a4fe8  docs: name the boundary in SPEC
+  e9d76c503adc4ee7bccb778e  test: a refusal is a row
+  ecdfbcb3d72cc0965837e5b9  fix: hold the reader to the report
+  daad8c7c996b3d7e10a5a14f  feat: decode the v6 field order
+  0646515940990a2b39a10629  docs: state the false-positive rate
+  fd823d530a452b3242c3b297  refactor: one scanner for every format
+  e6e11063109fae3555519ba6  test: pin the RFC 9562 examples
+  98a5104d56a651af93eb2f1b  chore: bump the toolchain pin
+  fdf2be578856000d5ffe49f8  fix: do not name a truncated hash
+  673dbbdbd4a535c7d41c149e  perf: index the columns once
+  261f66e315eec1661a990252  docs: name the boundary in SPEC
+  ea37a66ebb19863b560780cc  test: a refusal is a row
+  c987b2fcaccc80590ea70ae1  fix: hold the reader to the report
+  89252dd61f53d3305d2c4bcb  feat: decode the v6 field order
+  9215cf1f3e79d6bfdad625a9  docs: state the false-positive rate
+  0841acf7eb6dac3cfd78c1b6  refactor: one scanner for every format
+  3b6fe9b498c8fb4c23750fd3  test: pin the RFC 9562 examples
+  722e0567c21071dfad650917  chore: bump the toolchain pin
+  1ff95d95e9a9be3d4ba9d2a4  fix: do not name a truncated hash
+  5806b366aa97f6495a95df91  perf: index the columns once
+  7a595026fd969de7119599d0  docs: name the boundary in SPEC
+  b81c141a992dc70a679ea586  test: a refusal is a row
+  905947878604b07655eb2b3c  fix: hold the reader to the report
+  605d460477f0374a1686408e  feat: decode the v6 field order
+  6777cc069ccf506d127e4e2c  docs: state the false-positive rate
+  45a7496b9ffe86f32a576935  refactor: one scanner for every format
+  09d0b779a13342697f3bf6f4  test: pin the RFC 9562 examples
+  24f9adde4eac644f9f8e1729  chore: bump the toolchain pin
+  d52648ae94b54b4b152df52e  fix: do not name a truncated hash
+  9f2673e6c2e46b191845f534  perf: index the columns once
+  4618d194fb61dedf8a73834a  docs: name the boundary in SPEC
+  dc48fbae508be5650f16176d  test: a refusal is a row
+  4da17590cb591b0eb03f9e3b  fix: hold the reader to the report
+  87b8cabf30387b5bc34aca5e  feat: decode the v6 field order
+  f3df6dc702228cb9e3497660  docs: state the false-positive rate
+  2f2ff4c00a008adf62e96f53  refactor: one scanner for every format
+  c52786601973d81b26161a00  test: pin the RFC 9562 examples
+  2f3934adf7db91ef2e947f2b  chore: bump the toolchain pin
+  130a9e8efffc7b80fc2fd00a  fix: do not name a truncated hash
+  2af37f77b4a2587bb2f3ea08  perf: index the columns once
+  9e39898420ea5bdc9bf654ce  docs: name the boundary in SPEC
+  8efb9457b9a3fe24a96f3423  test: a refusal is a row
+  4dd94a6ee3d57f68ada2435b  fix: hold the reader to the report
+  ea4c9ef2852710659dfe78ed  feat: decode the v6 field order
+  e29abdfddfc4b8a4310a5a0a  docs: state the false-positive rate
+  634b892c9ea6e2985c1c0e58  refactor: one scanner for every format
+  b409fadc81351b3d043c981a  test: pin the RFC 9562 examples
+  6391551cd7e897c99c28b3b3  chore: bump the toolchain pin
+  51a5bf81137283c899eceb22  fix: do not name a truncated hash
+  0f832c847e3b3ee7251bae74  perf: index the columns once
+  c3424fecfc93b704499a2430  docs: name the boundary in SPEC
+  ab1b424136a81fa539b02904  test: a refusal is a row
+  1a69a09b50ca79b6f617a896  fix: hold the reader to the report
+  66da8764354c2c0eedae3ffd  feat: decode the v6 field order
+  f300f9de30d89ce10ad53372  docs: state the false-positive rate
+  08d56ea7ca8311ef96dba74f  refactor: one scanner for every format
+  4276c5336b07fb5207003c28  test: pin the RFC 9562 examples
+  bb22777ea43da4873febe48d  chore: bump the toolchain pin
+  4fa600c00a87d83a674f98b6  fix: do not name a truncated hash
+  313dba807dbc1b6c3d028945  perf: index the columns once
+  af20a6a4cffd3b8f5b5fb954  docs: name the boundary in SPEC
+  7063233ef4120f13b5c7779f  test: a refusal is a row
+  dfb571e534439669a2be2b6c  fix: hold the reader to the report
+  2e4a8f28e8adcb286bec731a  feat: decode the v6 field order
+  4fda73639304ae5c4c269e85  docs: state the false-positive rate
+  0ae479f28b813f8443e5ef1d  refactor: one scanner for every format
+  6cbcaabbeef4ab5d5061ae7b  test: pin the RFC 9562 examples
+  6e1365f0a65d1c7ac9f37135  chore: bump the toolchain pin
+  1b452ae2f8fcbf1d63b00d0d  fix: do not name a truncated hash
+  f279f179870e2634a379f0cd  perf: index the columns once
+  f0a3f4da7f01138e69d65e73  docs: name the boundary in SPEC
+  deae76a765b4f907b37fd59a  test: a refusal is a row
+  995d14e1550735262dcf8648  fix: hold the reader to the report
+  683deacd5686883666139e92  feat: decode the v6 field order
+  43c22aa002c1e43155243f45  docs: state the false-positive rate
+  88ed6df043743e6619ca093d  refactor: one scanner for every format
+  6994d56d9af8b2ab146e243d  test: pin the RFC 9562 examples
+  539b9768234187ed5b7f019b  chore: bump the toolchain pin
+  d23c7664204ec9d23c657046  fix: do not name a truncated hash
+  fce0d8b53a812e7c390ad62c  perf: index the columns once
+  8aca846b9b2cbbd45250fe39  docs: name the boundary in SPEC
+  1173bec6ed25c6e54f0e1427  test: a refusal is a row
+  c726a2bac4f67ce30ab7ee5c  fix: hold the reader to the report
+  eb921fba32047bd0f75d24ab  feat: decode the v6 field order
+  076a4c72b2f509f6b12ea3a3  docs: state the false-positive rate
+  924830b7e60cbb66d481c23a  refactor: one scanner for every format
+  0f6e0ec73c151ca172a00e9f  test: pin the RFC 9562 examples
+  ba1faf322bc9fc668a813e07  chore: bump the toolchain pin
+  804865b36cc1d602cda94004  fix: do not name a truncated hash
+  39430d9608205d7411ba9b45  perf: index the columns once
+  e60706707c41e3b7ff588a38  docs: name the boundary in SPEC
+  b778ba6e2395b11c12f5f2ee  test: a refusal is a row
+  001fbaedaf2a1ddaaceb9d5d  fix: hold the reader to the report
+  5296d4986af3857d2fc357f4  feat: decode the v6 field order
+  c2b9c4c8841feeb8488a6cae  docs: state the false-positive rate
+  12c2cd460b76b063a43e65a5  refactor: one scanner for every format
+  8a0ae3afb2126b021c4dce53  test: pin the RFC 9562 examples
+  8d67ed8b47dab58bf499127e  chore: bump the toolchain pin
+  af4b53cfe1f9659dd6033707  fix: do not name a truncated hash
+  c00dd852d39790195a272d1f  perf: index the columns once
+  50f2b9fb7cfa482f128743e4  docs: name the boundary in SPEC
+  c14859de58617066adbb1484  test: a refusal is a row
+  472ccab277f7703ddc4de0c2  fix: hold the reader to the report
+  e91e9cf09cff7ffd48af0a31  feat: decode the v6 field order
+  3c3c18eb1b0146a605972a7b  docs: state the false-positive rate
+  55dee24ed8ef92749d856b20  refactor: one scanner for every format
+  72265d387a72c136b3e7eec3  test: pin the RFC 9562 examples
+  2230ad4fbbb9de1ff2e3b969  chore: bump the toolchain pin
+  397308ace9d2bb13cd3b8a0b  fix: do not name a truncated hash
+  ea99d8955cf88244bc905868  perf: index the columns once
+  217e136e7b7e9f4597ba6a64  docs: name the boundary in SPEC
+  0da4b6e77c8eba906df375b0  test: a refusal is a row
+  a037841bc896d22f576ea4e9  fix: hold the reader to the report
+  73f2b419bcaded2e85f52881  feat: decode the v6 field order
+  003319041831fa6b62f332f4  docs: state the false-positive rate
+  34405cbff21f661aabcc431e  refactor: one scanner for every format
+  444fab321c73bf8432943e88  test: pin the RFC 9562 examples
+  b4397708d5ea09681beb0ef9  chore: bump the toolchain pin
+  10e1fc7e3fb6d0cfe8e8c8ad  fix: do not name a truncated hash
+  593985b199ec7c01ad4cf29e  perf: index the columns once
+  8b22b143e11846c982edb9a3  docs: name the boundary in SPEC
+  79e143f6b26b5da73f8e5ccc  test: a refusal is a row
+  a589d8c192b0ff72806462c3  fix: hold the reader to the report
+  42f6bdd9c41da53b6f77f8a8  feat: decode the v6 field order
+  f73c5efba75fce7aaee6ece9  docs: state the false-positive rate
+  69270f1cdcfd7897a0362229  refactor: one scanner for every format
+  bc8a5f707005853fc470adde  test: pin the RFC 9562 examples
+  481373c89c7223c91eb67cf1  chore: bump the toolchain pin
+  33a1bdcc9b8b380c3e2d0cda  fix: do not name a truncated hash
+  52ee5cba0516b187f10860e6  perf: index the columns once
+  4e498b6f8d6d8ae366a234dc  docs: name the boundary in SPEC
+  ebf2c1faba5e4478bb619dd9  test: a refusal is a row
+  a36ccc58945ef761f429bbbe  fix: hold the reader to the report
+  2c0f88969c45d151dc76f132  feat: decode the v6 field order
+  3c7246ff064ddbe842325f0c  docs: state the false-positive rate
+  ecc4651b1ba146327cc9bcc6  refactor: one scanner for every format
+  3290a7b784d199b9ae39698b  test: pin the RFC 9562 examples
+  67be3ffe7e2619cab2c4760c  chore: bump the toolchain pin
+  eb58fedb88654690e378e391  fix: do not name a truncated hash
+  383e3fc00076315e7b0940c6  perf: index the columns once
+  eecb3970916f5f8ed03738e8  docs: name the boundary in SPEC
+  6813218962ea81e8c7ac82b6  test: a refusal is a row
+  02d443d181a4b0c03af9bdad  fix: hold the reader to the report
+  4b9646e3989f526dbeaf04fd  feat: decode the v6 field order
+  15503720e8c08f8f91d68e6a  docs: state the false-positive rate
+  90992b67e4825d7ff236d040  refactor: one scanner for every format
+  d5f5d0bda89dd9a206d4deb2  test: pin the RFC 9562 examples
+  aadcf5f3d46544f75d5b9150  chore: bump the toolchain pin
+  0762d052ff1b0351ff264454  fix: do not name a truncated hash
+  745926fce6ef32a17627f871  perf: index the columns once
+  3edde90dff7e48eedfbaf28e  docs: name the boundary in SPEC
+  c02ab4a3ca02051a5b3aee51  test: a refusal is a row
+  54dd1a2699cbebf3c8a42b3f  fix: hold the reader to the report
+  5344ad18614bcccf0ae8cb43  feat: decode the v6 field order
+  bce339d43abb2fa5e7b5c14e  docs: state the false-positive rate
+  db09828bc9b1b1e88ab8de96  refactor: one scanner for every format
+  78bf61660b65455832ef0d50  test: pin the RFC 9562 examples
+  8b16389d60830431080121d8  chore: bump the toolchain pin
+  3aa8b5e0055212b2a2f5ab19  fix: do not name a truncated hash
+  4eff5071c5a9f7b0fd18bc58  perf: index the columns once
+  9d4f4622072881ad3025edc0  docs: name the boundary in SPEC
+  d96fc277f30a52c6d3fab94d  test: a refusal is a row
+  73a4fe7d87873aab4b91bf83  fix: hold the reader to the report
+  06c6a45efca0785632b6d198  feat: decode the v6 field order
+  1d3f70bce17e174c9bbf5bfb  docs: state the false-positive rate
+  8f34aae53b37f3565a2c3107  refactor: one scanner for every format
+  274abbf51d8713cf705811fc  test: pin the RFC 9562 examples
+  e93f7fdb3a62a4f34c309392  chore: bump the toolchain pin
+  7ce53654794b3d527e95590e  fix: do not name a truncated hash
+  2c576f8eb0cbe228cbc96cfb  perf: index the columns once
+  ab9a75885a025d9c3f916d4a  docs: name the boundary in SPEC
+  b609a68ed22a0746586abbcf  test: a refusal is a row
+  38c3c559bcaa8076687dd95e  fix: hold the reader to the report
+  a0c1dc220210386ba1f4efda  feat: decode the v6 field order
+  cc6f7414f91990fb9d8f75a4  docs: state the false-positive rate
+  9c9d7aadf56c95ea3746ca40  refactor: one scanner for every format
+  aa30ac7142d6c8a2bae8e793  test: pin the RFC 9562 examples
+  869ae0090717db15ef661acd  chore: bump the toolchain pin
+  7a63b236ae6f696508363a3c  fix: do not name a truncated hash
+  ac545c3eaff787d952e902b7  perf: index the columns once
+  d1f4b778b47bc863284584ce  docs: name the boundary in SPEC
+  85ec41f6c1653de3b1660e0c  test: a refusal is a row
+  e5ef10b2bd44ab68dc15acbd  fix: hold the reader to the report
+  0bb24a246ddc5083c7b861fc  feat: decode the v6 field order
+  2075323e7ef9c3bec88dee50  docs: state the false-positive rate
+  0f91593e41508a013d663457  refactor: one scanner for every format
+  df00ce942373455f28d89958  test: pin the RFC 9562 examples
+  909a9c2897c24320932864c2  chore: bump the toolchain pin
+  075d0e5c60c5769b0bae536b  fix: do not name a truncated hash
+  0151ce26e53d05b2a493f8b1  perf: index the columns once
+  fa3a7a5a3707f7067f1ec47d  docs: name the boundary in SPEC
+  a210a2415edc5582abff04c9  test: a refusal is a row
+  7e2b6c63184fc583075269f2  fix: hold the reader to the report
+  3b21623a64d245b09bc5c36b  feat: decode the v6 field order
+  f24dff83a062b9649190e03c  docs: state the false-positive rate
+  aa38c0e1ba403c3b68046c24  refactor: one scanner for every format
+  3ff7cfdea72e98542deb2b01  test: pin the RFC 9562 examples
+  baed04cc6bf121f83c1b0cda  chore: bump the toolchain pin
+  46fba7a1d38e1a199fc7bf3a  fix: do not name a truncated hash
+  8f6dc7cab1f878cc6bce3721  perf: index the columns once
+  7872c0b8033aed6486f45581  docs: name the boundary in SPEC
+  1345aa0e724a93e239b237d5  test: a refusal is a row
+  573e3bcb14dd2388275fda08  fix: hold the reader to the report
+  b719dda428a4152f18bd2924  feat: decode the v6 field order
+  561e86d8799d191479ebf8eb  docs: state the false-positive rate
+  529a31707e4691611318c7ee  refactor: one scanner for every format
+  acf0106b267014c09213a27f  test: pin the RFC 9562 examples
+  fc27979c05cfa05105bbfd5b  chore: bump the toolchain pin
+  1b67ee81eca899fb116a3b69  fix: do not name a truncated hash
+  9ea13bc7c3ce0cbf52f176e8  perf: index the columns once
+  e96257165c4a82db51effef1  docs: name the boundary in SPEC
+  928dfb3efd1b1c5af014e2f6  test: a refusal is a row
+  082cc70604ab177866c574cd  fix: hold the reader to the report
+  d4383fa0bdb1a64affc50b34  feat: decode the v6 field order
+  7dbe1d25eb5a69ac539ff786  docs: state the false-positive rate
+  43438c98c15504cc1d824ce3  refactor: one scanner for every format
+  86c3a8362b2564f783818c11  test: pin the RFC 9562 examples
+  5741f69b4b58348288480ddf  chore: bump the toolchain pin
+  ab786736c0f03d8b57f24f94  fix: do not name a truncated hash
+  629bd0715c86eb6825479dd5  perf: index the columns once
+  664bb48923788573ca0c7a33  docs: name the boundary in SPEC
+  8a8df6882959575177905b7b  test: a refusal is a row
+  71252856461b8bedbd3e5c3a  fix: hold the reader to the report
+  a239677ed0d6ad8511de9b91  feat: decode the v6 field order
+  8ea2484e6dfe87e2d0c390df  docs: state the false-positive rate
+  c40973a2d3107b5be3ba3c17  refactor: one scanner for every format
+  410a82093472649dcf1cfc51  test: pin the RFC 9562 examples
+  d3a2ee17d528c0f4c30a5dd8  chore: bump the toolchain pin
+  c1061631cffabf4ade31372c  fix: do not name a truncated hash
+  490661edcf474249a11d1f97  perf: index the columns once
+  9ef428167f885f07a3f70711  docs: name the boundary in SPEC
+  d159f84455d608f4a0f4b704  test: a refusal is a row
+  d6b792c9e3393405dd99351c  fix: hold the reader to the report
+  b4325e9bf179dfcbc672b373  feat: decode the v6 field order
+  5035893404ec15e7de2aa585  docs: state the false-positive rate
+  eb1953099ff76e18f05c8422  refactor: one scanner for every format
+  b67c4f6c7bad819f57b9a896  test: pin the RFC 9562 examples
+  60180f840b787b882ebc4c5d  chore: bump the toolchain pin
+  6188604ad54688049d2ad9f0  fix: do not name a truncated hash
+  f2f9a33e0df266be592d1474  perf: index the columns once
+  4a3da7faaf5b3670e49b23a3  docs: name the boundary in SPEC
+  2276ee9fa3b64ffe16854182  test: a refusal is a row
+  8ee5408b56585f804c44c498  fix: hold the reader to the report
+  bd3f6f6993c7a23609d7aa72  feat: decode the v6 field order
+  ffb99eb1e63cb5d92ca9dc0f  docs: state the false-positive rate
+  3e49fe70da15a5681eee53c1  refactor: one scanner for every format
+  405f021ba3db9c579fcb70f7  test: pin the RFC 9562 examples
+  57adaaa6efd387d714444e30  chore: bump the toolchain pin
+  b287ab4f3d9f52430b852559  fix: do not name a truncated hash
+  b9374110de02bff970c414b4  perf: index the columns once
+  f16ddd772a9d16e516eebe30  docs: name the boundary in SPEC
+  7c79778bbccf9980a5f9c5b6  test: a refusal is a row
+  cf83e976a05805f4d9e8a08a  fix: hold the reader to the report
+  678a7082a38d8275e1256a81  feat: decode the v6 field order
+  bcf888ee0a0d874dee23a29a  docs: state the false-positive rate
+  4da906e5f9ea3236612644bf  refactor: one scanner for every format
+  aa9a345e5d759bea6997db5a  test: pin the RFC 9562 examples
+  f817b0b932ddce7575dcf5d9  chore: bump the toolchain pin
+  f1c5ff41631c4b0d2b16c7b7  fix: do not name a truncated hash
+  45aec6105823e59e1cd309d9  perf: index the columns once
+  c5dceb4b2ad43584b1dd0ad4  docs: name the boundary in SPEC
+  be89c9a3d6655514275156c4  test: a refusal is a row
+  d20175481979ac0ad4ea8146  fix: hold the reader to the report
+  6da971c3226d2d815731b9ab  feat: decode the v6 field order
+  18e47a0d9b6fa39787e43214  docs: state the false-positive rate
+  5a614c05e5eaca6e42ac5988  refactor: one scanner for every format
+  8979d3616454e03a8b0e7059  test: pin the RFC 9562 examples
+  ce05f3152dd966002eeb437b  chore: bump the toolchain pin
+  c5f7346c1b83fa0195fe3e10  fix: do not name a truncated hash
+  ceed985d68431ff454290d6b  perf: index the columns once
+  c241fdedb753923a3acd675c  docs: name the boundary in SPEC
+  1f100c349b9f248f4553f712  test: a refusal is a row
+  477dacd672be0fdd67a40464  fix: hold the reader to the report
+  58678aec4fd149fe6ca4ff8b  feat: decode the v6 field order
+  0888fceb2bf0d4435e5a5ec9  docs: state the false-positive rate
+  11c65a270a76b01790ae0336  refactor: one scanner for every format
+  e06be5513cf9416f0e04b28a  test: pin the RFC 9562 examples
+  2e4dcae9edfc04040ed79778  chore: bump the toolchain pin
+  2bb31d195f2e7d1f8e8d17e8  fix: do not name a truncated hash
+  43f7720f48f96ce1d519785b  perf: index the columns once
+  418a8becd1b2b715c2e3233d  docs: name the boundary in SPEC
+  5e733b6bd7c39a9fc9157139  test: a refusal is a row
+
+checksum manifest
+
+  09deeef5e666bcbd9530fb65  build/artifact-0.tar.gz
+  856577ba85a36a010c546b90  build/artifact-1.tar.gz
+  d229fa295048ae0b6abb5bde  build/artifact-2.tar.gz
+  0140900ddaa564b78b3e21e2  build/artifact-3.tar.gz
+  0a435f74f179e530b9b3f105  build/artifact-4.tar.gz
+  cafe9a2ef4fdba0d4440251e  build/artifact-5.tar.gz
+  7b003234cbe152c98e920bd0  build/artifact-6.tar.gz
+  c2b438457f743606dc2711bc  build/artifact-7.tar.gz
+  20c6bbe7e114ee755c80961b  build/artifact-8.tar.gz
+  b48b92d594de84a1e3f40dfb  build/artifact-9.tar.gz
+  3c53d69fefd58fd448231c27  build/artifact-10.tar.gz
+  feb7b1276e1ccde3d2695ec9  build/artifact-11.tar.gz
+  b476003f4683e0dba19edbb6  build/artifact-12.tar.gz
+  dc2f48a0ee70f3a7286c7c4b  build/artifact-13.tar.gz
+  026a857de9db7b874a63f5c3  build/artifact-14.tar.gz
+  2b344bacc2004a95b944d699  build/artifact-15.tar.gz
+  8d8ad84a2138c0f77b1fce61  build/artifact-16.tar.gz
+  932d2d11c9bdc9bd77286ee4  build/artifact-17.tar.gz
+  c1eda0afd8634f86dcf74c98  build/artifact-18.tar.gz
+  d3a6385910255ad989f49875  build/artifact-19.tar.gz
+  808eb4fb089c26cf87f98d0f  build/artifact-20.tar.gz
+  7dfca067303615ec2e407527  build/artifact-21.tar.gz
+  197f2f5f4670307f6e2ae229  build/artifact-22.tar.gz
+  7b1daf80a2ccf8b832df6427  build/artifact-23.tar.gz
+  420d81a9bcc9a58c0ab8687a  build/artifact-24.tar.gz
+  0684fc990aadf4fd2cdb3f24  build/artifact-25.tar.gz
+  16beb5210e7483bd031a2116  build/artifact-26.tar.gz
+  6bfc0824f3453c81780acac1  build/artifact-27.tar.gz
+  202cb26b84c615a2fc80eb11  build/artifact-28.tar.gz
+  9d95b430302c1578ee68c330  build/artifact-29.tar.gz
+  beb598504797a633fd074d85  build/artifact-30.tar.gz
+  46ac91cadaf65b7e9d71df8a  build/artifact-31.tar.gz
+  20379bb6eaab69f5cabef512  build/artifact-32.tar.gz
+  3c5b121af8304cd21f22222d  build/artifact-33.tar.gz
+  15f212fdad2ad2396ba6bc00  build/artifact-34.tar.gz
+  a478f3b32c5b3224dfac40f2  build/artifact-35.tar.gz
+  a1f627aa42cc2146a40354e0  build/artifact-36.tar.gz
+  9a27f970f6792a98a53c65dd  build/artifact-37.tar.gz
+  6a215a944de9282b12c4924a  build/artifact-38.tar.gz
+  d0107f4f07d6745f41d288cd  build/artifact-39.tar.gz
+  eec388eb9a30c00df168a672  build/artifact-40.tar.gz
+  d0e57582c1b7420e6d6c67b4  build/artifact-41.tar.gz
+  aafa4a6df882146594401e66  build/artifact-42.tar.gz
+  49bd2c1d66aca8d73bd14cb7  build/artifact-43.tar.gz
+  dc094e706320d7fccaca4550  build/artifact-44.tar.gz
+  3f27f6a3d8c1ac38e9847d95  build/artifact-45.tar.gz
+  ebeeb95dbe17610c3cf6d6b1  build/artifact-46.tar.gz
+  108bb9d7ebc347811d0cc539  build/artifact-47.tar.gz
+  55e9548247d577e3bb0fae1f  build/artifact-48.tar.gz
+  db1a2314fbea37b10fc91813  build/artifact-49.tar.gz
+  c3b8834d9cbe60af3d8f0afa  build/artifact-50.tar.gz
+  d4cef56aae34f0795d45aa95  build/artifact-51.tar.gz
+  bb16bed6d283a09c9893eebb  build/artifact-52.tar.gz
+  f5d7b8d9273d62ec0045f759  build/artifact-53.tar.gz
+  31352df76d097d695fc91050  build/artifact-54.tar.gz
+  45ce919b737df321b02574cd  build/artifact-55.tar.gz
+  e4e568b0fa0bf6deb15bad40  build/artifact-56.tar.gz
+  418f15a90fc2913f34356fa3  build/artifact-57.tar.gz
+  0a3f097b86dbd72234e61005  build/artifact-58.tar.gz
+  5286e8bd6f6d59737779954b  build/artifact-59.tar.gz
+  8b7a0fb88d1c21e9cf44c41d  build/artifact-60.tar.gz
+  f47e35c1ae01a0fc192bbe8d  build/artifact-61.tar.gz
+  95d87a3e75802420f60f341c  build/artifact-62.tar.gz
+  7bf120789a890eee09435c35  build/artifact-63.tar.gz
+  980df306e10f6402f0335221  build/artifact-64.tar.gz
+  9da9f0a44254a905cb894b47  build/artifact-65.tar.gz
+  59f9d15b64b24eaf0edc3cfa  build/artifact-66.tar.gz
+  fa90fc4653090b345328352d  build/artifact-67.tar.gz
+  183bcd8c88a31453f3e1c0aa  build/artifact-68.tar.gz
+  6359f53ee00a1bac8c4c1852  build/artifact-69.tar.gz
+  47408c73699bdeaae71f03bf  build/artifact-70.tar.gz
+  f62cf111ee52f4041c41803e  build/artifact-71.tar.gz
+  fe1e68b00bc2ae555a43aab4  build/artifact-72.tar.gz
+  f8920ce7bb02efb227e602d7  build/artifact-73.tar.gz
+  aeee0d7ec93c9d00e838be6f  build/artifact-74.tar.gz
+  11f42482fc7c03739f9a34fb  build/artifact-75.tar.gz
+  d0b1ef20c1dacd3d2ed9e427  build/artifact-76.tar.gz
+  8ab53ef73f5cf0468f99625f  build/artifact-77.tar.gz
+  bd16ffa30abfc88ce7003b13  build/artifact-78.tar.gz
+  4155f1d5b967f442413e9802  build/artifact-79.tar.gz
+  a21381ee8a6855f9b0a89864  build/artifact-80.tar.gz
+  ba04cf2f8a870e8d3a41e6ba  build/artifact-81.tar.gz
+  3ab74059c55cf432ca90bd9c  build/artifact-82.tar.gz
+  fc29824a1f38db164ffd8153  build/artifact-83.tar.gz
+  c96cfd52afce3991f0c93df7  build/artifact-84.tar.gz
+  bf763126e6365fe07e7e918b  build/artifact-85.tar.gz
+  7bfe5542534523db7d272bc6  build/artifact-86.tar.gz
+  614f8441de3a7ac1a26da692  build/artifact-87.tar.gz
+  ebd36ee2501d2a0939884107  build/artifact-88.tar.gz
+  475e73a4b82a0e71788df238  build/artifact-89.tar.gz
+  8097447120d2b0d21df8e0fc  build/artifact-90.tar.gz
+  c34709bb5b465bc63c885af9  build/artifact-91.tar.gz
+  0e73782fec67cdcf8d7b8f03  build/artifact-92.tar.gz
+  3e838968e9547469524537c0  build/artifact-93.tar.gz
+  dd4b0dfab28f8e86faa29350  build/artifact-94.tar.gz
+  a5fe20d11aa71cc9a1047992  build/artifact-95.tar.gz
+  94790992482180aeb5b10ea8  build/artifact-96.tar.gz
+  9e10828855cb93f70d342a0e  build/artifact-97.tar.gz
+  7bd7a09ff24f1d47f89d1c36  build/artifact-98.tar.gz
+  608cff16c5390947acb87f58  build/artifact-99.tar.gz
+  e509fb6e4b433b0af67cea8a  build/artifact-100.tar.gz
+  4a15c5e8b6f8e396690d5fd8  build/artifact-101.tar.gz
+  10d7cc6a1ea5e1daca3c4401  build/artifact-102.tar.gz
+  b9d53aa4932928c03c1d1a07  build/artifact-103.tar.gz
+  fc397674e5d6d030ea4c74e9  build/artifact-104.tar.gz
+  ca9e329c40335d7b1c469841  build/artifact-105.tar.gz
+  b27da9eb1147c2d34fa47067  build/artifact-106.tar.gz
+  c98a8c1830a8f4b06928d692  build/artifact-107.tar.gz
+  9865226c6da74e420a3de50a  build/artifact-108.tar.gz
+  edef9daf91c47c9b80ea5961  build/artifact-109.tar.gz
+  53367ebbdbfb327d8b836f28  build/artifact-110.tar.gz
+  99d892c416331da54e3a57b6  build/artifact-111.tar.gz
+  c4dc9881945c2b45237dcd6f  build/artifact-112.tar.gz
+  2e9844ed055360a1cab46321  build/artifact-113.tar.gz
+  337288a36fff6acfd605f10e  build/artifact-114.tar.gz
+  e6b53e6b912cf87d88f874c8  build/artifact-115.tar.gz
+  282df549396e69d00bf3d3de  build/artifact-116.tar.gz
+  4c4a40af3518b3e0ddf118db  build/artifact-117.tar.gz
+  61269b47f7786db42c163756  build/artifact-118.tar.gz
+  b8b98295a56166cb270577c6  build/artifact-119.tar.gz
+  16ec811849fa23e291195087  build/artifact-120.tar.gz
+  a7126ff9d800c0b8a6db0e65  build/artifact-121.tar.gz
+  12ed56822bd885bd6043b6d8  build/artifact-122.tar.gz
+  9a9be3f2afd922d078441e62  build/artifact-123.tar.gz
+  6cab3c76a689206cfd169e6e  build/artifact-124.tar.gz
+  ed880192b6f5a0830486bd67  build/artifact-125.tar.gz
+  4871ffe27cbf9d6805e4d0fb  build/artifact-126.tar.gz
+  766e6f2bf4b8d766eeea79bb  build/artifact-127.tar.gz
+  e0f7f41b49811c2cdd1e7a96  build/artifact-128.tar.gz
+  137f026a774fb34ebeea2228  build/artifact-129.tar.gz
+  506e04623d3b4f08cb2c53a6  build/artifact-130.tar.gz
+  376ef503350f110ffc3e361b  build/artifact-131.tar.gz
+  11088ed0a359670ccb3f5412  build/artifact-132.tar.gz
+  03f5551499af9204133c7b7d  build/artifact-133.tar.gz
+  4013c6ac015a87788db00aa5  build/artifact-134.tar.gz
+  251e57fe4da74f2b78037785  build/artifact-135.tar.gz
+  043b88051efca93a121cc2cf  build/artifact-136.tar.gz
+  13a1c0c282345a052c35e7c8  build/artifact-137.tar.gz
+  2ab9ca6907406ccda5bdd208  build/artifact-138.tar.gz
+  1656044aaedbdaa54ed3813c  build/artifact-139.tar.gz
+  f1d451edfb88ee3ad0dbdeb8  build/artifact-140.tar.gz
+  958062d5a4f7f631042da83c  build/artifact-141.tar.gz
+  28874b48d5f575214d76e3fb  build/artifact-142.tar.gz
+  b2f85bbae42b47d24f9a1afb  build/artifact-143.tar.gz
+  f8f8f2064bcf7088a3ce8a76  build/artifact-144.tar.gz
+  45330fe37ccc4f91d696576a  build/artifact-145.tar.gz
+  54bbfcd1ae3ec15d93c00314  build/artifact-146.tar.gz
+  8a6a46b9e702e844a98ffa18  build/artifact-147.tar.gz
+  ee844b60fc6855b2b4dc59b3  build/artifact-148.tar.gz
+  60c02a0141f67609872497fb  build/artifact-149.tar.gz
+  6ca223ebce901764166ee4db  build/artifact-150.tar.gz
+  7db1f56aa9be739f2f13237d  build/artifact-151.tar.gz
+  d9f3166b2a0ec8bcbb4c202f  build/artifact-152.tar.gz
+  f6970eaba9df9962fcb043c0  build/artifact-153.tar.gz
+  cd075baa9514c4e89d5d8c8a  build/artifact-154.tar.gz
+  83844b56c035dc31170bdeda  build/artifact-155.tar.gz
+  a28a0f951d79627121930c1b  build/artifact-156.tar.gz
+  1341560180e73fafc007325e  build/artifact-157.tar.gz
+  2025c4166edb230b55b7fb60  build/artifact-158.tar.gz
+  a22f85bab5f7044c8c961ec8  build/artifact-159.tar.gz
+  4c4f37ec18165f321d9c41e3  build/artifact-160.tar.gz
+  d32e32b0369fe110ec117107  build/artifact-161.tar.gz
+  293bb301f61ddff7cf21865d  build/artifact-162.tar.gz
+  785680dae1e10065913315ff  build/artifact-163.tar.gz
+  9dc328a49ebd4d29dbc03ec8  build/artifact-164.tar.gz
+  e2f88309ae1ccbf0427890b4  build/artifact-165.tar.gz
+  0c29f430d520651f4a80e629  build/artifact-166.tar.gz
+  ac73ea48a38f2af6f8e16a49  build/artifact-167.tar.gz
+  72aaf731204669644a30effa  build/artifact-168.tar.gz
+  3342c812729c822cff249ee5  build/artifact-169.tar.gz
+  c95a655bfdf0a3c1d6b5c942  build/artifact-170.tar.gz
+  a5bee59134b2f09d05204e69  build/artifact-171.tar.gz
+  746f9513e952aa24f01a260e  build/artifact-172.tar.gz
+  556ccd9965a8c04439d702bb  build/artifact-173.tar.gz
+  73f2692344aba5ed6b150e7a  build/artifact-174.tar.gz
+  d69ce09deb2608eb7428a3ab  build/artifact-175.tar.gz
+  f89ea39523d7af2873919334  build/artifact-176.tar.gz
+  2ad2f14ee10f135a9a5136a5  build/artifact-177.tar.gz
+  75e6452105055e0c8a8ec294  build/artifact-178.tar.gz
+  0b3d008ad68a7740fc01371b  build/artifact-179.tar.gz
+  b2a8ca4456473ce3e1ed3aa4  build/artifact-180.tar.gz
+  a4e6a0cb80e5b5a680c95773  build/artifact-181.tar.gz
+  b740c996f49d836518d4b951  build/artifact-182.tar.gz
+  38590780c74f589178351a40  build/artifact-183.tar.gz
+  56bfe15e46cc688c3879ca8d  build/artifact-184.tar.gz
+  0bb1d619cdbebf08aa7cfb2b  build/artifact-185.tar.gz
+  cea7e37cbcdf3fbd33ebfba8  build/artifact-186.tar.gz
+  a28759cb18c5253437f9ab13  build/artifact-187.tar.gz
+  0ddddb0f26cf0fcb6549c4ff  build/artifact-188.tar.gz
+  6720529ab088dc3ae45d7208  build/artifact-189.tar.gz
+  6f15b4962ec5af3757453c67  build/artifact-190.tar.gz
+  02665aed80578988715cf248  build/artifact-191.tar.gz
+  9088b8201247723868485f3e  build/artifact-192.tar.gz
+  ae6413a1d3f2790e2d939e5a  build/artifact-193.tar.gz
+  2d0010b361a3bdeae18753ea  build/artifact-194.tar.gz
+  429c5b33827a039d964fccdc  build/artifact-195.tar.gz
+  d00b0ca7fad311461df550af  build/artifact-196.tar.gz
+  79e89bf94cdb7a3227ee1267  build/artifact-197.tar.gz
+  1e5810d20c753fba321b6a04  build/artifact-198.tar.gz
+  a11d5c010af4a386b52f95b2  build/artifact-199.tar.gz
+
+whole digests, for the record
+
+  0d25e556af2c3f535e8d2a88aab4586d  b20d2360a7505ac80b0e6208890011601bb52773  release-0
+  9fb1ed4493432985d4b885633ccb7735  413f85305ded49aced9b6614626ce8d5a69cc9d6  release-1
+  00fc8a7c7fa24057601889bcd290ba89  8bab725d6a6850ff1993ecca25fc6f900bdec122  release-2
+  d81a32ade8904976f850af1b7c10a7f5  dfddc21196d008ceb7bfe13f62124fa558b595b9  release-3
+  73e520631ecc0c0d50cd7407a4509367  e38afa54d63d5a74b53e33bb6489d8bfaf345aa4  release-4
+  dd2fc4f17b953ca15189b27f4cef8109  4b3d8c5d82d664adb0346d96f8e87a0c13957e23  release-5
+  b357f10a67d274ebf034760176946a1c  f97a00772e1d39375d97bc0fd4a0560557a442dc  release-6
+  0e53ef2e69b3e6838ffcdea21dfcefb5  5b4389f7e12be58b9f104edea75ef3b67b8b2e0a  release-7
+  2530a9d7d213afc4c79e16fa8cc62267  81d505504e04b58c3b725b87a3baac1b530993e9  release-8
+  a87368b42198572f499eb4ed4c4a0b1b  91409c89dfe2d9ff4f175f9e36cf30d3a410b41d  release-9
+  19a551d94411f10a9612eafdae1ef14f  27b6ee1b35c91f02367f631602a2150c3013c49c  release-10
+  8ecca28a0ed19c89e7b0104487a87020  967dc564189e108896c595801f61e7b9d56d93f5  release-11
+  eb4239fa04b9780cde5a308aaa676ff2  293d29380814469c083e197d4cf0b62394f099d6  release-12
+  54f7abfc7495032e571d51d499168649  568b1dfe1a344c82623363adf5cb7b78261cc591  release-13
+  34c428645c5d8ee655f202c8054c24d5  8d428ed5e29b5223e9a18b4e2d21ed7b02ffe7f3  release-14
+  386523e47ba815fede25c820ce3a3678  df2dbc80261cc2f1221ac1aee7223abd048dbe6d  release-15
+  4579b59e1f2e072fb39d7a01b0621fd9  cd59b46722b0c9c0e14243c947a1e6d5016f6952  release-16
+  39296419c2415f70f8ecbbe6389a2c98  173a9902f10a7d96f31d2b9be3bafd5fbf0e69ed  release-17
+  75cb0da0df2c6a0e77dd52c680e091f5  8bd81b17387af791dab69ae9cd5663075d7579e1  release-18
+  0bda2e4ebcada349f20af198d12fd34a  d913b5cad7705f9ecf185ac02e70d0de3933ce69  release-19

@@ -1,0 +1,16 @@
+{
+  "note": "one UUID of every version RFC 9562 defines, so 'all versions' is a claim with a document behind it",
+  "uuid_v1": "c232ab00-9414-11ec-b3c8-9e6bdeced846",
+  "uuid_v2": "000004d2-92e8-21ed-8100-3fdb0085247e",
+  "uuid_v3": "5df41881-3aed-3515-88a7-2f4a814cf09e",
+  "uuid_v4": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+  "uuid_v5": "2ed6657d-e927-568b-95e1-2665a8aea6a2",
+  "uuid_v6": "1ec9414c-232a-6b00-b3c8-9e6bdeced846",
+  "uuid_v7": "019ff344-cc00-7abc-8def-0123456789ab",
+  "uuid_v8": "2489e9ad-2ee2-8e00-8ec9-32d5f69181c0",
+  "variant_ncs": "f47ac10b-58cc-4372-1567-0e02b2c3d479",
+  "variant_microsoft": "f47ac10b-58cc-4372-c567-0e02b2c3d479",
+  "variant_future": "f47ac10b-58cc-4372-f567-0e02b2c3d479",
+  "version_zero": "f47ac10b-58cc-0372-a567-0e02b2c3d479",
+  "version_nine": "f47ac10b-58cc-9372-a567-0e02b2c3d479"
+}
