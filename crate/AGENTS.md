@@ -395,9 +395,13 @@ build · ci · chore · revert**. A scope is optional and free-form —
 where to look. Append `!` for a breaking change. **The subject is capped
 at 72 characters.**
 
-`.githooks/commit-msg` enforces both, and it is **opt-in per clone** —
-`git config core.hooksPath .githooks`, which a fresh checkout has not
-done. Run it before the first commit.
+**Both are enforced, and by CI rather than only by the hook.** The
+`commits` job in `.github/workflows/ci-crate.yml` checks every pushed
+commit's subject against the same pattern and the same cap.
+`.githooks/commit-msg` is the fast local copy and is **opt-in per clone**
+— `git config core.hooksPath .githooks`, which a fresh checkout has not
+done — so `--no-verify` and an unconfigured clone defer the check rather
+than escape it. Scopes may be comma-separated.
 
 Everything else about a commit stays as it was. The subject is still
 imperative and still says what changed rather than which files moved; the
