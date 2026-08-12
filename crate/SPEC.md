@@ -296,6 +296,12 @@ read, ignore rules included. Symlinks are never followed.
 `ids-le mcp` speaks the Model Context Protocol on stdio, protocol version
 `2025-06-18`, and offers two tools.
 
+**Both schemas are strict in the same way**: `additionalProperties` is
+`false`, and each says what it needs — `extract_ids` requires `content`,
+`ids_le_scan` requires one of `path` or `paths`. A property neither
+defines is a typo the caller should be told about, not a knob silently
+ignored.
+
 - **`extract_ids`** — takes `content` plus optional `format`, `filename`,
   `kind`, `maxResults`. Touches no filesystem.
 - **`ids_le_scan`** — takes `path` or `paths`, plus optional `format`,

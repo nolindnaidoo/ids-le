@@ -13,19 +13,23 @@
 //! - **Refusals speak the caller's vocabulary.** An MCP caller has no
 //!   command line, so no message here mentions a flag.
 //!
+//! **This module is the transport and the envelope; a tool is a module.**
+//! `extract.rs` and `scan.rs` each hold one tool's schema next to the code
+//! that honours it — written a module apart, the two drifted, and
+//! `ids_le_scan` spent a release accepting any property a caller sent
+//! while `extract_ids` refused unknown ones.
+//!
 //! Read-only by construction: nothing on this surface writes.
 
 pub(crate) mod extract;
+pub(crate) mod scan;
 
 use std::io::{BufRead, Write};
-use std::path::PathBuf;
 use std::process::ExitCode;
 
 use serde_json::{Value, json};
 
-use crate::extract::{KIND_NAMES, Kind, resolve_format};
-use crate::scan::{self, ScanOptions};
-use crate::walk::{self, WalkOptions};
+use crate::extract::{KIND_NAMES, Kind};
 
 const PROTOCOL_VERSION: &str = "2025-06-18";
 
@@ -90,52 +94,7 @@ fn handle(request: &Value) -> Option<Value> {
 }
 
 fn tool_definitions() -> Value {
-    json!([
-        extract::definition(),
-        {
-            "name": "ids_le_scan",
-            "description": "Extract every identifier from files or directories, with the file \
-                            it came from, its line and column, the document's key path for it, \
-                            and the decoded time where the identifier carries one. Reads the \
-                            filesystem; never writes to it. A run that cannot be named is \
-                            returned as a row with `valid: false` and a named reason, never \
-                            dropped.",
-            "inputSchema": {
-                "type": "object",
-                "properties": {
-                    "path": { "type": "string", "description": "a file or directory to read" },
-                    "paths": {
-                        "type": "array",
-                        "items": { "type": "string" },
-                        "description": "several files or directories, instead of `path`",
-                    },
-                    "format": {
-                        "type": "string",
-                        "description": "Force a format for every file instead of inferring one \
-                                        per file name. An unrecognised name reads the text \
-                                        directly, without key paths.",
-                    },
-                    "kind": {
-                        "type": "string",
-                        "enum": KIND_NAMES,
-                        "description": "Return only one kind. This narrows the report after \
-                                        the analysis; omit it for the complete answer.",
-                    },
-                    "hidden": {
-                        "type": "boolean",
-                        "default": false,
-                        "description": "Walk hidden files and directories too, which is where \
-                                        a dotenv file lives.",
-                    },
-                    "ignored": {
-                        "type": "boolean",
-                        "default": false,
-                        "description": "Walk files excluded by .gitignore too.",
-                    },
-                },
-            },
-        },
-    ])
+    json!([extract::definition(), scan::definition()])
 }
 
 /// Protocol failures (no tool named, an unknown tool) are JSON-RPC
@@ -152,14 +111,14 @@ fn call_tool(params: Option<&Value>) -> Result<Value, (i64, String)> {
         .get("arguments")
         .cloned()
         .unwrap_or_else(|| json!({}));
-    let clock = crate::extract::Clock::at(scan::now_ms());
+    let clock = crate::extract::Clock::at(crate::scan::now_ms());
 
     match name {
         "extract_ids" => Ok(match extract::run(&arguments, clock) {
             Ok(result) => tool_result(&result),
             Err(message) => tool_failure(&message),
         }),
-        "ids_le_scan" => Ok(match scan_tool(&arguments) {
+        "ids_le_scan" => Ok(match scan::run(&arguments) {
             Ok(result) => tool_result(&result),
             Err(message) => tool_failure(&message),
         }),
@@ -168,97 +127,6 @@ fn call_tool(params: Option<&Value>) -> Result<Value, (i64, String)> {
             format!("this server offers no tool named {other}"),
         )),
     }
-}
-
-fn scan_tool(arguments: &Value) -> Result<Value, String> {
-    let inputs = requested_paths(arguments)?;
-    let flag = |name: &str| {
-        arguments
-            .get(name)
-            .and_then(Value::as_bool)
-            .unwrap_or(false)
-    };
-    let walk_options = WalkOptions {
-        hidden: flag("hidden"),
-        respect_ignore: !flag("ignored"),
-    };
-    let options = ScanOptions {
-        format: arguments
-            .get("format")
-            .and_then(Value::as_str)
-            .map(|name| resolve_format(Some(name), None)),
-        ..ScanOptions::default()
-    }
-    .with_kind(requested_kind(arguments)?);
-
-    let targets = walk::collect(&inputs, &walk_options)?;
-    let scanned = targets
-        .iter()
-        .map(|target| scan::scan_file(target, options))
-        .collect();
-    // A binary file was never a text candidate, so it gets no report —
-    // but the count is carried, because an agent reading `reports` as
-    // the whole tree would otherwise be wrong about coverage.
-    let (read, binary) = scan::partition(scanned);
-    let reports: Vec<Value> = read
-        .iter()
-        .map(|report| serde_json::to_value(report).expect("a report serializes"))
-        .collect();
-
-    // Summed from the typed reports rather than read back out of the
-    // JSON beside them: a lookup that missed would fall back to zero and
-    // understate the tree without saying so.
-    let ids: usize = read.iter().map(|report| report.summary.ids).sum();
-    let refused: usize = read.iter().map(|report| report.summary.refused).sum();
-
-    let mut diagnostics: Vec<Value> = read
-        .iter()
-        .filter(|report| report.was_skipped())
-        .map(|report| {
-            warning(
-                "unreadable",
-                &format!(
-                    "{} could not be read, so this scan does not cover it",
-                    report.file
-                ),
-            )
-        })
-        .collect();
-    if refused > 0 {
-        diagnostics.push(warning(
-            "refused",
-            &format!(
-                "{refused} run(s) could not be named; each is in its file's report with \
-                 `valid: false` and a reason"
-            ),
-        ));
-    }
-
-    let count = reports.len();
-    Ok(envelope(
-        "ids_le_scan",
-        &json!({ "reports": reports, "ids": ids, "refused": refused, "binaryFiles": binary }),
-        count,
-        &diagnostics,
-        false,
-    ))
-}
-
-fn requested_paths(arguments: &Value) -> Result<Vec<PathBuf>, String> {
-    if let Some(path) = arguments.get("path").and_then(Value::as_str) {
-        return Ok(vec![PathBuf::from(path)]);
-    }
-    if let Some(items) = arguments.get("paths").and_then(Value::as_array) {
-        let paths: Vec<PathBuf> = items
-            .iter()
-            .filter_map(|item| item.as_str().map(PathBuf::from))
-            .collect();
-        if paths.is_empty() {
-            return Err("the list of paths was empty".to_string());
-        }
-        return Ok(paths);
-    }
-    Err("no file or directory was supplied to read".to_string())
 }
 
 /// An unknown kind is refused, where an unknown format is not.
@@ -294,7 +162,8 @@ pub(crate) fn requested_kind(arguments: &Value) -> Result<Option<Kind>, String> 
 /// not a failure to produce one — conflating the two would have a model
 /// report a broken tool when what it actually learned is that the
 /// identifiers in that file cannot be named from the file alone.
-/// **`ok` is `true` by construction, and that is the contract rather
+///
+/// It follows that **`ok` is `true` by construction, and that is the contract rather
 /// than a shortcut.** A tool that could not run on its arguments returns
 /// `tool_failure` and never reaches an envelope; a tool that ran returns
 /// one. Everything that can appear in `diagnostics` here is a warning
@@ -328,7 +197,9 @@ fn tool_result(envelope: &Value) -> Value {
     })
 }
 
-fn warning(code: &str, message: &str) -> Value {
+/// A diagnostic about what the run found. Warnings are the only kind
+/// this surface produces — see `envelope`.
+pub(crate) fn warning(code: &str, message: &str) -> Value {
     json!({ "severity": "warning", "code": code, "message": message })
 }
 
@@ -497,6 +368,32 @@ mod tests {
             let rendered =
                 serde_json::to_string(&call("ids_le_scan", &arguments)).expect("serializes");
             assert!(!rendered.contains("--"), "{rendered}");
+        }
+    }
+
+    /// **Both tools are strict about their arguments in the same way.**
+    /// A schema that accepts unknown properties tells a model its typo
+    /// was fine and then answers a question it did not ask.
+    /// `extract_ids` declared `additionalProperties: false` and a
+    /// `required` list; `ids_le_scan` declared neither, which is a
+    /// silent default on the surface with the least tolerance for one.
+    #[test]
+    fn every_tool_schema_refuses_unknown_properties_and_says_what_it_needs() {
+        let definitions = tool_definitions();
+        let tools = definitions.as_array().expect("tools");
+        assert_eq!(tools.len(), 2, "a tool arrived or left");
+        for tool in tools {
+            let name = tool["name"].as_str().expect("a name");
+            let schema = &tool["inputSchema"];
+            assert_eq!(schema["type"], "object", "{name}");
+            assert_eq!(
+                schema["additionalProperties"], false,
+                "{name} accepts properties it does not define"
+            );
+            assert!(
+                schema.get("required").is_some() || schema.get("anyOf").is_some(),
+                "{name} does not say what it needs"
+            );
         }
     }
 

@@ -36,6 +36,21 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- **`ids_le_scan`'s tool schema is as strict as `extract_ids`'s.** It
+  declared neither `required` nor `additionalProperties: false`, so a
+  model that misspelled `hidden` was told nothing and got a walk it had
+  not asked for. The schema now sets `additionalProperties: false` and
+  `anyOf: [{required: ["path"]}, {required: ["paths"]}]`, which is what
+  the handler has always enforced in prose.
+
+  The tool moved to `src/mcp/scan.rs`, beside `extract.rs`, because that
+  is why the two drifted: `extract_ids` kept its schema next to its
+  handler and `ids_le_scan` had its schema in the transport module a
+  hundred lines from the code honouring it. `mod.rs` is the transport and
+  the envelope; a tool is a module. A test now holds every tool's schema
+  to both rules, and another turns every knob `ids_le_scan` advertises —
+  `hidden` and `ignored` had no test on this surface at all.
+
 - **A year outside `0000`–`9999` is written in ISO-8601's expanded form.**
   The report calls every decoded instant an ISO-8601 UTC string, and a
   five-digit year printed as bare digits is not one — the standard asks
