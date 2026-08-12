@@ -20,6 +20,7 @@ const UUID_V4: &str = "f47ac10b-58cc-4372-a567-0e02b2c3d479";
 const UUID_V7: &str = "019ff344-cc00-7abc-8def-0123456789ab";
 const NIL: &str = "00000000-0000-0000-0000-000000000000";
 const ULID: &str = "01KZSM9K00ABCDEFGH12345678";
+const OBJECT_ID: &str = "6a7bb780a1b2c3d4e5f60718";
 
 struct Tree {
     root: PathBuf,
@@ -228,7 +229,7 @@ fn an_embedded_timestamp_is_decoded_to_iso_8601_utc() {
     let tree = Tree::new("decode");
     tree.write(
         "ids.yaml",
-        &format!("request_id: {UUID_V7}\nsession: {ULID}\nblob: 6a7bb780a1b2c3d4e5f60718\n"),
+        &format!("request_id: {UUID_V7}\nsession: {ULID}\ndocument_id: {OBJECT_ID}\n"),
     );
     let rows = reports(&run(&[&tree.path().to_string_lossy()]))[0]["ids"].clone();
     for index in 0..3 {
@@ -236,10 +237,71 @@ fn an_embedded_timestamp_is_decoded_to_iso_8601_utc() {
             rows[index]["timestamp"], "2026-08-12T00:00:00.000Z",
             "row {index}: {rows}"
         );
+        assert_eq!(
+            rows[index]["valid"], true,
+            "row {index} was refused, so its decode proves nothing: {rows}"
+        );
     }
     assert_eq!(rows[0]["version"], 7);
     assert_eq!(rows[0]["variant"], "rfc4122");
     assert_eq!(rows[0]["key"], "request_id");
+}
+
+/// **The same 24 characters, two verdicts.** An ObjectId has no
+/// structure to check — its whole specification is 24 hex digits — so
+/// the document's word for the field is the only evidence there is. Under
+/// a key naming an identifier it is named; under `checksum`, and in
+/// prose where there are no keys at all, it is refused. Driven against
+/// the binary because this is the rule a caller's report depends on.
+#[test]
+fn an_objectid_is_named_only_where_the_document_names_the_field_an_id() {
+    let tree = Tree::new("objectid-context");
+    tree.write(
+        "record.json",
+        &format!("{{\"_id\":\"{OBJECT_ID}\",\"checksum\":\"{OBJECT_ID}\"}}\n"),
+    );
+    tree.write("NOTES.md", &format!("The document was {OBJECT_ID}.\n"));
+
+    let found = reports(&run(&[&tree.path().to_string_lossy()]));
+    let rows = |suffix: &str| -> Vec<serde_json::Value> {
+        found
+            .iter()
+            .find(|report| {
+                report["file"]
+                    .as_str()
+                    .is_some_and(|file| file.ends_with(suffix))
+            })
+            .expect(suffix)["ids"]
+            .as_array()
+            .expect("rows")
+            .clone()
+    };
+
+    let record = rows("record.json");
+    assert_eq!(record.len(), 2, "the same value twice: {record:?}");
+    assert_eq!(record[0]["key"], "_id");
+    assert_eq!(record[0]["kind"], "objectid");
+    assert_eq!(record[0]["valid"], true);
+    assert_eq!(record[1]["key"], "checksum");
+    assert_eq!(record[1]["kind"], serde_json::Value::Null);
+    assert_eq!(record[1]["valid"], false);
+    assert_eq!(record[1]["refused"], "ambiguous_kind");
+    assert_eq!(
+        record[0]["value"], record[1]["value"],
+        "the rule is contextual, so the two values must be identical"
+    );
+    assert_eq!(
+        record[1]["timestamp"], "2026-08-12T00:00:00.000Z",
+        "the refusal carries the decode a reader would disagree with"
+    );
+
+    let prose = rows("NOTES.md");
+    assert_eq!(prose.len(), 1);
+    assert_eq!(
+        prose[0]["valid"], false,
+        "a document with no keys names no field an identifier"
+    );
+    assert_eq!(prose[0]["refused"], "ambiguous_kind");
 }
 
 /// The boundary stated in SPEC.md, driven against the binary: a bare

@@ -92,9 +92,11 @@ confidently wrong:
 
 - `5d41402abc4b2a76b9719d911017c592` is an unhyphenated UUID **and** an MD5
   digest. Nothing in a document separates them, so nothing here picks.
-- `e83c5163316f89bfbde7d9ab` is 24 hex characters, which is an ObjectId's
-  shape — but its leading four bytes decode to 2093, so it is a truncated
-  hash and is refused.
+- `6a7bb780a1b2c3d4e5f60718` is 24 hex characters. Under `_id` it is an
+  ObjectId minted on 2026-08-12. Under `checksum`, or in prose, it is
+  refused — an ObjectId's whole specification is *24 hex characters*, so
+  a truncated SHA-1 fits it exactly and only the document can tell them
+  apart.
 - `1536886938009600000` under `channel_id` is a Discord Snowflake at
   2026-08-12. Under a bare `user_id` it is refused, because the Twitter epoch
   fits too and the document does not say which. Under `population` it is not
@@ -145,8 +147,17 @@ projection of the same reports so the two cannot drift.
 | `uuid` | 36 characters, `8-4-4-4-12`, hex | v1, v6, v7 | `version`, `variant` |
 | `ulid` | 26 characters, Crockford base32 | always (48-bit Unix ms) | — |
 | `nanoid` | 21 characters, `A-Za-z0-9_-` | never — a NanoID has no clock | — |
-| `objectid` | 24 hex characters | always (32-bit Unix seconds) | — |
-| `snowflake` | 17–19 digits | always (top 42 bits + an epoch) | — |
+| `objectid` | 24 hex characters, under a key naming an id | always (32-bit Unix seconds) | — |
+| `snowflake` | 17–19 digits, under a key naming an id | always (top 42 bits + an epoch) | — |
+
+**Two of those kinds need the document's permission.** An ObjectId is 24
+hex characters and a Snowflake is a large integer; neither carries a
+version, a variant, a checksum or a restricted alphabet, so neither run
+can say on its own what it is — a truncated git hash is a structurally
+perfect ObjectId, and a byte count is a structurally perfect Snowflake.
+Both are named only where the field's own name ends in `id` (`_id`,
+`userId`, `USER-ID`, `$oid`), and refused as `ambiguous_kind` otherwise.
+In a plain-text file, which has no keys at all, neither is ever named.
 
 All eight UUID versions RFC 9562 defines are recognised, and all four
 variants — `ncs`, `rfc4122`, `microsoft`, `future` — are reported. A version
@@ -197,9 +208,14 @@ report line, counted on stderr, and it never fails the run.
 JSON (and JSONC), YAML, TOML, INI (`.cfg`, `.conf`, `.properties`), dotenv
 and CSV give each finding a key path — `service.requestId`,
 `documents.[0]._id`, `discord.channel_id`. Everything else is read as text:
-**the same identifiers, without the key**. That is why you can point this at
-a repository nobody has described to it and get an answer out of the `.md`,
-the `.sql` and the `.tf` as well as the config.
+**the same runs, in the same places, without the key**. That is why you can
+point this at a repository nobody has described to it and get an answer out
+of the `.md`, the `.sql` and the `.tf` as well as the config.
+
+The key path is evidence, not decoration. ObjectId and Snowflake are named
+only under a field the document calls an id, so a run that is named in the
+`.json` comes back `ambiguous_kind` in the `.md` beside it — same row, same
+position, same decode, and a reason instead of a name.
 
 ## For agents
 

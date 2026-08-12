@@ -1,0 +1,7 @@
+{
+  "note": "the same 24 hex characters four times: the verdict follows the field, not the value",
+  "record": { "_id": "6a7bb780a1b2c3d4e5f60718" },
+  "mirror": { "documentId": "6a7bb780a1b2c3d4e5f60718" },
+  "checksum": "6a7bb780a1b2c3d4e5f60718",
+  "manifest": ["6a7bb780a1b2c3d4e5f60718"]
+}

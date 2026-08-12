@@ -46,9 +46,11 @@ regex-based tool gets confidently wrong:
 
 - `5d41402abc4b2a76b9719d911017c592` is an unhyphenated UUID **and** an
   MD5 digest. Nothing in a document separates them, so nothing here picks.
-- `e83c5163316f89bfbde7d9ab` is 24 hex characters, which is an ObjectId's
-  shape — but its leading four bytes decode to 2093, so it is a truncated
-  hash and is refused.
+- `6a7bb780a1b2c3d4e5f60718` is 24 hex characters. Under `_id` it is an
+  ObjectId minted on 2026-08-12; under `checksum`, or in prose, it is
+  refused. An ObjectId's whole specification is *24 hex characters*, so a
+  truncated SHA-1 fits it exactly and only the document can separate
+  them.
 - `1536886938009600000` under `channel_id` is a Discord Snowflake at
   2026-08-12. Under a bare `user_id` it is refused, because the Twitter
   epoch fits too and the document does not say which. Under `population`
@@ -117,9 +119,14 @@ A refusal does not move the exit code. Refusing is the tool working;
 JSON (and JSONC), YAML, TOML, INI (`.cfg`, `.conf`, `.properties`),
 dotenv and CSV get each finding a key path — `service.requestId`,
 `documents.[0]._id`, `discord.channel_id`. Everything else is read as
-text: **the same identifiers, without the key**. That is why you can
-point this at a repository nobody has described to it and get an answer
-from the `.md`, the `.sql` and the `.tf` as well as the config.
+text: **the same runs, in the same places, without the key**. That is why
+you can point this at a repository nobody has described to it and get an
+answer from the `.md`, the `.sql` and the `.tf` as well as the config.
+
+The key path is evidence, not decoration. ObjectId and Snowflake are
+named only under a field the document calls an id, so a run that is named
+in the `.json` comes back `ambiguous_kind` in the `.md` beside it — same
+row, same position, same decode, and a reason instead of a name.
 
 ## For agents
 

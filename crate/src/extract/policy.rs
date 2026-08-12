@@ -193,7 +193,7 @@ pub(crate) fn classify(token: &str, key: Option<&str>, clock: Clock) -> Verdict 
     match token.len() {
         36 => uuid::classify(token, clock),
         26 => ulid::classify(token, key, clock),
-        24 => objectid::classify(token, clock),
+        24 => objectid::classify(token, key, clock),
         21 => nanoid::classify(token, key),
         17..=19 if token.bytes().all(|byte| byte.is_ascii_digit()) => {
             snowflake::classify(token, key, clock)
@@ -253,6 +253,34 @@ pub(crate) fn flatten_key(key: &str) -> String {
 /// than the table or object it happens to sit in.
 pub(crate) fn leaf_key(key: &str) -> &str {
     key.rsplit('.').next().unwrap_or(key)
+}
+
+/// Whether the field's own name — the leaf of the key path — mentions a
+/// word.
+///
+/// `key_mentions` reads the whole path; this reads only the segment the
+/// value actually sits under. `snowflakes.count` is a count that happens
+/// to sit in a table about identifiers, and the whole path would name it
+/// one.
+pub(crate) fn leaf_mentions(key: Option<&str>, word: &str) -> bool {
+    key.is_some_and(|path| flatten_key(leaf_key(path)).contains(word))
+}
+
+/// Whether the document's own name for a field says it holds an
+/// identifier: the leaf of the key path ends in `id`.
+///
+/// **Two kinds share this, and they share it because they have the same
+/// problem.** A Snowflake is a large integer and an ObjectId is 24 hex
+/// digits; neither carries a version, a variant, a checksum or a
+/// restricted alphabet, so neither run can settle on its own what it is.
+/// Where the value cannot say, the document's word for the field is the
+/// only evidence there is — and it is one definition here rather than
+/// two in two modules that would drift apart.
+///
+/// Compared with separators removed and case folded, so `_id`, `userId`,
+/// `USER-ID` and `objectid` are the same evidence.
+pub(crate) fn names_an_id(key: Option<&str>) -> bool {
+    key.is_some_and(|path| flatten_key(leaf_key(path)).ends_with("id"))
 }
 
 #[cfg(test)]
@@ -364,5 +392,45 @@ mod tests {
     fn the_leaf_of_a_key_path_is_the_fields_own_name() {
         assert_eq!(leaf_key("service.database.id"), "id");
         assert_eq!(leaf_key("id"), "id");
+    }
+
+    /// The predicate the two structureless kinds share. Written once, so
+    /// a Snowflake and an ObjectId cannot come to disagree about what
+    /// "the document names this an identifier" means.
+    #[test]
+    fn a_key_names_an_id_when_its_leaf_ends_in_id() {
+        for key in [
+            "id",
+            "_id",
+            "$oid",
+            "userId",
+            "USER-ID",
+            "objectId",
+            "documents.[0]._id",
+            "service.request_id",
+        ] {
+            assert!(names_an_id(Some(key)), "{key}");
+        }
+        for key in [
+            "digest",
+            "commit",
+            "checksum",
+            "identifier",
+            "snowflakes.count",
+            "ids.total",
+        ] {
+            assert!(!names_an_id(Some(key)), "{key}");
+        }
+        assert!(!names_an_id(None), "a document with no keys names nothing");
+    }
+
+    /// The leaf, not the whole path — the distinction that keeps a count
+    /// under a table about identifiers from being one.
+    #[test]
+    fn only_the_leaf_of_a_path_is_read_for_a_word() {
+        assert!(leaf_mentions(Some("snowflake"), "snowflake"));
+        assert!(leaf_mentions(Some("discord.snowflake_value"), "snowflake"));
+        assert!(!leaf_mentions(Some("snowflakes.count"), "snowflake"));
+        assert!(!leaf_mentions(None, "snowflake"));
     }
 }

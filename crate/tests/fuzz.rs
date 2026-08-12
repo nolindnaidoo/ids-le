@@ -169,6 +169,11 @@ fn run_of(seeded: &mut Seeded, alphabet: &[u8], length: usize) -> String {
 /// characters are a ULID's length and every hex letter is in Crockford's
 /// alphabet, which is why lowercase hex of that length is a refusal
 /// rather than nothing.
+///
+/// Half the runs sit under a key ending in `id` and half do not, because
+/// at 24 characters that is the whole question: an ObjectId has no
+/// structure to check, so a run with no field naming it an identifier is
+/// refused however good its timestamp looks.
 fn hex_case(seeded: &mut Seeded, index: usize) -> Case {
     let length = *[22usize, 23, 24, 25, 26, 30, 31, 32, 33, 34]
         .get(seeded.below(10))
@@ -177,26 +182,36 @@ fn hex_case(seeded: &mut Seeded, index: usize) -> Case {
     // A letter and a digit, both away from the front: the near-miss rule
     // wants a letter, a 26-character run needs both to be
     // identifier-shaped, and the **leading** four bytes are left random
-    // because for a 24-character run they are the whole question.
+    // because for a 24-character run they are the other half of the
+    // question.
     token.replace_range(1..2, &seeded.pick(HEX_LETTERS).to_string());
     token.replace_range(2..3, &seeded.pick(DIGITS).to_string());
 
-    let expect = match length {
-        // Both an unhyphenated UUID and an MD5 digest, exactly.
-        32 => Expect::Reason("ambiguous_kind"),
-        23 | 25 | 31 | 33 => Expect::Reason("malformed"),
-        // An ObjectId if its leading four bytes are a plausible time,
-        // and an ambiguity if they are not — up to the bytes just
-        // rolled.
-        24 => Expect::Row,
+    let named_field = seeded.below(2) == 0;
+    let expect = match (length, named_field) {
+        // Named the field an identifier, so the leading four bytes get
+        // to decide: an ObjectId if they are a plausible time, an
+        // ambiguity if they are not, up to the bytes just rolled.
+        (24, true) => Expect::Row,
+        // The two lengths where a hash fits the shape exactly. 32 hex
+        // digits are an unhyphenated UUID and an MD5 digest; 24 with
+        // nothing naming the field an identifier are an ObjectId and a
+        // truncated SHA-1. Neither can be settled from the run.
+        (32, _) | (24, false) => Expect::Reason("ambiguous_kind"),
+        (23 | 25 | 31 | 33, _) => Expect::Reason("malformed"),
         // A ULID's length, in an alphabet Crockford accepts, spelled in
         // lowercase — which is never the canonical form, so it is a
         // refusal whichever rule catches it first.
-        26 => Expect::Refused,
+        (26, _) => Expect::Refused,
         _ => Expect::Ignored,
     };
+    let key = if named_field {
+        format!("k{index}_id")
+    } else {
+        format!("k{index}")
+    };
     Case {
-        key: format!("k{index}"),
+        key,
         token,
         expect,
         family: "hex near 24 and 32",
@@ -664,9 +679,25 @@ fn the_shapes_at_every_boundary_are_answered() {
             "5d41402abc4b2a76b9719d911017c592",
             Expect::Reason("ambiguous_kind"),
         ),
-        // 24 hex digits whose leading four bytes are 1970 and 2106.
-        ("k8", "00000001a1b2c3d4e5f60718", Expect::Refused),
-        ("k9", "ffffffffa1b2c3d4e5f60718", Expect::Refused),
+        // 24 hex digits whose leading four bytes are 1970 and 2106,
+        // under a key that does name an identifier: the field is right
+        // and the time is not, so still no kind.
+        ("k8_id", "00000001a1b2c3d4e5f60718", Expect::Refused),
+        ("k9_id", "ffffffffa1b2c3d4e5f60718", Expect::Refused),
+        // The same 24 characters twice: named where the document calls
+        // the field an identifier, refused where it does not. An
+        // ObjectId's whole specification is 24 hex digits, so the run
+        // can never settle this alone.
+        (
+            "k8b_id",
+            "6a7bb780a1b2c3d4e5f60718",
+            Expect::Named("objectid"),
+        ),
+        (
+            "k9b",
+            "6a7bb780a1b2c3d4e5f60718",
+            Expect::Reason("ambiguous_kind"),
+        ),
         // A candidate longer than any kind, and one shorter than all of
         // them: no row either way.
         (

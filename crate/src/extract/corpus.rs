@@ -43,6 +43,7 @@ pub(crate) fn document(name: &str) -> &'static str {
         "ids.csv" => include_str!("../../fixtures/documents/ids.csv"),
         "ids.txt" => include_str!("../../fixtures/documents/ids.txt"),
         "ambiguous.json" => include_str!("../../fixtures/documents/ambiguous.json"),
+        "context.json" => include_str!("../../fixtures/documents/context.json"),
         "timestamps.json" => include_str!("../../fixtures/documents/timestamps.json"),
         other => panic!("the corpus has no document named {other}"),
     }
@@ -201,6 +202,62 @@ mod tests {
                 "no ambiguity case produces {reason:?}"
             );
         }
+    }
+
+    /// **The contextual rule, pinned as a document.** The same 24 hex
+    /// characters appear four times: two under fields the document names
+    /// identifiers, two not. The verdict follows the field, because an
+    /// ObjectId's whole specification is *24 hex digits* and the run can
+    /// never settle it alone — the same reasoning that keeps a bare
+    /// integer from being a Snowflake, applied to the other kind that
+    /// needs it.
+    ///
+    /// Read as text, where there are no key paths at all, none of the
+    /// four is named. That is the same document and the same bytes, so
+    /// nothing about the value moved.
+    #[test]
+    fn the_same_run_is_named_or_refused_by_the_field_it_sits_in() {
+        let keyed = rows("context.json", "json");
+        let value = keyed[0]["value"].clone();
+        assert!(
+            keyed.iter().all(|row| row["value"] == value),
+            "the document must hold one value four times"
+        );
+
+        let verdicts: Vec<(&str, bool)> = keyed
+            .iter()
+            .map(|row| {
+                (
+                    row["key"].as_str().unwrap_or_default(),
+                    row["valid"] == true,
+                )
+            })
+            .collect();
+        assert_eq!(
+            verdicts,
+            [
+                ("record._id", true),
+                ("mirror.documentId", true),
+                ("checksum", false),
+                ("manifest.[0]", false),
+            ]
+        );
+
+        for row in keyed.iter().filter(|row| row["valid"] == false) {
+            assert_eq!(row["refused"], "ambiguous_kind", "{row}");
+            assert!(row["kind"].is_null(), "a kind was named anyway: {row}");
+            assert_eq!(
+                row["timestamp"], "2026-08-12T00:00:00.000Z",
+                "the decode rides on the refusal so a reader can disagree: {row}"
+            );
+        }
+
+        let bare = rows("context.json", "text");
+        assert_eq!(bare.len(), keyed.len(), "the same runs, without key paths");
+        assert!(
+            bare.iter().all(|row| row["valid"] == false),
+            "a document with no keys names no field an identifier: {bare:?}"
+        );
     }
 
     /// **The decode contract.** Six identifiers, four schemes, three

@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **An ObjectId is named only where the document names the field an
+  identifier** — a key path whose leaf ends in `id`, plus a plausible
+  embedded timestamp. An ObjectId's whole specification is *24 hex
+  characters*, so every truncated SHA-1 and MD5 digest is a structurally
+  perfect one; the timestamp alone named 163 of 600 ordinary digests, and
+  the key requirement takes that to 0. It is the rule Snowflake has
+  always applied, extended to the other kind with nothing to validate,
+  and the two now share one predicate. See
+  [`crate/CHANGELOG.md`](crate/CHANGELOG.md) for the full note.
+
 ## [0.1.0]
 
 First release. Core functionality; not yet published to crates.io.

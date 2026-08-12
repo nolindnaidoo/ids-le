@@ -210,7 +210,7 @@
           },
           {
             "column": 14,
-            "detail": "24 hex digits are an ObjectId only if the leading four bytes are a time, and these are not; a truncated hash fits the same shape",
+            "detail": "24 hex digits are an ObjectId, a truncated hash and a hex dump in equal measure, and nothing in this document names this field an identifier",
             "key": "commit",
             "kind": null,
             "line": 4,

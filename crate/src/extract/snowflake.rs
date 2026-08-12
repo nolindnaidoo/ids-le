@@ -26,7 +26,7 @@
 //! the platform, both fit and neither is chosen.
 
 use super::policy::{
-    Clock, Id, Kind, Reason, Refusal, Verdict, flatten_key, key_mentions, leaf_key,
+    Clock, Id, Kind, Reason, Refusal, Verdict, key_mentions, leaf_mentions, names_an_id,
 };
 use super::time::iso8601_utc;
 
@@ -44,7 +44,7 @@ const DISCORD_WORDS: [&str; 4] = ["discord", "guild", "channel", "message"];
 const TWITTER_WORDS: [&str; 3] = ["twitter", "tweet", "status"];
 
 pub(crate) fn classify(token: &str, key: Option<&str>, clock: Clock) -> Verdict {
-    if !names_an_id(key) {
+    if !names_a_snowflake_field(key) {
         return Verdict::Ignored;
     }
     let Ok(value) = token.parse::<u64>() else {
@@ -85,17 +85,17 @@ pub(crate) fn classify(token: &str, key: Option<&str>, clock: Clock) -> Verdict 
     Verdict::Named(Id::at(Kind::Snowflake, timestamp))
 }
 
-/// Whether the field's own name says it holds an identifier.
+/// Whether the field's own name says it holds an identifier, or names
+/// this scheme outright.
 ///
-/// The *leaf* of the key path, not the whole path: `snowflakes.count` is
-/// a count that happens to sit under a table about identifiers, and
-/// matching the whole path would name it one.
-fn names_an_id(key: Option<&str>) -> bool {
-    let Some(path) = key else {
-        return false;
-    };
-    let leaf = flatten_key(leaf_key(path));
-    leaf.ends_with("id") || leaf.contains("snowflake")
+/// The first half is `policy::names_an_id`, shared with `objectid.rs`
+/// because the two kinds have the same problem: a run with no structure
+/// to check, which only the document's word for the field can settle.
+/// The second half is this scheme's own name, and it reads the *leaf*
+/// like the first — `snowflakes.count` is a count that happens to sit
+/// under a table about identifiers.
+fn names_a_snowflake_field(key: Option<&str>) -> bool {
+    names_an_id(key) || leaf_mentions(key, "snowflake")
 }
 
 /// The epoch the document chose, or nothing when it chose neither and

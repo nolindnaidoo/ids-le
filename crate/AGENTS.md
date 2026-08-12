@@ -89,10 +89,21 @@ Inside `extract/`:
 - **A candidate is a *maximal* run.** `user_550e8400-…` is one run, not a
   prefix beside a UUID. Stripping a prefix this tool cannot verify is
   guessing which part of a string is the identifier.
-- **The key path is evidence, not decoration.** Three kinds ask it
-  whether a run is what its shape suggests. A reader that mislabels a
-  value can turn a refusal into a finding, which is why each one states
-  its limits in its own module doc.
+- **The key path is evidence, not decoration.** Four kinds ask it whether
+  a run is what its shape suggests. A reader that mislabels a value can
+  turn a refusal into a finding, which is why each one states its limits
+  in its own module doc.
+- **A run with no structure to check is named only where the document
+  names the field an identifier.** Snowflake and ObjectId are the two:
+  a large integer and 24 hex digits, neither carrying a version, a
+  variant, a checksum or a restricted alphabet. Every 24-hex run is a
+  structurally perfect ObjectId — a truncated SHA-1 included — so the
+  shape can never settle it and the timestamp alone admitted better than
+  one hash in four. They share **one** predicate, `policy::names_an_id`;
+  a second definition of "the document names this an identifier" would
+  drift from the first. The kinds that *do* have structure — UUID's
+  nibbles, ULID's alphabet and bounded leading character, NanoID's
+  base64url — are checked on their own terms and do not consult it.
 - **`--kind` is a view, applied after the analysis.** A refusal that
   named no kind disappears under any `--kind`, so the unfiltered run is
   the complete one. SPEC.md says so; do not "fix" it by filtering
@@ -197,7 +208,7 @@ Five suites beyond those, each with its own CI job:
 | `tests/platform.rs` | Forward slashes in every reported path, case folding, reserved Windows names, CRLF, stdin — and that no decode moves with the machine's time zone. The job runs the whole suite under `TZ=UTC`, under none, and under `Pacific/Kiritimati`. | 3-OS matrix |
 | `tests/fuzz.rs` | Generated runs at every boundary the classifier decides on, time-boxed by `IDS_LE_FUZZ_SECONDS` and seeded from `IDS_LE_FUZZ_SEED`, both printed. Asserts no panic, no stall, a well-formed row — and **never a kind named where two schemes fit**. | 60 s in CI |
 | `tests/budget.rs` | A wall-clock ceiling on a generated 500-file corpus, plus linearity across files, across identifiers in one file, and across identifiers on one non-ASCII line. Gated behind `IDS_LE_BUDGET`; the measurement and the machine it came from are in the module doc. | release, `--test-threads=1` |
-| `tests/coverage_matrix.rs` | Every kind, reason, UUID version, variant and format reachable from a real fixture — with `Kind`, `Reason`, `Variant` and `SUPPORTED_FORMATS` read out of `src/extract/` rather than typed into the test. Also measures the rate at which ordinary 24-hex hashes are named ObjectIds. | greps its own marker |
+| `tests/coverage_matrix.rs` | Every kind, reason, UUID version, variant and format reachable from a real fixture — with `Kind`, `Reason`, `Variant` and `SUPPORTED_FORMATS` read out of `src/extract/` rather than typed into the test. Also asserts that **no** hash in prose is named an ObjectId, and prints the residual rate under an id-naming key. | greps its own marker |
 
 - **The matrix prints `coverage-matrix: complete` and CI greps for it.**
   `cargo test <filter>` exits 0 when the filter matches nothing, so a

@@ -25,8 +25,8 @@ picking one.
 | `uuid` | 36 characters, `8-4-4-4-12`, hex | v1, v6, v7 | `version`, `variant` |
 | `ulid` | 26 characters, Crockford base32 | always (48-bit Unix ms) | — |
 | `nanoid` | 21 characters, `A-Za-z0-9_-` | never — a NanoID has no clock | — |
-| `objectid` | 24 hex characters | always (32-bit Unix seconds) | — |
-| `snowflake` | 17–19 digits | always (top 42 bits + an epoch) | — |
+| `objectid` | 24 hex characters, **under a key naming an id** | always (32-bit Unix seconds) | — |
+| `snowflake` | 17–19 digits, **under a key naming an id** | always (top 42 bits + an epoch) | — |
 
 `variant` is one of `ncs`, `rfc4122`, `microsoft`, `future`. `version` is
 reported only under the RFC 4122 variant, because in any other layout
@@ -53,7 +53,8 @@ version, the variant, the timestamp that made the reason true.
 | `ambiguous_kind` | Two or more schemes fit and nothing in the document chooses. | `5d41402abc4b2a76b9719d911017c592` — 32 hex digits are an unhyphenated UUID and an MD5 digest in equal measure. |
 | `ambiguous_kind` | A structurally valid ULID that is not canonically uppercase, under a key that does not say ULID. | `01kzsm9k00AbCdEfGh12345678` |
 | `ambiguous_kind` | 21 base62 characters — a NanoID, a short token and a truncated hash all fit — with no `-`/`_` and no key naming the scheme. | `V1StGXR8xZ5jdHi6BxmyT` |
-| `ambiguous_kind` | 24 hex digits whose leading four bytes are not a plausible time. The timestamp is the only evidence an ObjectId has, so a bad one unmakes the kind. | `e83c5163316f89bfbde7d9ab` — a truncated git hash. |
+| `ambiguous_kind` | 24 hex digits under a key that does not name an identifier — or none at all, as in every plain-text file. An ObjectId has no structure to check, so context is the only evidence there is. | `6a7bb780a1b2c3d4e5f60718` under `checksum` |
+| `ambiguous_kind` | 24 hex digits under a key that *does* name an identifier, whose leading four bytes are not a plausible time. Both signals are required. | `e83c5163316f89bfbde7d9ab` under `commitId` — a truncated git hash. |
 | `ambiguous_kind` | A Snowflake under a key that names no platform, where both epochs decode to a plausible instant. | `1536886938009600000` under `user_id` |
 | `malformed` | The right shape, and validation failed: a non-RFC UUID variant, a version outside 1–8, a non-hex character in the `8-4-4-4-12` shape, a ULID character outside Crockford base32, a ULID leading character above `7`, or a hex run one digit either side of 24 or 32. | `f47ac10b-58cc-4372-1567-0e02b2c3d479` (NCS variant) |
 | `nil_or_max` | The nil UUID or the max UUID. Structurally valid; RFC 9562 defines both as naming nothing. | `00000000-0000-0000-0000-000000000000` |
@@ -67,12 +68,29 @@ is read once per run, on the surface, never inside the analysis.
 
 These are the stated limits, not oversights.
 
-- **A bare integer is not a Snowflake without a key that names an id.**
-  Nothing *in* an 18-digit integer says it is an identifier — it is
-  equally a byte count, a microsecond timestamp, an account number. Two
-  pieces of evidence are required together: 17–19 digits, **and** a key
-  path whose leaf ends in `id` or mentions `snowflake`. In a document
-  with no keys — every plain-text file — no integer is ever a Snowflake.
+- **A structureless run needs the document's word for it.** Two of the
+  five kinds have nothing to validate, and both are held to the same
+  rule: **the leaf of the key path must end in `id`** (compared with
+  separators removed and case folded, so `_id`, `userId`, `USER-ID`,
+  `$oid` and `objectId` are the same evidence). One predicate,
+  `policy::names_an_id`, serves both — two definitions of "the document
+  names this an identifier" would drift.
+
+  - **A bare integer is not a Snowflake.** Nothing *in* an 18-digit
+    integer says it is an identifier — it is equally a byte count, a
+    microsecond timestamp, an account number. 17–19 digits **and** a key
+    naming an id (or mentioning `snowflake`) are required together.
+  - **A bare 24-hex run is not an ObjectId.** An ObjectId's entire
+    specification is *24 hex characters*: no version, no variant, no
+    checksum, no reserved bits. Every 24-hex run is therefore a
+    structurally perfect ObjectId, and a truncated SHA-1 or MD5 digest
+    is exactly as perfect. A key naming an id **and** a plausible
+    embedded timestamp are required together.
+
+  In a document with no keys — every plain-text file — neither kind is
+  ever named. That is the trade this crate makes on purpose: precision
+  over recall, with the refusal naming the run, the reason and the
+  decode so a reader can disagree.
 - **Only the canonical hyphenated form is a UUID.** The 32-character
   unhyphenated form is refused as `ambiguous_kind`, because it is
   character-for-character an MD5 digest.
@@ -81,27 +99,26 @@ These are the stated limits, not oversights.
   45-character run that matches no shape and produces no row. Deciding
   where the prefix ended would be guessing which part of a string is the
   identifier.
-- **A 24-hex run with a plausible embedded timestamp is named an
-  ObjectId, and about one random 24-hex run in four is named rather than
-  refused.** An ObjectId has no version, no variant and no checksum, so
-  its leading four bytes are the only evidence in the string that it is
-  one — and any 24 hex digits carry four leading bytes. The arithmetic:
-  the leading field is a 32-bit count of seconds, so it spans
-  2³² = 4,294,967,296 values; the plausibility window runs from
-  1990-01-01 (631,152,000) to now + 365 days, which on 2026-08-12 is
-  1,818,028,800. That is a width of 1,186,876,800 seconds, or **27.6% of
-  the space — one run in 3.6**. Measured on
-  `fixtures/documents/hashes.txt`, 600 abbreviated SHA-1 and MD5 digests:
-  **163 named, 27.2%**. The upper edge moves with the wall clock, so the
-  rate rises by about 0.73 points a year on its own.
+- **What the ObjectId rule costs, and what it bought.** The timestamp
+  alone was never enough evidence, and the arithmetic says why: the
+  leading field is a 32-bit count of seconds spanning
+  2³² = 4,294,967,296 values, while the plausibility window runs from
+  1990-01-01 (631,152,000) to now + 365 days — 1,818,028,800 on
+  2026-08-12. That is 1,186,876,800 seconds, **27.6% of the space**, so
+  timestamp-only naming admitted better than one random 24-hex run in
+  four. Measured on `fixtures/documents/hashes.txt`, 600 abbreviated
+  SHA-1 and MD5 digests: **163 named, 27.2%**. On a repository of git
+  object names or truncated digests that is a false-positive in every
+  fourth hash.
 
-  On a repository of git object names or truncated digests that is a
-  meaningful false-positive rate, and it is stated here rather than
-  hidden. Two things hold it honest: the decoded timestamp is on the row,
-  so a "2003-11-08" ObjectId in a document written last week is visibly a
-  hash; and `tests/coverage_matrix.rs` measures the rate on every CI run
-  and prints it, so tightening the rule would be a decision taken with a
-  number in hand rather than a hunch.
+  Requiring the key takes that to **0 of 600**. The cost is recall: a
+  genuine ObjectId in prose, or under a field called `checksum`, is now
+  refused. The residual is stated rather than hidden — under a key that
+  *does* name an id the timestamp is the only remaining filter, so
+  roughly 27% of digests stored in a field called `commitId` are still
+  named, and that number rises about 0.73 points a year as the window's
+  upper edge tracks the clock. `tests/coverage_matrix.rs` asserts the
+  first number is zero and prints both on every run.
 - **Roughly half of real NanoIDs arrive as refusals.** A NanoID is
   recognisable only by its default 21-character base64url alphabet, and
   `-`/`_` — the two characters that separate base64url from base62 —
@@ -169,9 +186,16 @@ parallel source of truth.
 
 **The format changes only the key path, never which runs are found.** The
 identifier scan is one scanner over raw text for every document, so a
-`.md` file yields the same identifiers as the `.json` beside it and only
-loses the key. An unrecognised format is therefore leniency that costs
-key paths, not a refusal.
+`.md` file yields the same rows as the `.json` beside it, in the same
+places. An unrecognised format is therefore leniency that costs key
+paths, not a refusal.
+
+It can cost a *verdict*, though, and that is not a contradiction: the key
+path is **evidence**. ObjectId and Snowflake are named only under a key
+naming an id, so the same run that is named in the `.json` comes back
+`ambiguous_kind` in the `.md`. The row, the position and the decode are
+all still there — what is missing is the thing that would justify naming
+it, and the refusal says so.
 
 Each reader is a line scanner rather than a parser, and states its own
 limits:

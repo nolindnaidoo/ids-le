@@ -7,6 +7,43 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- **An ObjectId is named only where the document names the field an
+  identifier.** A 24-hex run is now named when the leaf of its key path
+  ends in `id` — `_id`, `userId`, `$oid`, `objectId` — **and** its
+  leading four bytes decode to a plausible time. Either signal missing is
+  `ambiguous_kind`, carrying the decode as before.
+
+  An ObjectId's entire specification is *24 hex characters*: no version,
+  no variant, no checksum, no reserved bits. Every 24-hex run is
+  therefore a structurally perfect ObjectId, and so is every truncated
+  SHA-1 and MD5 digest — the run can never settle it, because there is
+  nothing in it to settle it with. The timestamp alone was admitting
+  **163 of 600** ordinary abbreviated digests (27.2%, and the plausible
+  window covers 27.6% of the 32-bit second space, so that is the
+  expected rate rather than bad luck). It is now **0 of 600**.
+
+  This is not a new rule. It is the rule `snowflake.rs` has always
+  applied — a bare integer is not a Snowflake without a key naming an id
+  — extended to the other structureless kind, and the two now share one
+  predicate, `policy::names_an_id`, rather than two that could drift.
+  UUID, ULID and NanoID are unchanged: each has structure of its own and
+  is checked on its own terms.
+
+  **The trade is recall.** A genuine ObjectId in prose, or under a field
+  called `checksum`, is now refused — with its position, its decode and a
+  reason, so a reader can disagree. The residual is stated too: under a
+  key that does name an id, the timestamp is the only remaining filter,
+  so roughly 27% of digests stored in a field called `commitId` are still
+  named. `tests/coverage_matrix.rs` asserts the first number is zero and
+  prints both on every run.
+
+  `fixtures/documents/context.json` is new and pins the rule as a
+  document: the same 24 characters four times, named under `_id` and
+  `documentId`, refused under `checksum` and in an array — and refused
+  all four times when the same bytes are read as text.
+
 ### Fixed
 
 - **Reported paths use `/` on every platform.** On Windows the report
@@ -44,11 +81,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   v7.
 
 - **`fixtures/documents/hashes.txt`** — 600 abbreviated SHA-1 and MD5
-  digests, and the measurement they exist for: **27.2% of ordinary 24-hex
-  runs are named ObjectIds** (163 of 600), against a plausibility window
-  covering 27.6% of the 32-bit second space. The behaviour is unchanged
-  and documented in SPEC.md, which now carries the arithmetic; the matrix
-  prints the measured rate on every run.
+  digests, and the measurement they exist for: the share of ordinary
+  24-hex runs named as ObjectIds. It measured 27.2% (163 of 600) against
+  a plausibility window covering 27.6% of the 32-bit second space, which
+  is what the rule change above was decided on.
 
 ## [0.1.0]
 
