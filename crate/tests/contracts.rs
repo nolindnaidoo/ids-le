@@ -364,6 +364,36 @@ fn a_trailing_comment_does_not_lend_its_line_a_key() {
     }
 }
 
+/// **One rule for "the document names this field", across every kind
+/// that reads the key path.** The leaf of the path is the field's own
+/// name; a table called `ulids` or `snowflakes` is where a field sits,
+/// not what the field is. ULID and NanoID used to read the whole path
+/// while ObjectId and Snowflake read the leaf, so `ulids.count` was named
+/// and `snowflakes.count` was not.
+#[test]
+fn a_table_named_for_a_scheme_does_not_name_the_field_in_it() {
+    let tree = Tree::new("leaf-evidence");
+    tree.write(
+        "counts.yaml",
+        &format!(
+            "ulids:\n  count: {}\nnanoids:\n  count: {}\nsnowflakes:\n  count: {}\nobjectids:\n  \
+             count: {OBJECT_ID}\n",
+            ULID.to_lowercase(),
+            "V1StGXR8xZ5jdHi6BxmyT",
+            "1536886938009600000",
+        ),
+    );
+
+    let report = &reports(&run(&[&tree.path().to_string_lossy()]))[0];
+    assert_eq!(
+        report["summary"]["ids"], 0,
+        "a table's name named a field: {report}"
+    );
+    for row in report["ids"].as_array().expect("rows") {
+        assert_eq!(row["refused"], "ambiguous_kind", "{row}");
+    }
+}
+
 /// A binary file was never a text candidate: no report line, no effect
 /// on the exit code. A file that *is* text and could not be decoded
 /// keeps its named diagnostic and fails `--strict`.

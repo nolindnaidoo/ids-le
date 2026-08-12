@@ -26,7 +26,7 @@
 //! the platform, both fit and neither is chosen.
 
 use super::policy::{
-    Clock, Id, Kind, Reason, Refusal, Verdict, key_mentions, leaf_mentions, names_an_id,
+    Clock, Id, Kind, Reason, Refusal, Verdict, key_mentions, names_an_id, names_scheme,
 };
 use super::time::iso8601_utc;
 
@@ -95,7 +95,7 @@ pub(crate) fn classify(token: &str, key: Option<&str>, clock: Clock) -> Verdict 
 /// like the first — `snowflakes.count` is a count that happens to sit
 /// under a table about identifiers.
 fn names_a_snowflake_field(key: Option<&str>) -> bool {
-    names_an_id(key) || leaf_mentions(key, "snowflake")
+    names_an_id(key) || names_scheme(key, "snowflake")
 }
 
 /// The epoch the document chose, or nothing when it chose neither and

@@ -21,7 +21,7 @@
 //! document's key names the scheme. That is the honest split, and
 //! SPEC.md states it rather than papering over it with a coin flip.
 
-use super::policy::{Id, Kind, Reason, Refusal, Verdict, key_mentions};
+use super::policy::{Id, Kind, Reason, Refusal, Verdict, names_scheme};
 
 const LENGTH: usize = 21;
 
@@ -30,7 +30,7 @@ pub(crate) fn classify(token: &str, key: Option<&str>) -> Verdict {
         return Verdict::Ignored;
     }
     let base64url = token.bytes().any(|byte| byte == b'-' || byte == b'_');
-    if !base64url && !key_mentions(key, "nanoid") {
+    if !base64url && !names_scheme(key, "nanoid") {
         return Verdict::Refused(Refusal::new(
             None,
             Reason::AmbiguousKind,
@@ -104,6 +104,20 @@ mod tests {
         assert_eq!(
             refused(BASE62, Some("session.token")).reason,
             Reason::AmbiguousKind
+        );
+    }
+
+    /// **The leaf, not the whole path** — the same rule the other three
+    /// context-reading kinds follow.
+    #[test]
+    fn only_the_leaf_of_the_key_path_names_the_scheme() {
+        assert_eq!(
+            refused(BASE62, Some("nanoids.count")).reason,
+            Reason::AmbiguousKind
+        );
+        assert_eq!(
+            classify(BASE62, Some("nanoids.session_nanoid")),
+            Verdict::Named(Id::of(Kind::NanoId))
         );
     }
 

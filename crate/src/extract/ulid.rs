@@ -12,7 +12,7 @@
 //! Lowercase sits in between — several libraries emit it — so it is
 //! named only when the document's own key says ULID.
 
-use super::policy::{Clock, Id, Kind, Reason, Refusal, Verdict, key_mentions};
+use super::policy::{Clock, Id, Kind, Reason, Refusal, Verdict, names_scheme};
 use super::time::iso8601_utc;
 
 /// Crockford base32: the digits, then the letters with `I`, `L`, `O` and
@@ -56,7 +56,7 @@ pub(crate) fn classify(token: &str, key: Option<&str>, clock: Clock) -> Verdict 
     // The kind is settled before the clock is read: an implausible time
     // is a fact about a ULID, and this may not be one.
     let canonical = token.bytes().all(|byte| !byte.is_ascii_lowercase());
-    if !canonical && !key_mentions(key, "ulid") {
+    if !canonical && !names_scheme(key, "ulid") {
         return Verdict::Refused(Refusal::new(
             None,
             Reason::AmbiguousKind,
@@ -200,6 +200,22 @@ mod tests {
         assert_eq!(
             refused("01kzsm9k00abcdefgh12345678", Some("session.token")).reason,
             Reason::AmbiguousKind
+        );
+    }
+
+    /// **The leaf, not the whole path** — the same rule ObjectId,
+    /// Snowflake and NanoID are held to. A count that happens to sit in a
+    /// table about ULIDs is still a count, and the table's name is not
+    /// the document calling *this field* a ULID.
+    #[test]
+    fn only_the_leaf_of_the_key_path_names_the_scheme() {
+        assert_eq!(
+            refused("01kzsm9k00abcdefgh12345678", Some("ulids.count")).reason,
+            Reason::AmbiguousKind
+        );
+        assert_eq!(
+            named("01kzsm9k00abcdefgh12345678", Some("ulids.session_ulid")).timestamp,
+            Some("2026-08-12T00:00:00.000Z".to_string())
         );
     }
 

@@ -91,6 +91,16 @@ These are the stated limits, not oversights.
   ever named. That is the trade this crate makes on purpose: precision
   over recall, with the refusal naming the run, the reason and the
   decode so a reader can disagree.
+- **The leaf of the key path is the field's own name, and that is what
+  every kind reads.** ULID, NanoID and Snowflake can also be named by a
+  key that says the scheme outright (`session.ulid`, `nanoId`,
+  `snowflake`), and that too is the leaf: `ulids.count` is a count that
+  happens to sit in a table about identifiers, not a ULID.
+
+  The one exception is **which platform** minted a Snowflake, which reads
+  the whole path — `discord.id` is a Discord id. Which scheme a field
+  holds is a fact about the field; which platform minted it is a fact
+  about the structure the field sits in.
 - **Only the canonical hyphenated form is a UUID.** The 32-character
   unhyphenated form is refused as `ambiguous_kind`, because it is
   character-for-character an MD5 digest.

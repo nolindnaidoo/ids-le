@@ -168,9 +168,18 @@ of it and not the rest, so it is written down rather than assumed.
   only `impl … for` blocks are `Default` and `Drop`. A trait introduced
   to abstract over one type is indirection with nothing behind it.
 - **A predicate two modules need is written once.** `policy::names_an_id`
-  serves ObjectId and Snowflake; `mcp::requested_kind` serves both tools.
-  Two definitions of the same question drift, and the drift shows up as
-  one caller answering what the other refused.
+  serves ObjectId and Snowflake; `policy::names_scheme` serves ULID,
+  NanoID and Snowflake; `locate::value_length` serves all four readers
+  that have comments; `mcp::requested_kind` serves both tools. Two
+  definitions of the same question drift, and the drift shows up as one
+  caller answering what the other refused — which is exactly how each of
+  those four was found.
+- **A kind that legitimately differs says so where the difference is.**
+  `key_mentions` reads the whole key path and exists for one caller:
+  choosing a Snowflake's platform epoch, because which platform minted an
+  identifier is a fact about the structure it hangs off. Everything
+  asking *what a field is* reads the leaf. A new predicate that reads the
+  whole path needs that argument written next to it.
 
 ## Hard rules
 

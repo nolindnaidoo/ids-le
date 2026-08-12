@@ -233,7 +233,16 @@ fn is_near_miss_hex(token: &str) -> bool {
     near && is_hex(token) && token.bytes().any(|byte| byte.is_ascii_alphabetic())
 }
 
-/// Whether the document's key path mentions a word.
+/// Whether the document's key path mentions a word **anywhere along
+/// it**, the enclosing tables included.
+///
+/// This is for evidence that is a property of the *structure* rather
+/// than of the field. There is one such use, and it is deliberate:
+/// `snowflake.rs` reads the whole path for Twitter and Discord, because
+/// which platform minted an identifier is a fact about the object it
+/// hangs off — `discord.id` is a Discord id, and the leaf alone says
+/// nothing. **What kind a field holds is the opposite**, and reads only
+/// the leaf: see `names_scheme` and `names_an_id`.
 ///
 /// Compared with separators removed, so `user_id`, `userId` and
 /// `user-id` are the same evidence — which is the only way this is
@@ -259,15 +268,22 @@ pub(crate) fn leaf_key(key: &str) -> &str {
     key.rsplit('.').next().unwrap_or(key)
 }
 
-/// Whether the field's own name — the leaf of the key path — mentions a
-/// word.
+/// Whether the document's own name for a field names an identifier
+/// scheme outright.
 ///
-/// `key_mentions` reads the whole path; this reads only the segment the
-/// value actually sits under. `snowflakes.count` is a count that happens
-/// to sit in a table about identifiers, and the whole path would name it
-/// one.
-pub(crate) fn leaf_mentions(key: Option<&str>, word: &str) -> bool {
-    key.is_some_and(|path| flatten_key(leaf_key(path)).contains(word))
+/// **Three kinds share this and they read it identically** — ULID,
+/// NanoID and Snowflake, each with its own scheme's name. It is the
+/// escape hatch for a run whose shape alone cannot settle it: a
+/// lowercase ULID, 21 base62 characters, an integer.
+///
+/// The **leaf** of the key path, for the same reason `names_an_id` reads
+/// the leaf: `ulids.count` is a count that happens to sit in a table
+/// about identifiers, and the whole path would name it one. ULID and
+/// NanoID once read the whole path here while ObjectId and Snowflake
+/// read the leaf, so the same document answered two ways about the same
+/// question.
+pub(crate) fn names_scheme(key: Option<&str>, scheme: &str) -> bool {
+    key.is_some_and(|path| flatten_key(leaf_key(path)).contains(scheme))
 }
 
 /// Whether the document's own name for a field says it holds an
@@ -431,10 +447,14 @@ mod tests {
     /// The leaf, not the whole path — the distinction that keeps a count
     /// under a table about identifiers from being one.
     #[test]
-    fn only_the_leaf_of_a_path_is_read_for_a_word() {
-        assert!(leaf_mentions(Some("snowflake"), "snowflake"));
-        assert!(leaf_mentions(Some("discord.snowflake_value"), "snowflake"));
-        assert!(!leaf_mentions(Some("snowflakes.count"), "snowflake"));
-        assert!(!leaf_mentions(None, "snowflake"));
+    fn only_the_leaf_of_a_path_names_the_scheme() {
+        assert!(names_scheme(Some("snowflake"), "snowflake"));
+        assert!(names_scheme(Some("discord.snowflake_value"), "snowflake"));
+        assert!(!names_scheme(Some("snowflakes.count"), "snowflake"));
+        assert!(!names_scheme(None, "snowflake"));
+        // The three kinds that use it, on their own names.
+        assert!(names_scheme(Some("session.ulid"), "ulid"));
+        assert!(names_scheme(Some("session.nanoId"), "nanoid"));
+        assert!(!names_scheme(Some("ulids.count"), "ulid"));
     }
 }

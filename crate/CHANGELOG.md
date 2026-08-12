@@ -7,6 +7,33 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- **Every kind reads the same part of the key path to decide what a field
+  is.** ULID and NanoID asked whether the *whole* path mentioned their
+  scheme, while ObjectId and Snowflake asked whether the *leaf* did — so
+  one document answered two ways about the same question:
+
+  ```yaml
+  ulids:
+    count: 01kzsm9k00abcdefgh12345678   # was: named a ulid
+  snowflakes:
+    count: 1536886938009600000          # correctly: not a finding
+  ```
+
+  A count that happens to sit in a table about identifiers is still a
+  count, and `policy.rs` had said so all along — only two of the four
+  kinds followed it. The three schemes that can be named outright now
+  share one predicate, `policy::names_scheme`, which reads the leaf, next
+  to `policy::names_an_id`, which already did.
+
+  **One exception, and it is written down rather than left to be
+  rediscovered.** Snowflake still reads the whole path to choose between
+  the Twitter and Discord epochs, because which *platform* minted an
+  identifier is a fact about the structure it hangs off — `discord.id` is
+  a Discord id — where which *scheme* a field holds is a fact about the
+  field. `policy::key_mentions` now exists for that one use and says so.
+
 ### Fixed
 
 - **A trailing comment no longer lends its line's key path to the runs
