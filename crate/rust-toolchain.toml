@@ -1,6 +1,7 @@
 # Contributors get the same toolchain CI uses, without being told to
-# install anything. Scoped to crate/ because the rest of this repository
-# is TypeScript and has no business acquiring a Rust toolchain.
+# install anything. Scoped to crate/ rather than the repo root because the
+# extension that will sit beside it has no business acquiring a Rust
+# toolchain — the sibling repos that already have one keep it this way.
 [toolchain]
 channel = "stable"
 components = ["rustfmt", "clippy"]
