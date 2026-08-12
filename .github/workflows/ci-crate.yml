@@ -134,3 +134,143 @@ jobs:
         with:
           tool: cargo-audit
       - run: cargo audit
+
+  # Documents and directory entries that are hostile to a reader, over the
+  # built binary, on a tree the test builds at runtime — Windows cannot check
+  # in a FIFO, a mode-000 file, a symlink loop or a path over 260 characters,
+  # and a fixture directory that cannot be created on a third of the matrix
+  # silently tests nothing.
+  #
+  # Every case exists because something of that shape got through by hand
+  # somewhere in this family: a byte-order mark read as content, a text file
+  # that could not be decoded and vanished from the report rather than being
+  # named, a PNG that made --strict exit 2 on any repository holding an image,
+  # and a minified bundle on one very long line. Runs in a few seconds; the
+  # timeout is a hang net, not the budget.
+  hazards:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, windows-2025, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772 # master
+        with:
+          toolchain: stable
+      # --nocapture so a platform that could not express a case says so by
+      # name in the log. A skipped case is never reported as a pass.
+      - name: Hazardous documents and directory entries
+        run: cargo test --locked --test hazards -- --nocapture
+
+  # What the operating system does to a report, asserted rather than hoped
+  # for: forward slashes in every reported path (a sibling shipped `\` on
+  # Windows for a release), a walk that survives a reserved device name, a
+  # case-folding filesystem that does not report one file twice, CRLF that
+  # does not move a column, and a stdin refusal judged by its exit code
+  # rather than by whether the parent's write won the race.
+  #
+  # The whole suite then runs three times, under three time zones. This
+  # crate's central claim is a decode rendered as ISO-8601 **UTC**, so a
+  # suite that quietly depended on the machine's zone would be right on the
+  # author's desk and wrong everywhere else — and Windows ignores TZ
+  # outright, which would hide it on a third of the matrix. The byte
+  # identity of the three reports is asserted inside the test, where two
+  # reports can actually be compared; running everything under all three is
+  # what proves nothing else reads a clock.
+  platform:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, windows-2025, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772 # master
+        with:
+          toolchain: stable
+      - name: Platform behaviour
+        run: cargo test --locked --test platform -- --nocapture
+      - name: The suite under a fixed time zone
+        env:
+          TZ: UTC
+        run: cargo test --locked
+      - name: The same suite with no time zone at all
+        run: cargo test --locked
+      - name: And under a zone fourteen hours ahead
+        env:
+          TZ: Pacific/Kiritimati
+        run: cargo test --locked
+
+  # A standing net over the classifier, fed runs generated at every boundary
+  # it decides on: hex at every length near 24 and 32, base62 near 21,
+  # Crockford carrying the four letters it excludes, ULIDs whose leading
+  # character overflows a 48-bit timestamp, all 256 UUID version/variant
+  # nibble pairs, and integers across the Snowflake range.
+  #
+  # Sixty seconds, not run to convergence — the point is that a panic, a
+  # stall, or a row that names a kind when two schemes fit fails a build
+  # rather than waiting to be found by a user. The seed is printed on every
+  # run, so a red build reproduces from its own log.
+  fuzz:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      IDS_LE_FUZZ_SECONDS: "60"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772 # master
+        with:
+          toolchain: stable
+      - name: Fuzz the classifier at its boundaries
+        run: cargo test --locked --release --test fuzz -- --nocapture
+
+  # A wall-clock ceiling and three linearity checks on a generated 500-file
+  # corpus. A sibling was fifty times slower than the rest of the family for
+  # a release because nothing measured it; the ceiling here is ten times a
+  # local measurement recorded in the test, and four times the work may not
+  # cost six times the clock — across files, across identifiers in one file,
+  # and across identifiers on one non-ASCII line. The last of those is the
+  # quadratic this crate actually shipped: the column index re-counted UTF-16
+  # units from the line start on every lookup, so a minified bundle carrying
+  # one accented character took four seconds for twenty thousand runs.
+  budget:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      IDS_LE_BUDGET: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772 # master
+        with:
+          toolchain: stable
+      # One at a time: two timed runs sharing a runner measure each other
+      # rather than the tool.
+      - name: Wall-clock budget and linearity
+        run: cargo test --locked --release --test budget -- --nocapture --test-threads=1
+
+  # Does this crate name what it claims to name? Every kind, every refusal
+  # reason, every UUID version and variant, and every format reader, each
+  # reachable from a real fixture document — with the enums read out of
+  # src/extract/ rather than typed into the test, so a sixth kind cannot
+  # arrive without a document that produces it. It also prints the measured
+  # rate at which ordinary 24-hex hashes are named ObjectIds, which SPEC.md
+  # states and nothing else measures.
+  #
+  # The grep is the point of the marker line: `cargo test <filter>` exits 0
+  # when the filter matches nothing, so a renamed or deleted test would
+  # otherwise leave a green job that ran no assertions at all.
+  coverage-matrix:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772 # master
+        with:
+          toolchain: stable
+      - name: Every kind, reason, version and format, named back from a fixture
+        run: |
+          set -o pipefail
+          cargo test --locked --test coverage_matrix -- --nocapture | tee matrix.log
+          grep -q 'coverage-matrix: complete' matrix.log
