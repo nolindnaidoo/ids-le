@@ -33,7 +33,17 @@ name = "ids-le"
 path = "src/main.rs"
 
 [dependencies]
+# Three dependencies, each with the reason it earns its place. A fourth
+# needs an argument in this file before it needs a line in it.
+#
+# The report shape *is* the API — one JSON object per line on stdout, and
+# a caller scripts against it. Deriving it off the types that produce it
+# is what keeps the shape and the code from drifting; hand-written
+# serialization would be a second definition of the contract.
 serde = { version = "1", features = ["derive"] }
+# The MCP surface speaks JSON-RPC, which has to be parsed as well as
+# written, and the corpus fixtures are read back as data. Writing is
+# `serde`'s job; reading needs a parser, and this is serde's own.
 serde_json = "1"
 # The walker. `ignore` is ripgrep's, so "what this tool walks" and "what
 # ripgrep walks" are the same answer — which is the answer a person
@@ -81,6 +91,10 @@ must_use_candidate = "allow"
 # the documentation; a `# Errors` section restating it on every function
 # would be the same sentence twice.
 missing_errors_doc = "allow"
+# The handful of `expect`s in this crate are each guarded by a check in
+# the same function and each names the invariant in its message — see
+# AGENTS.md, "Panics". A `# Panics` section would restate the message a
+# reader can already see, and would suggest the panic is reachable.
 missing_panics_doc = "allow"
 # The doc comments in `extract/` name real identifier schemes, and their
 # real spelling is camel-case: NanoID, ObjectId, MongoDB, ULID. The lint

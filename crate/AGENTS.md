@@ -144,6 +144,34 @@ pixelactions and scrape-le:
 - No nesting deeper than two levels inside a function; extract a named
   helper instead.
 
+## Style beyond control flow
+
+The rest of the shape the code is expected to take. Clippy catches some
+of it and not the rest, so it is written down rather than assumed.
+
+- **Borrowed parameters, not owned ones.** `&str`, `&[T]` and `&Path` —
+  never `&String`, `&Vec<T>` or `&PathBuf`. Clippy's `ptr_arg` misses a
+  `&PathBuf` whose only use is a generic `AsRef<Path>` call, so this is a
+  review rule and not only a lint. `locate::join` takes an iterator of
+  `&str` for the same reason: both readers hold a stack they are still
+  using, and copying it to build every key path would copy the whole
+  stack once per finding.
+- **Build a row after the verdict, not before.** `extract::located`
+  exists because a candidate no kind claims is most of what a document
+  holds, and a `Found` assembled up front pays for the text and the key
+  path of a row nobody reports.
+- **No `clone`, `to_string` or `collect` that the next line throws
+  away.** A `Vec` that exists only to be joined, a `String` that exists
+  only to be compared.
+- **Free functions over methods on a growing struct**, and no trait with
+  a single implementation. **No trait is declared in this crate** — the
+  only `impl … for` blocks are `Default` and `Drop`. A trait introduced
+  to abstract over one type is indirection with nothing behind it.
+- **A predicate two modules need is written once.** `policy::names_an_id`
+  serves ObjectId and Snowflake; `mcp::requested_kind` serves both tools.
+  Two definitions of the same question drift, and the drift shows up as
+  one caller answering what the other refused.
+
 ## Hard rules
 
 - **No inline `#[allow(...)]`.** Either fix the lint or add a visible,
@@ -160,8 +188,20 @@ pixelactions and scrape-le:
   database or an API, and no future feature may.
 - **Read-only.** The filesystem is never written outside tests.
 - **Strict parsing, never silent defaults.** A bad flag is an error with
-  an actionable message. The one sanctioned leniency is an unrecognised
-  *format*, and it is tested.
+  an actionable message. **Two** leniencies are sanctioned, both tested,
+  and there is not a third:
+  - an unrecognised *format*, which falls back to a text read;
+  - a *document* a reader cannot make sense of. The readers in
+    `extract/*.rs` supply key paths and nothing else, so a malformed
+    document costs key paths and never findings — a JSON scanner has no
+    opinion on whether the braces balanced. That is why each reader
+    states its own limits in its own module doc: a reader that
+    mislabels a value can turn a refusal into a finding, because for
+    four kinds the key path is evidence.
+
+  Neither leniency extends to the tool's own inputs. A bad `--kind`, a
+  `maxResults` that is not a positive integer, and a path that cannot be
+  opened are all refusals with a reason.
 - **Refuse rather than guess.** A run that fits two schemes is refused
   with both named. A refusal carries a reason and the evidence behind it
   — including the decode that caused it, where there was one. Never a
@@ -170,8 +210,44 @@ pixelactions and scrape-le:
   command line; no message on that surface mentions a flag, and a test
   greps for `--` across every tool definition and failure path.
 
+### Panics
+
+**No reachable panic.** No `unwrap`, no panicking index, no arithmetic
+that can overflow on a path a document can reach — and `overflow-checks`
+stays on in release so the second of those is a crash rather than a
+silently wrong number in a report whose whole value is honesty.
+
+`expect` is permitted in exactly one shape: **the invariant is
+established by a check in the same function, and the message names it.**
+Every one of them is here, and a new one needs the same argument:
+
+| Site | Guarded by |
+|---|---|
+| `uuid::nibble`, `uuid::field` | `strip_hyphens` returned 32 characters and `classify` checked every one is a hex digit |
+| `objectid::classify` | the same function checked `len() == 24` and `is_hex` two lines above |
+| `snowflake::classify` | `u64 >> 22` leaves 42 bits, which fit `i64` |
+| `cli::write_reports`, `mcp` | a `FileReport` has no failing serialization path — no map with non-string keys, no float |
+
+`extract::position` is the counter-example worth copying: an offset past
+the end **clamps** and an offset inside a character **floors**, because
+neither can happen from a candidate span and a silently wrong column
+would still be worse than a defensive floor.
+
+Tests are the exception, and deliberately: `expect` there names what the
+fixture was supposed to provide, and a panic is the failure report.
+
 ## Testing
 
+- **`extract/`: a 90% line coverage floor per module**, enforced by the
+  `coverage` job. Per module rather than on the crate total, because a
+  total lets one module slide while the others carry it — and scoped to
+  `extract/` because everything outside it is I/O, pinned instead by
+  `tests/contracts.rs` against the built binary. Everything in `extract/`
+  is pure; if something is hard to test there, the design is wrong. **The
+  floor is a floor**, never lowered to make a run green. The job also
+  fails when it measures *nothing*: rename the directory and the filter
+  stops matching, and a job that checked zero modules would otherwise
+  report success.
 - **`extract/` is pure, so it tests from a string.** No temp directories,
   no clocks, no flake. Every rule in a kind module has a test naming the
   rule, and every refusal has a test asserting the *reason* rather than
@@ -235,6 +311,20 @@ IDS_LE_BUDGET=1 cargo test --release --test budget -- --nocapture --test-threads
 `coverage_matrix`; add `-- --nocapture` to see what a platform skipped and
 what the matrix measured.
 
+Measuring the coverage floor locally, exactly as the `coverage` job does:
+
+```bash
+rustup component add llvm-tools-preview
+cargo install cargo-llvm-cov
+cargo llvm-cov --summary-only
+```
+
+`--html` instead of `--summary-only` writes a browsable report to
+`target/llvm-cov/html`; CI uploads that same report as the
+`coverage-report` artifact on every run, including a failing one — which
+is exactly when someone wants to see which lines are uncovered. Read the
+per-module numbers, not the total: the total is not what the job checks.
+
 **Run the binary, not only the tests.** Point it at `fixtures/documents/`
 and read the output. The scenario suite caught a generated fixture whose
 all-zero tail tripped `version_claim_mismatch` — a real rule firing
@@ -243,6 +333,55 @@ correctly on a test's mistake, and nothing but a run would have shown it.
 A change is not done because it compiles; it is done when it is tested,
 linted, documented where behaviour changed (README / SPEC / CHANGELOG /
 this file), and honest — claims in docs must match the code.
+
+**A change that is meant to move no output should be shown to move
+none.** Build the binary before and after, run both over
+`fixtures/documents/`, and diff the two reports. The corpus is a
+characterisation record precisely so a refactor can be held to it.
+
+## Git identity
+
+Every commit uses the GitHub noreply address:
+
+```
+13629544+nolindnaidoo@users.noreply.github.com
+```
+
+A real address in commit metadata is public forever — GitHub's API serves
+it for any public repo, and scrapers harvest it. Never set a real address
+in `user.email`, globally or repo-locally, and never commit with one. A
+repo-local `user.email` silently overrides the global one, so check
+`git config user.email` in a fresh clone before the first commit.
+
+## Commits
+
+The subject line follows
+[Conventional Commits](https://www.conventionalcommits.org):
+
+```
+type(optional-scope): imperative subject
+```
+
+`type` is one of **feat · fix · docs · style · refactor · perf · test ·
+build · ci · chore · revert**. A scope is optional and free-form —
+`fix(uuid):` and `fix:` are both fine; use one when it tells the reader
+where to look. Append `!` for a breaking change. **The subject is capped
+at 72 characters.**
+
+`.githooks/commit-msg` enforces both, and it is **opt-in per clone** —
+`git config core.hooksPath .githooks`, which a fresh checkout has not
+done. Run it before the first commit.
+
+Everything else about a commit stays as it was. The subject is still
+imperative and still says what changed rather than which files moved; the
+body carries the *why* and the user-visible consequence, at whatever
+length that takes. One concern per commit — a refactor and a behaviour
+change travel separately. If docs describe the thing you changed, update
+them in the same commit.
+
+**CHANGELOG.md is not generated from these.** It is written by hand,
+because an entry explaining why a bug mattered is worth more than a list
+of subjects.
 
 ## Deliberately left for 0.2.0
 
