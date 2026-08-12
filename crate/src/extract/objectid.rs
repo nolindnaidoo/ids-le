@@ -15,11 +15,14 @@
 //! claim, so a bad one unmakes the kind rather than the timestamp.
 //!
 //! The residual cost is stated rather than hidden: the plausible window
-//! covers roughly a quarter of the 32-bit second space, so about one
-//! random 24-hex run in four reaches this module and is named. That is
-//! why the decoded timestamp is on the row — a reader looking at a
-//! "2003-11-08" ObjectId in a document written last week has what they
-//! need to disagree. SPEC.md says so too.
+//! covers 1,186,876,800 of the 4,294,967,296 seconds a 32-bit field can
+//! hold, so about one random 24-hex run in four reaches this module and
+//! is named — 163 of 600 abbreviated SHA-1 and MD5 digests, measured on
+//! `fixtures/documents/hashes.txt` by `tests/coverage_matrix.rs`, which
+//! prints the rate on every run. That is why the decoded timestamp is on
+//! the row: a reader looking at a "2003-11-08" ObjectId in a document
+//! written last week has what they need to disagree. SPEC.md carries the
+//! arithmetic.
 
 use super::policy::{Clock, Id, Kind, Reason, Refusal, Verdict, is_hex};
 use super::time::iso8601_utc;

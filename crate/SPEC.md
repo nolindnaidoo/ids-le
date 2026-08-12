@@ -82,11 +82,26 @@ These are the stated limits, not oversights.
   where the prefix ended would be guessing which part of a string is the
   identifier.
 - **A 24-hex run with a plausible embedded timestamp is named an
-  ObjectId, and the plausible window covers roughly a quarter of the
-  32-bit second space** — so about one random 24-hex run in four is named
-  rather than refused. The decoded timestamp is on the row precisely so a
-  reader can disagree: a "2003-11-08" ObjectId in a document written last
-  week is a hash.
+  ObjectId, and about one random 24-hex run in four is named rather than
+  refused.** An ObjectId has no version, no variant and no checksum, so
+  its leading four bytes are the only evidence in the string that it is
+  one — and any 24 hex digits carry four leading bytes. The arithmetic:
+  the leading field is a 32-bit count of seconds, so it spans
+  2³² = 4,294,967,296 values; the plausibility window runs from
+  1990-01-01 (631,152,000) to now + 365 days, which on 2026-08-12 is
+  1,818,028,800. That is a width of 1,186,876,800 seconds, or **27.6% of
+  the space — one run in 3.6**. Measured on
+  `fixtures/documents/hashes.txt`, 600 abbreviated SHA-1 and MD5 digests:
+  **163 named, 27.2%**. The upper edge moves with the wall clock, so the
+  rate rises by about 0.73 points a year on its own.
+
+  On a repository of git object names or truncated digests that is a
+  meaningful false-positive rate, and it is stated here rather than
+  hidden. Two things hold it honest: the decoded timestamp is on the row,
+  so a "2003-11-08" ObjectId in a document written last week is visibly a
+  hash; and `tests/coverage_matrix.rs` measures the rate on every CI run
+  and prints it, so tightening the rule would be a decision taken with a
+  number in hand rather than a hunch.
 - **Roughly half of real NanoIDs arrive as refusals.** A NanoID is
   recognisable only by its default 21-character base64url alphabet, and
   `-`/`_` — the two characters that separate base64url from base62 —
