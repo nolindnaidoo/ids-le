@@ -36,6 +36,21 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- **A year outside `0000`–`9999` is written in ISO-8601's expanded form.**
+  The report calls every decoded instant an ISO-8601 UTC string, and a
+  five-digit year printed as bare digits is not one — the standard asks
+  for a sign and an agreed number of extra digits. This crate agrees on
+  six, matching `Date.toISOString`, so a ULID at the top of its 48-bit
+  field now reads `+010889-08-02T05:31:50.655Z` rather than
+  `10889-08-02T05:31:50.655Z`.
+
+  Only a refusal ever carries one: the plausibility window closes a year
+  past now, so any such decode arrives as `timestamp_implausible` with
+  the instant beside it as the evidence a reader is being asked to check.
+  The largest instant any kind here can decode is 10889 — a ULID or a
+  UUID v7 whose millisecond field is all ones. Nothing a real document
+  holds is affected, and the corpus does not move.
+
 - **SPEC.md no longer documents an exit code that cannot happen.** The
   exit-code table said `2` covered "the question was malformed, **or a
   scan gave up part way**", and `exit_code` opened with a branch for the

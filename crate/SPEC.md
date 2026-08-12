@@ -15,6 +15,13 @@ the kind, the raw text, the position (line, column, and the document's
 own key path), whether it is valid, and — where the identifier embeds a
 time — that time decoded to an ISO-8601 UTC string.
 
+A year outside `0000`–`9999` is written in ISO-8601's **expanded**
+representation: a sign and six digits, `+010889-08-02T05:31:50.655Z`, the
+same shape `Date.toISOString` produces. Only a refusal ever carries one —
+the plausibility window ends a year past now — and the largest instant any
+kind here can decode is 10889, from a ULID or a UUID v7 whose 48-bit
+millisecond field is all ones.
+
 Where it cannot name a run honestly, it says so with a reason instead of
 picking one.
 

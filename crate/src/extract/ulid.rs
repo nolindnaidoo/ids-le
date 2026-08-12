@@ -223,9 +223,11 @@ mod tests {
     fn an_implausible_timestamp_reports_the_decode_and_the_flag() {
         let refusal = refused("7ZZZZZZZZZABCDEFGH12345678", None);
         assert_eq!(refusal.reason, Reason::TimestampImplausible);
+        // ISO-8601's expanded form: a five-digit year needs a sign and
+        // six digits, or it is not ISO-8601 and the report says it is.
         assert_eq!(
             refusal.timestamp,
-            Some("10889-08-02T05:31:50.655Z".to_string())
+            Some("+010889-08-02T05:31:50.655Z".to_string())
         );
     }
 
