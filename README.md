@@ -281,12 +281,16 @@ Every tool in the family, one page: **[letools.dev](https://letools.dev)**
 - **[EnvSync-LE](https://letools.dev/tools/envsync-le)** — Spot missing keys across your .env files
 - **[Scrape-LE](https://letools.dev/tools/scrape-le)** — See what will block your scraper before you write it
 
-Each stands on its own: no shared crate, no published core. Where two of them
-agree it is because the same answer was right twice.
+Newer, and crate-first — published on GitHub, not yet listed on the site:
 
-**Contact Developer** — [nolindnaidoo.com](https://nolindnaidoo.com) ·
-[GitHub](https://github.com/nolindnaidoo) ·
-[LinkedIn](https://www.linkedin.com/in/nolindnaidoo/)
+- **[Units-LE](https://github.com/nolindnaidoo/units-le)** — Extract quantities — a number with its unit — and refuse the ambiguous ones
+- **[IPs-LE](https://github.com/nolindnaidoo/ips-le)** — Extract IPv4, IPv6, CIDR and MAC addresses, classified and normalized
+- **[Versions-LE](https://github.com/nolindnaidoo/versions-le)** — Find dependency constraints that conflict across a repository's manifests
+- **[Unicode-LE](https://github.com/nolindnaidoo/unicode-le)** — Detect bidi controls, invisibles, homoglyphs and mixed scripts
+- **[i18n-LE](https://github.com/nolindnaidoo/i18n-le)** — Identify the i18n library a project uses, then audit its catalogues by that library's rules
+
+Each stands on its own: no shared crate, no published core. Where two of
+them agree it is because the same answer was right twice.
 
 ## License
 
