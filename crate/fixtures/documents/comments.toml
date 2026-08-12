@@ -1,0 +1,7 @@
+# A comment is not evidence. The same 24 hex characters three times: as a
+# value under a key naming an id, inside a quoted value under one, and in
+# a trailing comment on a line whose key names one. Only the first two
+# sit under a field the document calls an identifier.
+_id = "6a7bb780a1b2c3d4e5f60718"
+quoted_id = "a # 6a7bb780a1b2c3d4e5f60718"
+version_id = 1 # 6a7bb780a1b2c3d4e5f60718

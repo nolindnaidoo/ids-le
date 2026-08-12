@@ -75,6 +75,68 @@ pub(crate) fn lines(text: &str) -> impl Iterator<Item = (usize, &str)> {
     })
 }
 
+/// How far a value runs on a line that may end in a comment.
+///
+/// `raw` is everything after the separator, **leading whitespace
+/// included**, because whether a comment character opens a comment
+/// depends on what sits in front of it. The answer is a length from the
+/// start of `raw`, with trailing whitespace trimmed.
+///
+/// **This is a correctness rule, not tidiness.** The key path a value
+/// sits under is evidence: four of the five kinds ask it whether a run is
+/// what its shape suggests. A reader that lets a value region run to the
+/// end of the line hands a trailing comment the line's key, and
+/// `_id = 1 # 6a7bb780a1b2c3d4e5f60718` named a hash an ObjectId on the
+/// strength of a key that belongs to the `1`. Three readers did that and
+/// `dotenv.rs` did not, which is how it was found — so the rule is
+/// written once here and every reader passes its own comment characters.
+///
+/// Two things keep it from cutting a value short:
+///
+/// - **Quotes.** `id = "a # b"` is a value carrying a hash. A backslash
+///   hides the next byte inside a double-quoted string; a literal
+///   `'…'` string has no escapes and ends at its own quote.
+/// - **Whitespace in front.** A comment character with a non-space byte
+///   before it belongs to the value — `a: b#c` is one YAML plain scalar,
+///   and `A=#x` is a dotenv value that several parsers read as one. This
+///   is the conservative direction: it can leave a comment attached, and
+///   it can never eat a value.
+pub(crate) fn value_length(raw: &str, comments: &[u8]) -> usize {
+    let bytes = raw.as_bytes();
+    let mut quote: Option<u8> = None;
+    let mut after_space = false;
+    let mut at = 0;
+
+    while at < bytes.len() {
+        let byte = bytes[at];
+        at += 1;
+        if quote == Some(b'"') && byte == b'\\' {
+            at += 1;
+            continue;
+        }
+        if quote == Some(byte) {
+            quote = None;
+            after_space = false;
+            continue;
+        }
+        if quote.is_some() {
+            after_space = false;
+            continue;
+        }
+        if byte == b'"' || byte == b'\'' {
+            quote = Some(byte);
+            after_space = false;
+            continue;
+        }
+        if after_space && comments.contains(&byte) {
+            // The comment character is ASCII, so `at - 1` is a boundary.
+            return raw[..at - 1].trim_end().len();
+        }
+        after_space = byte.is_ascii_whitespace();
+    }
+    raw.trim_end().len()
+}
+
 /// A dotted path from its segments, skipping the empty ones a
 /// document's root produces.
 ///
@@ -152,6 +214,50 @@ mod tests {
     fn a_trailing_newline_does_not_add_an_empty_line() {
         assert_eq!(lines("one\n").count(), 1);
         assert_eq!(lines("").count(), 0);
+    }
+
+    const HASH: &[u8] = b"#";
+
+    /// The rule three readers were missing. A trailing comment is not
+    /// part of the value, and the value keeps no trailing whitespace.
+    #[test]
+    fn a_comment_ends_the_value() {
+        assert_eq!(value_length(" 1 # a comment", HASH), 2);
+        assert_eq!(value_length(" 1\t# a comment", HASH), 2);
+        assert_eq!(value_length(" 1", HASH), 2);
+        assert_eq!(value_length("", HASH), 0);
+    }
+
+    /// The reason it cannot be `find('#')`: quoting exists so a value can
+    /// hold the comment character.
+    #[test]
+    fn a_comment_character_inside_a_string_is_part_of_the_value() {
+        assert_eq!(value_length(r#" "a # b""#, HASH), 8);
+        assert_eq!(value_length(" 'a # b'", HASH), 8);
+        assert_eq!(value_length(r#" "a # b" # gone"#, HASH), 8);
+        // A backslash hides the closing quote of a double-quoted string,
+        // so the `#` after it is still inside.
+        assert_eq!(value_length(r#" "a\" # b""#, HASH), 10);
+    }
+
+    /// Whitespace has to sit in front of it. `a: b#c` is one YAML plain
+    /// scalar, and the conservative direction can never eat a value.
+    #[test]
+    fn a_comment_character_with_no_space_before_it_is_part_of_the_value() {
+        assert_eq!(value_length(" b#c", HASH), 4);
+        assert_eq!(value_length("#ff0000", HASH), 7);
+    }
+
+    /// Each reader brings its own dialect's characters.
+    #[test]
+    fn a_reader_chooses_which_characters_open_a_comment() {
+        assert_eq!(value_length(" 1 ; two", b";#"), 2);
+        assert_eq!(value_length(" 1 ; two", HASH), 8, "not this dialect's");
+    }
+
+    #[test]
+    fn a_value_that_is_only_a_comment_has_no_length() {
+        assert_eq!(value_length(" # all of it", HASH), 0);
     }
 
     #[test]

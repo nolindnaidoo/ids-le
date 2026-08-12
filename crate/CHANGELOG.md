@@ -7,6 +7,46 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- **A trailing comment no longer lends its line's key path to the runs
+  inside it.** The TOML, INI and YAML readers ran a value region to the
+  end of the line, so everything after a `#` or `;` was addressed as
+  though it were the value. The key path is *evidence* — four of the five
+  kinds ask it whether a run is what its shape suggests — so this
+  promoted refusals to findings:
+
+  ```toml
+  _id = 1 # 6a7bb780a1b2c3d4e5f60718   # was: objectid, key "_id"
+  ```
+
+  ```dotenv
+  _ID=1 # 6a7bb780a1b2c3d4e5f60718     # was, correctly: refused
+  ```
+
+  Four readers of one document, and only `dotenv.rs` had the rule, which
+  is how the disagreement surfaced. The rule is now written once, in
+  `locate::value_length`, and each reader passes its own comment
+  characters.
+
+  It is **quote-aware**, because that is the whole reason quoting exists:
+  `id = "a # b"` is a value carrying a hash, and a backslash hides the
+  closing quote of a double-quoted string. It also requires whitespace in
+  front of the comment character, which is the conservative direction —
+  `a: b#c` stays one YAML plain scalar and `A=#x` stays a dotenv value,
+  so the change can leave a comment attached but can never eat a value.
+
+  Two smaller consequences fall out of the same rule. A dotenv value that
+  was quoted used to take the whole rest of the line, so a comment after
+  it borrowed the key; it no longer does. And a YAML key whose line holds
+  nothing but a comment (`a: # note`) introduces a block rather than
+  carrying a value, which it already meant.
+
+  `fixtures/documents/comments.toml` pins it as a document: the same 24
+  hex characters as a value under a key naming an id, inside a quoted
+  value under one, and in a trailing comment on a line whose key names
+  one — named, named, refused.
+
 ### Changed
 
 - **An ObjectId is named only where the document names the field an

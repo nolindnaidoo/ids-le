@@ -12,7 +12,10 @@
 //! without holding the whole document, and a wrong index in a key path
 //! is worse than an absent one.
 
-use super::locate::{KeySpan, lines};
+use super::locate::{KeySpan, lines, value_length};
+
+/// TOML has one comment character.
+const COMMENT: &[u8] = b"#";
 
 pub(crate) fn key_spans(text: &str) -> Vec<KeySpan> {
     let mut table = String::new();
@@ -36,7 +39,7 @@ pub(crate) fn key_spans(text: &str) -> Vec<KeySpan> {
         }
         spans.push(KeySpan {
             start: offset + equals + 1,
-            end: offset + line.len(),
+            end: offset + equals + 1 + value_length(&line[equals + 1..], COMMENT),
             path: if table.is_empty() {
                 key.to_string()
             } else {
@@ -109,5 +112,22 @@ mod tests {
     #[test]
     fn a_single_line_array_is_covered_by_its_key() {
         keyed("ids = [1, 2, 3]\n", &[("[1, 2, 3]", "ids")]);
+    }
+
+    /// **A comment is not part of the value.** The key path a value sits
+    /// under is evidence — four of the five kinds ask it whether a run is
+    /// what its shape suggests — so a reader that hands a trailing
+    /// comment the line's key turns a refusal into a finding.
+    #[test]
+    fn a_trailing_comment_is_outside_the_value() {
+        keyed("id = 1 # 6a7bb780a1b2c3d4e5f60718\n", &[("1", "id")]);
+    }
+
+    /// Quote-aware, because `"a # b"` is a value carrying a hash rather
+    /// than a value followed by a comment. Both TOML string forms.
+    #[test]
+    fn a_hash_inside_a_string_belongs_to_the_value() {
+        keyed("id = \"a # b\"\n", &[("\"a # b\"", "id")]);
+        keyed("id = 'a # b'\n", &[("'a # b'", "id")]);
     }
 }

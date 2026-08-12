@@ -6,7 +6,11 @@
 //! and `:` does too where no `=` is present — which is how a `.properties`
 //! file writes it.
 
-use super::locate::{KeySpan, lines};
+use super::locate::{KeySpan, lines, value_length};
+
+/// Both dialects' comment characters, for the same reason a whole line
+/// starting with either is skipped: a file does not say which it is.
+const COMMENT: &[u8] = b";#";
 
 pub(crate) fn key_spans(text: &str) -> Vec<KeySpan> {
     let mut section = String::new();
@@ -33,7 +37,7 @@ pub(crate) fn key_spans(text: &str) -> Vec<KeySpan> {
         }
         spans.push(KeySpan {
             start: offset + separator + 1,
-            end: offset + line.len(),
+            end: offset + separator + 1 + value_length(&line[separator + 1..], COMMENT),
             path: if section.is_empty() {
                 key.to_string()
             } else {
@@ -107,5 +111,20 @@ mod tests {
     #[test]
     fn a_line_with_no_separator_is_not_a_value() {
         keyed("[a]\njustaword\n", &[]);
+    }
+
+    /// **A comment is not part of the value**, in either dialect. The key
+    /// path is evidence, so a trailing comment holding a run must not
+    /// borrow the line's key.
+    #[test]
+    fn a_trailing_comment_is_outside_the_value() {
+        keyed("id = 1 # 6a7bb780a1b2c3d4e5f60718\n", &[("1", "id")]);
+        keyed("id = 1 ; 6a7bb780a1b2c3d4e5f60718\n", &[("1", "id")]);
+    }
+
+    #[test]
+    fn a_comment_character_inside_a_string_belongs_to_the_value() {
+        keyed("id = \"a # b\"\n", &[("\"a # b\"", "id")]);
+        keyed("id = \"a ; b\"\n", &[("\"a ; b\"", "id")]);
     }
 }

@@ -45,6 +45,7 @@ pub(crate) fn document(name: &str) -> &'static str {
         "ids.env" => include_str!("../../fixtures/documents/ids.env"),
         "ids.csv" => include_str!("../../fixtures/documents/ids.csv"),
         "ids.txt" => include_str!("../../fixtures/documents/ids.txt"),
+        "comments.toml" => include_str!("../../fixtures/documents/comments.toml"),
         "ambiguous.json" => include_str!("../../fixtures/documents/ambiguous.json"),
         "context.json" => include_str!("../../fixtures/documents/context.json"),
         "timestamps.json" => include_str!("../../fixtures/documents/timestamps.json"),

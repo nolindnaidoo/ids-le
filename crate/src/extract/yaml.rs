@@ -20,7 +20,10 @@
 //! what the document means. Pushing at the line indent would name it
 //! `items.[0].id.name`.
 
-use super::locate::{KeySpan, join, lines};
+use super::locate::{KeySpan, join, lines, value_length};
+
+/// YAML has one comment character.
+const COMMENT: &[u8] = b"#";
 
 pub(crate) fn key_spans(text: &str) -> Vec<KeySpan> {
     let mut stack: Vec<(usize, String)> = Vec::new();
@@ -48,10 +51,11 @@ pub(crate) fn key_spans(text: &str) -> Vec<KeySpan> {
 
         let Some((key, value_at)) = split_key(body) else {
             // A sequence item holding a scalar rather than a mapping.
-            if !body.is_empty() {
+            let length = value_length(body, COMMENT);
+            if length > 0 {
                 spans.push(KeySpan {
                     start: offset + column,
-                    end: offset + line.len(),
+                    end: offset + column + length,
                     path: path_of(&stack),
                 });
             }
@@ -61,13 +65,17 @@ pub(crate) fn key_spans(text: &str) -> Vec<KeySpan> {
 
         let value = &body[value_at..];
         let leading = value.len() - value.trim_start().len();
-        if value.trim().is_empty() {
-            // A key introducing a nested block. Its children carry it.
+        let length = value_length(value, COMMENT);
+        // A key introducing a nested block, and a key whose line holds
+        // nothing but a comment, are the same thing here: no value. The
+        // comment case has to be caught rather than clamped — the span
+        // would otherwise end before it started.
+        if length <= leading {
             continue;
         }
         spans.push(KeySpan {
             start: offset + column + value_at + leading,
-            end: offset + line.len(),
+            end: offset + column + value_at + length,
             path: path_of(&stack),
         });
     }
@@ -185,6 +193,31 @@ mod tests {
     #[test]
     fn a_quoted_key_loses_its_quotes() {
         keyed("\"my key\": x\n", &[("x", "my key")]);
+    }
+
+    /// **A comment is not part of the value.** The key path is evidence,
+    /// so a trailing comment holding a run must not borrow the line's
+    /// key — which is how `_id: 1 # <24 hex>` named a hash an ObjectId.
+    #[test]
+    fn a_trailing_comment_is_outside_the_value() {
+        keyed("id: 1 # 6a7bb780a1b2c3d4e5f60718\n", &[("1", "id")]);
+    }
+
+    /// A `#` with no space in front of it is part of a plain scalar,
+    /// which is what YAML says and the conservative answer besides.
+    #[test]
+    fn a_hash_inside_a_scalar_belongs_to_the_value() {
+        keyed("id: a#b\n", &[("a#b", "id")]);
+        keyed("id: \"a # b\"\n", &[("\"a # b\"", "id")]);
+    }
+
+    /// A line whose value is nothing but a comment introduces a block —
+    /// it does not carry a value, and it must not carry a span running
+    /// backwards from one.
+    #[test]
+    fn a_key_whose_value_is_only_a_comment_carries_nothing() {
+        assert!(key_spans("id: # 6a7bb780a1b2c3d4e5f60718\n").is_empty());
+        assert_eq!(key_spans("a: # nothing\n  b: x\n").len(), 1);
     }
 
     #[test]

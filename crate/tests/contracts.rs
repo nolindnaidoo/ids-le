@@ -336,6 +336,34 @@ fn a_bare_integer_needs_a_key_that_names_an_id() {
     assert_eq!(by_file("c.md")["ids"], serde_json::json!([]));
 }
 
+/// **A comment is not evidence.** The key path a value sits under is
+/// what decides whether a 24-hex run is an ObjectId, so a reader that
+/// hands a trailing comment the line's key promotes a refusal to a
+/// finding. TOML, INI and YAML all did; dotenv did not, and that
+/// disagreement between four readers of one document is how it surfaced.
+#[test]
+fn a_trailing_comment_does_not_lend_its_line_a_key() {
+    let tree = Tree::new("comment-evidence");
+    tree.write("a.toml", &format!("_id = 1 # {OBJECT_ID}\n"));
+    tree.write("a.ini", &format!("_id = 1 ; {OBJECT_ID}\n"));
+    tree.write("a.yaml", &format!("_id: 1 # {OBJECT_ID}\n"));
+    tree.write("a.env", &format!("_ID=1 # {OBJECT_ID}\n"));
+
+    let found = reports(&run(&[&tree.path().to_string_lossy()]));
+    assert_eq!(found.len(), 4, "the whole tree was walked");
+    for report in found {
+        let rows = report["ids"].as_array().expect("rows");
+        assert_eq!(rows.len(), 1, "{report}");
+        assert_eq!(rows[0]["value"], OBJECT_ID, "{report}");
+        assert!(
+            rows[0]["key"].is_null(),
+            "a comment lent the run its line's key: {report}"
+        );
+        assert_eq!(rows[0]["valid"], false, "{report}");
+        assert_eq!(rows[0]["refused"], "ambiguous_kind", "{report}");
+    }
+}
+
 /// A binary file was never a text candidate: no report line, no effect
 /// on the exit code. A file that *is* text and could not be decoded
 /// keeps its named diagnostic and fails `--strict`.

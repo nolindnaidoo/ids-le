@@ -197,6 +197,14 @@ naming an id, so the same run that is named in the `.json` comes back
 all still there — what is missing is the thing that would justify naming
 it, and the refusal says so.
 
+**A comment is not part of a value, and not evidence.** Every reader that
+has comment characters stops the value region at the first one that sits
+outside quotes with whitespace in front of it — so a run inside a
+trailing comment carries no key path, and cannot borrow the verdict a
+key would have bought it. Quoting protects the character
+(`id = "a # b"`), and a comment character with no space in front of it
+belongs to the value (`a: b#c` is one YAML scalar).
+
 Each reader is a line scanner rather than a parser, and states its own
 limits:
 

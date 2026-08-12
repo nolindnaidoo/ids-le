@@ -4,7 +4,10 @@
 //! weight — `.env` is where `DISCORD_CHANNEL_ID=` lives, and that name
 //! is the whole reason a bare integer beside it can be named at all.
 
-use super::locate::{KeySpan, lines};
+use super::locate::{KeySpan, lines, value_length};
+
+/// dotenv has one comment character.
+const COMMENT: &[u8] = b"#";
 
 pub(crate) fn key_spans(text: &str) -> Vec<KeySpan> {
     lines(text).filter_map(span_of).collect()
@@ -25,23 +28,9 @@ fn span_of((offset, line): (usize, &str)) -> Option<KeySpan> {
     let raw = &line[equals + 1..];
     Some(KeySpan {
         start: offset + equals + 1,
-        end: offset + equals + 1 + value_length(raw),
+        end: offset + equals + 1 + value_length(raw, COMMENT),
         path: key.to_string(),
     })
-}
-
-/// How far the value runs.
-///
-/// A `#` inside a quoted value is part of the value — that is the whole
-/// reason quoting exists in these files — so the comment is only cut off
-/// an unquoted one.
-fn value_length(raw: &str) -> usize {
-    let leading = raw.len() - raw.trim_start().len();
-    let body = raw.trim_start();
-    if body.starts_with('"') || body.starts_with('\'') {
-        return raw.len();
-    }
-    leading + body.find(" #").unwrap_or(body.len())
 }
 
 #[cfg(test)]
@@ -92,6 +81,14 @@ mod tests {
     #[test]
     fn a_line_with_no_equals_is_not_a_value() {
         keyed("JUST_A_WORD\n", &[]);
+    }
+
+    /// A comment *after* a quoted value is still a comment. The old rule
+    /// gave a quoted value the whole rest of the line, so a run in the
+    /// comment borrowed the key.
+    #[test]
+    fn a_comment_after_a_quoted_value_is_outside_it() {
+        keyed("A=\"x\" # 6a7bb780a1b2c3d4e5f60718\n", &[("\"x\"", "A")]);
     }
 
     #[test]

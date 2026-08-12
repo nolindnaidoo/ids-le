@@ -614,6 +614,41 @@
           "timestamp": "2026-08-12T00:00:00.000Z"
         }
       ]
+    },
+    {
+      "name": "a trailing comment lends no key",
+      "file": "comments.toml",
+      "fileType": "toml",
+      "expected": [
+        {
+          "kind": "objectid",
+          "value": "6a7bb780a1b2c3d4e5f60718",
+          "line": 5,
+          "column": 8,
+          "key": "_id",
+          "valid": true,
+          "timestamp": "2026-08-12T00:00:00.000Z"
+        },
+        {
+          "kind": "objectid",
+          "value": "6a7bb780a1b2c3d4e5f60718",
+          "line": 6,
+          "column": 18,
+          "key": "quoted_id",
+          "valid": true,
+          "timestamp": "2026-08-12T00:00:00.000Z"
+        },
+        {
+          "kind": null,
+          "value": "6a7bb780a1b2c3d4e5f60718",
+          "line": 7,
+          "column": 18,
+          "valid": false,
+          "timestamp": "2026-08-12T00:00:00.000Z",
+          "refused": "ambiguous_kind",
+          "detail": "24 hex digits are an ObjectId, a truncated hash and a hex dump in equal measure, and nothing in this document names this field an identifier"
+        }
+      ]
     }
   ],
   "ambiguity": [
