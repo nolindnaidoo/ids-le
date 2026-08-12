@@ -170,7 +170,7 @@ fn is_binary(bytes: &[u8]) -> bool {
 }
 
 pub(crate) fn scan_file(path: &PathBuf, options: ScanOptions) -> Scanned {
-    let file = path.to_string_lossy().into_owned();
+    let file = report_path(path);
     let format = options.format.unwrap_or_else(|| format_of(path));
 
     match std::fs::read(path) {
@@ -188,6 +188,27 @@ pub(crate) fn scan_file(path: &PathBuf, options: ScanOptions) -> Scanned {
 
 fn format_of(path: &StdPath) -> &'static str {
     resolve_format(None, path.file_name().and_then(|name| name.to_str()))
+}
+
+/// The path as the report spells it: **separated by `/` on every
+/// platform**.
+///
+/// A report is diffed against one produced on another machine and read
+/// by someone who does not have the tree. A sibling in this family
+/// shipped `\` on Windows for a whole release, which made every path in
+/// a Windows report differ from the same path in a Linux one for no
+/// reason a reader could see.
+#[cfg(windows)]
+fn report_path(path: &StdPath) -> String {
+    path.to_string_lossy().replace('\\', "/")
+}
+
+/// The path as the report spells it. Nothing to rewrite here: `\` is a
+/// legal character in a Unix filename, and replacing it would rename
+/// the file in the report.
+#[cfg(not(windows))]
+fn report_path(path: &StdPath) -> String {
+    path.to_string_lossy().into_owned()
 }
 
 pub(crate) fn scan_content(
@@ -540,6 +561,27 @@ mod tests {
                 reason_name(reason)
             );
         }
+    }
+
+    /// Windows only, because on Unix there is nothing to rewrite: `\` is
+    /// a legal character in a filename there, and replacing it would
+    /// rename the file in the report.
+    #[cfg(windows)]
+    #[test]
+    fn a_reported_path_is_separated_by_forward_slashes() {
+        assert_eq!(
+            report_path(StdPath::new(r"C:\src\config.json")),
+            "C:/src/config.json"
+        );
+    }
+
+    #[cfg(not(windows))]
+    #[test]
+    fn a_backslash_in_a_unix_filename_is_left_alone() {
+        assert_eq!(
+            report_path(StdPath::new(r"/tmp/odd\name.json")),
+            r"/tmp/odd\name.json"
+        );
     }
 
     #[test]
