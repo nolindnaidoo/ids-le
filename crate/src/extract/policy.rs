@@ -205,7 +205,7 @@ pub(crate) fn classify(token: &str, key: Option<&str>, clock: Clock) -> Verdict 
              nothing in this document chooses between them"
                 .to_string(),
         )),
-        length if is_near_miss_hex(token, length) => Verdict::Refused(Refusal::new(
+        length if is_near_miss_hex(token) => Verdict::Refused(Refusal::new(
             None,
             Reason::Malformed,
             format!(
@@ -227,7 +227,8 @@ pub(crate) fn is_hex(token: &str) -> bool {
 /// The `a`–`f` requirement is what keeps a Snowflake out of here: 19
 /// digits are 19 hex digits too, and a bare integer must reach
 /// `snowflake.rs` rather than be refused as a truncated ObjectId.
-fn is_near_miss_hex(token: &str, length: usize) -> bool {
+fn is_near_miss_hex(token: &str) -> bool {
+    let length = token.len();
     let near = length.abs_diff(24) == 1 || length.abs_diff(32) == 1;
     near && is_hex(token) && token.bytes().any(|byte| byte.is_ascii_alphabetic())
 }
@@ -242,10 +243,13 @@ pub(crate) fn key_mentions(key: Option<&str>, word: &str) -> bool {
 }
 
 /// The document's key path, lowercased with separators removed.
+///
+/// ASCII case folding, because the filter has already thrown away
+/// everything that is not an ASCII alphanumeric.
 pub(crate) fn flatten_key(key: &str) -> String {
     key.chars()
         .filter(char::is_ascii_alphanumeric)
-        .flat_map(char::to_lowercase)
+        .map(|character| character.to_ascii_lowercase())
         .collect()
 }
 
@@ -356,8 +360,8 @@ mod tests {
     /// truncated ObjectId before it reaches its own module.
     #[test]
     fn a_run_of_digits_is_never_a_near_miss_hex_identifier() {
-        assert!(!is_near_miss_hex("1234567890123456789", 19));
-        assert!(!is_near_miss_hex("12345678901234567890123", 23));
+        assert!(!is_near_miss_hex("1234567890123456789"));
+        assert!(!is_near_miss_hex("12345678901234567890123"));
     }
 
     #[test]

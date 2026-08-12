@@ -104,16 +104,21 @@ fn chosen_epoch(key: Option<&str>, discord: i64, twitter: i64, clock: Clock) -> 
     let says_discord = DISCORD_WORDS.iter().any(|word| key_mentions(key, word));
     let says_twitter = TWITTER_WORDS.iter().any(|word| key_mentions(key, word));
     match (says_discord, says_twitter) {
-        (true, false) => return Some(discord),
-        (false, true) => return Some(twitter),
-        // A key naming both platforms is a key naming neither.
-        _ => {}
+        (true, false) => Some(discord),
+        (false, true) => Some(twitter),
+        // A key naming both platforms is a key naming neither, and a key
+        // naming one is the same silence. Either way the clock is the
+        // last thing left to ask.
+        (true, true) | (false, false) => by_clock(discord, twitter, clock),
     }
+}
 
-    // Nothing named the platform, so the clock is the last thing left to
-    // ask. Where exactly one epoch produces a plausible instant, that is
-    // an answer; where both do — which is the ordinary case for a real
-    // identifier — it is not.
+/// The epoch the clock chose, where nothing in the document did.
+///
+/// Where exactly one epoch produces a plausible instant, that is an
+/// answer; where both do — the ordinary case for a real identifier — it
+/// is not.
+fn by_clock(discord: i64, twitter: i64, clock: Clock) -> Option<i64> {
     match (clock.is_plausible(discord), clock.is_plausible(twitter)) {
         (true, true) => None,
         (true, false) => Some(discord),

@@ -105,12 +105,7 @@ fn split_key(body: &str) -> Option<(&str, usize)> {
 }
 
 fn path_of(stack: &[(usize, String)]) -> String {
-    join(
-        &stack
-            .iter()
-            .map(|(_, segment)| segment.clone())
-            .collect::<Vec<String>>(),
-    )
+    join(stack.iter().map(|(_, segment)| segment.as_str()))
 }
 
 #[cfg(test)]

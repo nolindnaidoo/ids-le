@@ -205,8 +205,11 @@ fn scan_tool(arguments: &Value) -> Result<Value, String> {
         .map(|report| serde_json::to_value(report).expect("a report serializes"))
         .collect();
 
-    let ids: u64 = summed(&reports, "ids");
-    let refused: u64 = summed(&reports, "refused");
+    // Summed from the typed reports rather than read back out of the
+    // JSON beside them: a lookup that missed would fall back to zero and
+    // understate the tree without saying so.
+    let ids: usize = read.iter().map(|report| report.summary.ids).sum();
+    let refused: usize = read.iter().map(|report| report.summary.refused).sum();
 
     let mut diagnostics: Vec<Value> = read
         .iter()
@@ -241,13 +244,6 @@ fn scan_tool(arguments: &Value) -> Result<Value, String> {
     ))
 }
 
-fn summed(reports: &[Value], field: &str) -> u64 {
-    reports
-        .iter()
-        .map(|report| report["summary"][field].as_u64().unwrap_or(0))
-        .sum()
-}
-
 fn requested_paths(arguments: &Value) -> Result<Vec<PathBuf>, String> {
     if let Some(path) = arguments.get("path").and_then(Value::as_str) {
         return Ok(vec![PathBuf::from(path)]);
@@ -265,7 +261,17 @@ fn requested_paths(arguments: &Value) -> Result<Vec<PathBuf>, String> {
     Err("no file or directory was supplied to read".to_string())
 }
 
-fn requested_kind(arguments: &Value) -> Result<Option<Kind>, String> {
+/// An unknown kind is refused, where an unknown format is not.
+///
+/// The asymmetry is the same one the command line makes: a bad format
+/// costs key paths, and a bad kind would return an empty list that a
+/// model reads as "this document has no identifiers".
+///
+/// Both tools share this rather than each parsing `kind` itself — the
+/// same reasoning as `policy::names_an_id`. Two definitions of what a
+/// kind argument means would drift, and the drift would show up as one
+/// tool answering a question the other refused.
+pub(crate) fn requested_kind(arguments: &Value) -> Result<Option<Kind>, String> {
     let Some(raw) = arguments.get("kind") else {
         return Ok(None);
     };

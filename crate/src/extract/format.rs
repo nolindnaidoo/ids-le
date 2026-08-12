@@ -52,12 +52,11 @@ pub(crate) const SUPPORTED_FORMATS: [&str; 7] =
 /// report.
 pub(crate) const FALLBACK_FORMAT: &str = "text";
 
+/// Case folded last, so the whole thing is one allocation: no lowercase
+/// mapping produces or consumes a leading `.`, which is the only
+/// character stripped here.
 fn normalise(value: &str) -> String {
-    value
-        .trim()
-        .to_lowercase()
-        .trim_start_matches('.')
-        .to_string()
+    value.trim().trim_start_matches('.').to_lowercase()
 }
 
 /// The reader key for an already-canonical format name, or the fallback.

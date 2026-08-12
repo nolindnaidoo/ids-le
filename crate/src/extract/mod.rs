@@ -100,7 +100,35 @@ fn row(
     index: &PositionIndex,
     clock: Clock,
 ) -> Option<Found> {
-    let base = Found {
+    match policy::classify(value, key, clock) {
+        Verdict::Ignored => None,
+        Verdict::Named(id) => Some(Found {
+            kind: Some(id.kind),
+            valid: true,
+            version: id.version,
+            variant: id.variant,
+            timestamp: id.timestamp,
+            ..located(value, offset, key, index)
+        }),
+        Verdict::Refused(refusal) => Some(Found {
+            kind: refusal.kind,
+            version: refusal.version,
+            variant: refusal.variant,
+            timestamp: refusal.timestamp,
+            refused: Some(refusal.reason),
+            detail: Some(refusal.detail),
+            ..located(value, offset, key, index)
+        }),
+    }
+}
+
+/// The half of a row that does not depend on the verdict.
+///
+/// Built inside the arms rather than before the match: a candidate no
+/// kind claims is most of what a document holds, and it would otherwise
+/// pay for the text and the key path of a row nobody reports.
+fn located(value: &str, offset: usize, key: Option<&str>, index: &PositionIndex) -> Found {
+    Found {
         kind: None,
         value: value.to_string(),
         position: index.at(offset),
@@ -111,27 +139,6 @@ fn row(
         timestamp: None,
         refused: None,
         detail: None,
-    };
-
-    match policy::classify(value, key, clock) {
-        Verdict::Ignored => None,
-        Verdict::Named(id) => Some(Found {
-            kind: Some(id.kind),
-            valid: true,
-            version: id.version,
-            variant: id.variant,
-            timestamp: id.timestamp,
-            ..base
-        }),
-        Verdict::Refused(refusal) => Some(Found {
-            kind: refusal.kind,
-            version: refusal.version,
-            variant: refusal.variant,
-            timestamp: refusal.timestamp,
-            refused: Some(refusal.reason),
-            detail: Some(refusal.detail),
-            ..base
-        }),
     }
 }
 

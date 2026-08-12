@@ -85,12 +85,13 @@ impl<'a> PositionIndex<'a> {
     /// UTF-16 code units before a byte offset, counted from the nearest
     /// checkpoint at or below it.
     fn units_before(&self, offset: usize) -> usize {
-        // ASCII: one byte, one code unit, and no index was built.
-        let Some(&(byte, units)) = self.checkpoints.get(
-            self.checkpoints
-                .partition_point(|(at, _)| *at <= offset)
-                .wrapping_sub(1),
-        ) else {
+        let after = self.checkpoints.partition_point(|(at, _)| *at <= offset);
+        // ASCII: one byte, one code unit, and no index was built, so
+        // there is no checkpoint at or below the offset to start from.
+        let Some(&(byte, units)) = after
+            .checked_sub(1)
+            .and_then(|index| self.checkpoints.get(index))
+        else {
             return offset;
         };
         units + self.content[byte..offset].encode_utf16().count()

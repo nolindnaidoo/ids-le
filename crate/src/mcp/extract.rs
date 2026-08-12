@@ -12,7 +12,7 @@
 
 use serde_json::{Value, json};
 
-use crate::extract::{self, Clock, KIND_NAMES, Kind, Options, SUPPORTED_FORMATS, resolve_format};
+use crate::extract::{self, Clock, KIND_NAMES, Options, SUPPORTED_FORMATS, resolve_format};
 
 const DEFAULT_MAX_RESULTS: usize = 500;
 const MAX_MAX_RESULTS: usize = 5000;
@@ -75,7 +75,7 @@ pub(crate) fn run(arguments: &Value, clock: Clock) -> Result<Value, String> {
         .and_then(Value::as_str)
         .ok_or_else(|| "content is required and must be a string".to_string())?;
     let max_results = read_max_results(arguments)?;
-    let kind = read_kind(arguments)?;
+    let kind = super::requested_kind(arguments)?;
 
     // Never a refusal. An agent that knows nothing about a document
     // still gets its identifiers; only the key paths depend on knowing
@@ -122,38 +122,22 @@ pub(crate) fn run(arguments: &Value, clock: Clock) -> Result<Value, String> {
 }
 
 /// Clamp quietly, reject loudly.
+///
+/// A cap above the ceiling is the caller asking for everything, which is
+/// answered rather than refused. A cap that is not a positive integer —
+/// a fraction, a negative, a string, a zero — is a question this tool
+/// cannot answer, and a silent default would hand back a truncated
+/// report the caller believed was capped where they said.
 fn read_max_results(arguments: &Value) -> Result<usize, String> {
     let Some(raw) = arguments.get("maxResults") else {
         return Ok(DEFAULT_MAX_RESULTS);
     };
-    let invalid = "maxResults must be a positive integer".to_string();
-    let value = raw.as_u64().ok_or(invalid.clone())?;
-    if value < 1 {
-        return Err(invalid);
-    }
+    let Some(value) = raw.as_u64().filter(|value| *value >= 1) else {
+        return Err("maxResults must be a positive integer".to_string());
+    };
     Ok(usize::try_from(value)
         .unwrap_or(MAX_MAX_RESULTS)
         .min(MAX_MAX_RESULTS))
-}
-
-/// An unknown kind is refused, where an unknown format is not.
-///
-/// The asymmetry is the same one the command line makes: a bad format
-/// costs key paths, and a bad kind would return an empty list that a
-/// model reads as "this document has no identifiers".
-fn read_kind(arguments: &Value) -> Result<Option<Kind>, String> {
-    let Some(raw) = arguments.get("kind") else {
-        return Ok(None);
-    };
-    let name = raw
-        .as_str()
-        .ok_or_else(|| "kind must be a string".to_string())?;
-    Kind::from_name(name).map(Some).ok_or_else(|| {
-        format!(
-            "{name} is not a kind; it is one of {}",
-            KIND_NAMES.join(", ")
-        )
-    })
 }
 
 #[cfg(test)]

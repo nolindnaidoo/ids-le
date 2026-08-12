@@ -63,32 +63,21 @@ pub(crate) fn key_spans(text: &str) -> Vec<KeySpan> {
                 at += 1;
             }
             b',' => {
-                if let Some(frame) = frames.last_mut() {
-                    frame.expect_key = !frame.array;
-                    if frame.array {
-                        frame.index += 1;
-                        if let Some(segment) = path.last_mut() {
-                            *segment = format!("[{}]", frame.index);
-                        }
-                    }
-                }
+                advance(&mut frames, &mut path);
                 at += 1;
             }
             b'"' => {
                 let (content, end) = read_string(bytes, at);
-                let key = frames.last().is_some_and(|frame| frame.expect_key);
-                if key {
-                    if let Some(segment) = path.last_mut() {
-                        *segment = text[content.clone()].to_string();
-                    }
-                } else {
-                    spans.push(KeySpan {
-                        start: content.start,
-                        end: content.end,
-                        path: join(&path),
-                    });
-                }
                 at = end;
+                if frames.last().is_some_and(|frame| frame.expect_key) {
+                    rename(&mut path, &text[content]);
+                    continue;
+                }
+                spans.push(KeySpan {
+                    start: content.start,
+                    end: content.end,
+                    path: join(path.iter().map(String::as_str)),
+                });
             }
             b'/' => at = skip_comment(bytes, at),
             byte if is_scalar_byte(byte) => {
@@ -99,13 +88,37 @@ pub(crate) fn key_spans(text: &str) -> Vec<KeySpan> {
                 spans.push(KeySpan {
                     start,
                     end: at,
-                    path: join(&path),
+                    path: join(path.iter().map(String::as_str)),
                 });
             }
             _ => at += 1,
         }
     }
     spans
+}
+
+/// A comma closes a value: in an object the next string is a key again,
+/// and in an array the element index advances.
+fn advance(frames: &mut [Frame], path: &mut [String]) {
+    let Some(frame) = frames.last_mut() else {
+        return;
+    };
+    frame.expect_key = !frame.array;
+    if !frame.array {
+        return;
+    }
+    frame.index += 1;
+    rename(path, &format!("[{}]", frame.index));
+}
+
+/// The innermost frame's name. A key renames the frame it was read in;
+/// a comma in an array renames it to the next index.
+fn rename(path: &mut [String], segment: &str) {
+    let Some(last) = path.last_mut() else {
+        return;
+    };
+    last.clear();
+    last.push_str(segment);
 }
 
 /// The byte range between the quotes, and the offset just past the

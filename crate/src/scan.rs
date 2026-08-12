@@ -8,7 +8,7 @@
 //! can pin; the wall clock is read exactly here, on the impure side of
 //! the line.
 
-use std::path::{Path as StdPath, PathBuf};
+use std::path::Path as StdPath;
 
 use serde::Serialize;
 
@@ -169,7 +169,7 @@ fn is_binary(bytes: &[u8]) -> bool {
         .any(|byte| *byte == b'\0')
 }
 
-pub(crate) fn scan_file(path: &PathBuf, options: ScanOptions) -> Scanned {
+pub(crate) fn scan_file(path: &StdPath, options: ScanOptions) -> Scanned {
     let file = report_path(path);
     let format = options.format.unwrap_or_else(|| format_of(path));
 
@@ -350,7 +350,7 @@ mod tests {
         }
     }
 
-    fn read(path: &PathBuf, options: ScanOptions) -> FileReport {
+    fn read(path: &StdPath, options: ScanOptions) -> FileReport {
         scan_file(path, options)
             .into_report()
             .expect("the file was a text candidate")
