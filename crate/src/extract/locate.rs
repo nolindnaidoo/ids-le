@@ -13,11 +13,13 @@
 //! over a tree — which is also the only way the offsets stay the raw
 //! document's, and offsets are what the whole report is indexed by.
 //!
-//! **A key path is evidence, not decoration.** Three of the five kinds
-//! ask it whether a run is what its shape suggests, so a reader that
-//! silently mislabels a value can turn a refusal into a finding. Each
-//! reader states its limits in its own module, and none of them
-//! reconstructs a document — they read as far as a line goes, and stop.
+//! **A key path is evidence, not decoration.** Four of the five kinds
+//! ask it whether a run is what its shape suggests — ULID and NanoID for
+//! the scheme's own name, ObjectId and Snowflake through
+//! `policy::names_an_id`, and only UUID never — so a reader that silently
+//! mislabels a value can turn a refusal into a finding. Each reader
+//! states its limits in its own module, and none of them reconstructs a
+//! document — they read as far as a line goes, and stop.
 
 use super::{csv, dotenv, ini, json, toml, yaml};
 
