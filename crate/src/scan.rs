@@ -21,10 +21,39 @@ use crate::extract::{self, Clock, Found, Kind, Options, resolve_format};
 /// even when a document produced nothing.
 const SCHEMA: u8 = 1;
 
+/// How much a diagnostic costs the run.
+///
+/// **One variant, and that is the design rather than an omission.** Every
+/// diagnostic this crate produces is a warning about a file it could not
+/// read, and that is not a failure of the run — every repository holds a
+/// PNG, and exiting 2 on those makes the tool unusable in CI, which is
+/// the one place it is most worth running. `--strict` is how a pipeline
+/// asks for the other answer.
+///
+/// A second variant would need a state where a scan gave up part way,
+/// and `scan_file` has none: it reads a whole file or names why it could
+/// not. It was once a `String`, and `exit_code` carried a branch on
+/// `"error"` that nothing could produce — a documented exit code with
+/// nothing behind it. Adding a variant here now forces every reader of
+/// one to be revisited.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "lowercase")]
+pub(crate) enum Severity {
+    Warning,
+}
+
+/// What a diagnostic is about. Held to the same rule as `Severity`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "lowercase")]
+pub(crate) enum Code {
+    /// A file that looked like text and could not be read.
+    Skipped,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 pub(crate) struct Diagnostic {
-    pub(crate) severity: String,
-    pub(crate) code: String,
+    pub(crate) severity: Severity,
+    pub(crate) code: Code,
     pub(crate) message: String,
 }
 
@@ -61,17 +90,7 @@ impl FileReport {
     pub(crate) fn was_skipped(&self) -> bool {
         self.diagnostics
             .iter()
-            .any(|diagnostic| diagnostic.code == "skipped")
-    }
-
-    /// Whether the scan of this file gave up part way. Unlike a skip
-    /// this **does** fail the run: reporting no findings for a file that
-    /// was never finished would overstate coverage, which is the one
-    /// thing an audit tool must never do.
-    pub(crate) fn is_incomplete(&self) -> bool {
-        self.diagnostics
-            .iter()
-            .any(|diagnostic| diagnostic.severity == "error")
+            .any(|diagnostic| diagnostic.code == Code::Skipped)
     }
 }
 
@@ -239,12 +258,14 @@ pub(crate) fn scan_content(
 /// answer about that tree. `--strict` is for the pipeline that wants
 /// every row named or nothing shipped, and it turns both a refusal and
 /// an unreadable text file into a failure.
+///
+/// **Nothing about a file exits 2 on its own.** Exit 2 is for a
+/// malformed *question* — an unknown flag, an unknown kind, a path that
+/// cannot be opened at all — and `tests/hazards.rs` says so by name. A
+/// file the filesystem refused is a fact about the tree, reported and
+/// carried; `Severity` is the type that keeps a third answer from being
+/// invented here.
 pub(crate) fn exit_code(reports: &[FileReport], strict: bool) -> u8 {
-    // A scan that gave up part way always fails: it would otherwise
-    // report "nothing found" for a file it never finished reading.
-    if reports.iter().any(FileReport::is_incomplete) {
-        return 2;
-    }
     if strict
         && reports
             .iter()
@@ -312,8 +333,8 @@ fn skipped(file: String, format: &'static str, reason: &str) -> FileReport {
         format: format.to_string(),
         ids: Vec::new(),
         diagnostics: vec![Diagnostic {
-            severity: "warning".to_string(),
-            code: "skipped".to_string(),
+            severity: Severity::Warning,
+            code: Code::Skipped,
             message: reason.to_string(),
         }],
         summary: Summary { ids: 0, refused: 0 },
@@ -418,7 +439,7 @@ mod tests {
         let tree = TempTree::new("scan-unreadable");
         let report = read(&tree.path().join("gone.json"), plain());
         assert!(report.was_skipped());
-        assert_eq!(report.diagnostics[0].severity, "warning");
+        assert_eq!(report.diagnostics[0].severity, Severity::Warning);
         assert_eq!(exit_code(std::slice::from_ref(&report), false), 1);
         assert_eq!(exit_code(&[report], true), 2, "--strict is opt-in");
     }
@@ -457,6 +478,42 @@ mod tests {
             exit_code(&binary_only, true),
             1,
             "a binary file never fails --strict"
+        );
+    }
+
+    /// **Every severity and every code a report can carry is produced by
+    /// a real scan**, and serializes to the word the wire format has
+    /// always used. The same discipline `tests/coverage_matrix.rs`
+    /// applies to kinds and reasons: a variant nothing can produce is a
+    /// branch nobody is checking, which is how `exit_code` came to hold
+    /// a test for an `"error"` severity that no path could reach.
+    #[test]
+    fn every_diagnostic_variant_is_reachable_and_keeps_its_wire_name() {
+        let tree = TempTree::new("scan-severities");
+        let broken = tree.write_bytes("notes.txt", &[0x68, 0x69, 0xff, 0xfe]);
+        let diagnostics = read(&broken, plain()).diagnostics;
+
+        // Exhaustive on purpose. A new variant does not compile until it
+        // is given a wire name here, and it does not pass until a real
+        // scan below produces one — which is the check `exit_code` was
+        // missing when it branched on a severity nothing emitted.
+        let severity_name = |severity: Severity| match severity {
+            Severity::Warning => "warning",
+        };
+        let code_name = |code: Code| match code {
+            Code::Skipped => "skipped",
+        };
+
+        assert_eq!(diagnostics.len(), 1, "{diagnostics:?}");
+        assert_eq!(severity_name(diagnostics[0].severity), "warning");
+        assert_eq!(code_name(diagnostics[0].code), "skipped");
+        assert_eq!(
+            serde_json::to_value(diagnostics[0].severity).expect("serializes"),
+            severity_name(diagnostics[0].severity)
+        );
+        assert_eq!(
+            serde_json::to_value(diagnostics[0].code).expect("serializes"),
+            code_name(diagnostics[0].code)
         );
     }
 

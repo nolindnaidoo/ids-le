@@ -294,6 +294,14 @@ pub(crate) fn requested_kind(arguments: &Value) -> Result<Option<Kind>, String> 
 /// not a failure to produce one — conflating the two would have a model
 /// report a broken tool when what it actually learned is that the
 /// identifiers in that file cannot be named from the file alone.
+/// **`ok` is `true` by construction, and that is the contract rather
+/// than a shortcut.** A tool that could not run on its arguments returns
+/// `tool_failure` and never reaches an envelope; a tool that ran returns
+/// one. Everything that can appear in `diagnostics` here is a warning
+/// about what the run *found* — refusals, a file that could not be read
+/// — and those are the answer, not a failure to produce one. This used
+/// to be computed by looking for an `"error"` severity that no path
+/// emits, which read as a live check and was not one.
 pub(crate) fn envelope(
     tool: &str,
     data: &Value,
@@ -301,11 +309,8 @@ pub(crate) fn envelope(
     diagnostics: &[Value],
     truncated: bool,
 ) -> Value {
-    let ok = !diagnostics
-        .iter()
-        .any(|diagnostic| diagnostic["severity"].as_str() == Some("error"));
     json!({
-        "ok": ok,
+        "ok": true,
         "data": data,
         "diagnostics": diagnostics,
         "meta": { "tool": tool, "count": count, "truncated": truncated },

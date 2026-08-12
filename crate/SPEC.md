@@ -241,12 +241,18 @@ The API. A shell branches on these.
 |---|---|
 | `0` | At least one identifier was named. |
 | `1` | None were. Finding nothing is an answer, not an error. |
-| `2` | The question was malformed, or a scan gave up part way. |
+| `2` | The question was malformed. |
 
 **A refusal does not move the exit code.** Refusing is the tool working.
 `--strict` is for the pipeline that wants every run named or nothing
 shipped: under it, any refusal *or* any text file that could not be read
 exits 2.
+
+**Nothing about a file exits 2 on its own.** An unknown flag, an unknown
+kind, and a path that cannot be opened at all are malformed questions; a
+file the filesystem refused mid-tree is a fact about the tree, reported
+with a warning and carried. There is no "gave up part way" state — a file
+is read whole or the reason it was not is named.
 
 A binary file — a NUL byte in its first 8 KiB, ripgrep's test — is never
 a text candidate: no report line, counted on stderr, and it never fails

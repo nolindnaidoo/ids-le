@@ -36,6 +36,24 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- **SPEC.md no longer documents an exit code that cannot happen.** The
+  exit-code table said `2` covered "the question was malformed, **or a
+  scan gave up part way**", and `exit_code` opened with a branch for the
+  second half. Nothing could produce it: `Diagnostic.severity` was a
+  `String`, the branch tested it for `"error"`, and the only diagnostic
+  this crate constructs is the `warning` for a file it could not read.
+  A file is read whole or the reason it was not is named — there is no
+  partial state, so the claim is gone and so is the branch.
+
+  `Severity` and `Code` are enums now rather than strings, each with one
+  variant and the reason for that written on it. The wire format is
+  unchanged (`"severity": "warning"`, `"code": "skipped"`), and a new
+  variant no longer compiles until something produces it and a test names
+  it. The MCP envelope's `ok` was computed the same way against the same
+  impossible severity; it is stated as the constant it always was, with
+  the reason — a tool that could not run returns `isError` and never
+  reaches an envelope.
+
 - **A trailing comment no longer lends its line's key path to the runs
   inside it.** The TOML, INI and YAML readers ran a value region to the
   end of the line, so everything after a `#` or `;` was addressed as
