@@ -1,11 +1,11 @@
 [package]
 name = "ids-le"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 rust-version = "1.88"
 license = "MIT"
 readme = "README.md"
-description = "Extract every identifier from a codebase, decode the time inside it, and refuse the ones that cannot be named"
+description = "Extract every UUID, ULID, NanoID, ObjectId and Snowflake, and decode the time inside"
 authors = ["Nolin D Naidoo"]
 homepage = "https://letools.dev/tools/ids-le"
 repository = "https://github.com/nolindnaidoo/ids-le"
