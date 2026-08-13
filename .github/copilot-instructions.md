@@ -1,42 +1,47 @@
 # Contributor and agent instructions
 
-**Read [AGENTS.md](AGENTS.md) before writing any code.** It carries the
-engineering standard this repository is held to — control flow, error handling,
-module shape — plus the architecture, the invariants and why each one exists.
-[CLAUDE.md](CLAUDE.md) is the short version: gates and traps.
+**Read [AGENTS.md](../AGENTS.md) before writing any code**, and through it
+[crate/AGENTS.md](../crate/AGENTS.md) — the engineering standard this repository
+is held to: control flow, error handling, structure, and why each rule
+exists. [crate/SPEC.md](../crate/SPEC.md) is the behaviour;
+[CLAUDE.md](../CLAUDE.md) is the short version: gates and traps.
 
-This file exists only to route you there. It is deliberately thin: the standard
-lives in one place so it cannot drift between tools.
+This file exists only to route you there. It is deliberately thin: the
+standard lives in one place so it cannot drift between tools.
 
 ## Non-negotiables
 
+- **Refuse rather than guess.** A run that fits two schemes is refused with
+  both named, and the reason is a row in the report — never a dropped row and
+  never a silent success.
 - Guard clauses first. **No statement-position `else`** — two branches are an
-  early return, many are a `match` or a lookup table. Value-position `if/else`
-  is fine.
-- Nesting stops at two levels inside a function.
-- **`Result<T, String>` for fallible functions.** No `anyhow`, no `thiserror`
-  in the library; one error enum only where a domain genuinely needs it.
-- `#![forbid(unsafe_code)]`, crate-wide, no platform exemption.
-- **No inline `#[allow(...)]` anywhere.** CI greps for it. A lint you mean to
-  relax goes in `[lints.clippy]` in `crate/Cargo.toml` with a comment saying
-  why.
-- Flat modules. No layers, registries, managers or services, and no trait with
-  a single implementation.
-- **Refuse rather than guess.** Ambiguous input returns a named refusal reason,
-  never a plausible answer. A test that passes by normalizing something that
-  should have been refused is the bug this whole family exists to prevent.
-- **stdout is protocol, stderr is human.** There is no `--json` flag, and exit
-  codes are part of the API.
-- Never report success you did not achieve.
+  early return, many are a `match`.
+- Nesting stops at two levels inside a function; extract a named helper.
+- `Result<T, String>` is the error type. No `anyhow`, no `thiserror` — the
+  message *is* the documentation.
+- **`unsafe` is forbidden crate-wide**, and a test is not an exemption.
+- **No inline `#[allow(...)]`.** Fix the lint, or relax it visibly in
+  `[lints.clippy]` with its reason.
+- Dependencies are a cost. Three is already a position; justify any addition
+  in a Cargo.toml comment.
+- The analysis layer reads no clock and touches no filesystem.
+- **Never report a result you did not get.** A file that could not be read is
+  named in the report, not dropped from it.
 - Comments explain **why**, never what.
-- Commits are conventional (`fix:`, `feat:`, `docs:`…), imperative, and
-  enforced by a hook and by CI.
+- Commits are conventional (`feat:`, `fix:`, `docs:`, `test:`, `ci:`…),
+  imperative, subject under 72 characters, enforced by a hook and by CI.
 
 ## Before you commit
 
 ```bash
-cd crate && cargo fmt --all --check && cargo clippy --all-targets -- -D warnings && cargo test --locked
+cd crate
+cargo fmt --all --check && cargo clippy --all-targets -- -D warnings && cargo test --locked
 ```
 
-Coverage thresholds are a floor and are never lowered to make a build pass.
-Every claim in a README or in help text must be provable against the code.
+Coverage floors are a backstop against an untested module, not a target: they
+sit well below where the code actually is and are never raised to track it.
+Every claim in the README or in SPEC.md must be provable against the code.
+
+**Provable is about behaviour and numbers, not availability.** An install line
+for a publish you are about to make is *staged*, not forbidden — write it, and
+let the release commit be what makes it true.

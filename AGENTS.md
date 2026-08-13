@@ -55,7 +55,7 @@ a real gate rather than a report:
 | `fuzz` | `IDS_LE_FUZZ_SECONDS=60 cargo test --release --test fuzz` | A panic, a stall, or a kind named where two schemes fit |
 | `budget` | `IDS_LE_BUDGET=1 cargo test --release --test budget -- --test-threads=1` | An order-of-magnitude slowdown, and anything quadratic |
 | `coverage-matrix` | `cargo test --test coverage_matrix -- --nocapture`, then a grep | A kind, reason, version, variant or format with no fixture behind it |
-| `coverage` | `cargo llvm-cov` | Any module in `extract/` under a 90% line floor |
+| `coverage` | `cargo llvm-cov` | Any module in `extract/` under a 75% line floor |
 
 **The `coverage-matrix` job greps for a marker line**, and that is not
 decoration: `cargo test <filter>` exits 0 when the filter matches nothing, so

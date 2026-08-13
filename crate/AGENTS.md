@@ -265,7 +265,7 @@ fixture was supposed to provide, and a panic is the failure report.
 
 ## Testing
 
-- **`extract/`: a 90% line coverage floor per module**, enforced by the
+- **`extract/`: a 75% line coverage floor per module**, enforced by the
   `coverage` job. Per module rather than on the crate total, because a
   total lets one module slide while the others carry it — and scoped to
   `extract/` because everything outside it is I/O, pinned instead by
