@@ -1,15 +1,21 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/nolindnaidoo/ids-le/main/assets/icon.png" alt="IDs-LE logo" width="96" height="96"/>
 </p>
-<h1 align="center">ids-le</h1>
+<h1 align="center">IDs-LE</h1>
 <p align="center">
   <b>Find every identifier in a codebase, decode the time inside it, and refuse the ones that cannot be named</b><br/>
   <i>UUID · ULID · NanoID · MongoDB ObjectId · Snowflake</i>
 </p>
 
 <p align="center">
+  <a href="https://crates.io/crates/ids-le">
+    <img src="https://img.shields.io/crates/v/ids-le?style=for-the-badge&label=Rust%20CLI&color=blue&logo=rust" alt="ids-le on crates.io" />
+  </a>
   <a href="https://letools.dev/tools/ids-le">
     <img src="https://img.shields.io/badge/LE%20Tools-letools.dev-blue?style=for-the-badge" alt="LE Tools" />
+  </a>
+  <a href="https://github.com/nolindnaidoo/ids-le/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="MIT licensed" />
   </a>
 </p>
 
@@ -18,6 +24,10 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/nolindnaidoo/ids-le/main/assets/demo.gif" alt="IDs-LE demo — the real binary, recorded by assets/demo.tape" style="max-width: 100%; height: auto;" />
 </p>
+
+> **Useful?** A star is how other developers find it —
+> [★ GitHub](https://github.com/nolindnaidoo/ids-le) ·
+> [letools.dev/tools/ids-le](https://letools.dev/tools/ids-le)
 
 ## What it does
 

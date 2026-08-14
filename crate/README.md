@@ -1,7 +1,32 @@
-# ids-le
+<h1 align="center">ids-le</h1>
 
-Find every identifier in a codebase, decode the time inside it, and
-refuse the ones that cannot be named.
+<p align="center">
+  <b>Find every identifier in a codebase, decode the time inside it, and refuse the ones that cannot be named</b><br/>
+  <i>UUID · ULID · NanoID · MongoDB ObjectId · Snowflake</i>
+</p>
+
+<p align="center">
+  <a href="https://crates.io/crates/ids-le">
+    <img src="https://img.shields.io/crates/v/ids-le.svg" alt="ids-le on crates.io" />
+  </a>
+  <a href="https://crates.io/crates/ids-le">
+    <img src="https://img.shields.io/crates/d/ids-le.svg" alt="crates.io downloads" />
+  </a>
+  <a href="https://github.com/nolindnaidoo/ids-le/actions/workflows/ci-crate.yml">
+    <img src="https://github.com/nolindnaidoo/ids-le/actions/workflows/ci-crate.yml/badge.svg" alt="Build Status" />
+  </a>
+  <img src="https://img.shields.io/badge/rustc-1.88+-93450a.svg" alt="MSRV: Rust 1.88+" />
+  <a href="https://github.com/nolindnaidoo/ids-le/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT" />
+  </a>
+  <a href="https://letools.dev/tools/ids-le">
+    <img src="https://img.shields.io/badge/web-letools.dev-00A0FF.svg" alt="letools.dev" />
+  </a>
+</p>
+
+> **Useful?** A star is how other developers find it —
+> [★ GitHub](https://github.com/nolindnaidoo/ids-le) ·
+> [letools.dev/tools/ids-le](https://letools.dev/tools/ids-le)
 
 UUID (all versions), ULID, NanoID, MongoDB ObjectId and Snowflake. For
 each one: what it is, where it is — line, column, and the document's own
