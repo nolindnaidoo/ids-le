@@ -197,7 +197,7 @@ four bits are not a version field.
 ## The timestamps
 
 This is the part nobody wants to write twice. Six of these carry a clock, in
-six unrelated bit layouts, over three different epochs — one of which starts
+six unrelated bit layouts, over four different epochs — one of which starts
 in 1582:
 
 | Scheme | Where the time is | Epoch |
@@ -217,6 +217,22 @@ not the same claim.
 A decode that lands before 1990 or more than a year from now is refused as
 `timestamp_implausible` — and the decode is on the row next to the flag,
 because a refusal that hides its evidence is a verdict a reader cannot check.
+
+## Options
+
+Taken from `ids-le --help`, which is the authority.
+
+| Option | What it does |
+|---|---|
+| `--kind <kind>` | Report only one of `uuid`, `ulid`, `nanoid`, `objectid`, `snowflake` |
+| `--format <format>` | Force a format instead of inferring it from the file name; an unknown name falls back to a text read rather than failing |
+| `--strict` | Exit 2 if anything was refused or any file could not be read, rather than reporting it and carrying on |
+| `--stdin` | Read one document from stdin |
+| `--hidden` | Walk hidden files and directories too |
+| `--no-ignore` | Walk files that `.gitignore` excludes |
+
+A filter narrows what this tool claims, never what it declined to claim:
+a refusal survives `--kind`.
 
 ## Exit codes
 
@@ -271,30 +287,15 @@ whether one should be where it is. It reads; nothing is written. It never
 touches the network, and it verifies nothing against a database or an API.
 Full list in [`crate/SPEC.md`](crate/SPEC.md), "Non-goals".
 
-## Development
+## Documentation
 
-The crate is in [`crate/`](crate/). Gates, in the order CI runs them:
-
-```bash
-cd crate
-cargo fmt --all --check
-cargo clippy --all-targets -- -D warnings
-cargo test --locked
-```
-
-Beyond those, five suites that do not run on a laptop mid-edit:
-
-| Suite | What it holds |
+| What | Where |
 |---|---|
-| `tests/hazards.rs` | A BOM, invalid UTF-8, UTF-16, a FIFO, a mode-000 file, a symlink loop, a 300-character path, an empty file, a multi-megabyte minified line, a 3 MB base64 blob — on a tree built at runtime, on all three platforms |
-| `tests/platform.rs` | Forward slashes in every reported path, case folding, reserved Windows names, CRLF, stdin — and the whole suite under three time zones |
-| `tests/fuzz.rs` | Generated runs at every boundary the classifier decides on; `IDS_LE_FUZZ_SECONDS` sets the clock |
-| `tests/budget.rs` | A wall-clock ceiling and three linearity checks; `IDS_LE_BUDGET` runs it |
-| `tests/coverage_matrix.rs` | Every kind, reason, UUID version, variant and format reachable from a real fixture |
-
-Architecture and conventions live in [`crate/AGENTS.md`](crate/AGENTS.md);
-behaviour in [`crate/SPEC.md`](crate/SPEC.md); changes in
-[`CHANGELOG.md`](CHANGELOG.md).
+| What the tool is allowed to say — scope, output contract, refusals, non-goals | [`crate/SPEC.md`](crate/SPEC.md) |
+| How the code is written and held together — architecture, invariants, the gates | [`crate/AGENTS.md`](crate/AGENTS.md) |
+| The crate's own front page | [`crate/README.md`](crate/README.md) |
+| What changed | [CHANGELOG.md](CHANGELOG.md) · [`crate/CHANGELOG.md`](crate/CHANGELOG.md) |
+| The tool's page, and the other fifteen | [letools.dev/tools/ids-le](https://letools.dev/tools/ids-le) |
 
 ## More from the LE family
 
@@ -330,6 +331,7 @@ Each stands on its own: no shared crate, no published core. Where two of them
 agree, it is because the same answer was right twice.
 
 **Contact** — [nolindnaidoo.com](https://nolindnaidoo.com) · [GitHub](https://github.com/nolindnaidoo) · [LinkedIn](https://www.linkedin.com/in/nolindnaidoo/)
+
 ## Also by nolindnaidoo
 
 **Rust** — pixelcoords and pixelactions are one loop: pixelcoords answers

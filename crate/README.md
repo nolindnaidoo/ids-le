@@ -83,7 +83,7 @@ regex-based tool gets confidently wrong:
   it is not a finding at all.
 
 The full table, and the boundaries the tool holds, are in
-[SPEC.md](SPEC.md).
+[SPEC.md](https://github.com/nolindnaidoo/ids-le/blob/main/crate/SPEC.md).
 
 ## Install
 
@@ -140,6 +140,22 @@ Exit codes follow grep, so a shell can branch on them:
 A refusal does not move the exit code. Refusing is the tool working;
 `--strict` is how a pipeline turns it into a failure.
 
+## Options
+
+Taken from `ids-le --help`, which is the authority.
+
+| Option | What it does |
+|---|---|
+| `--kind <kind>` | Report only one of `uuid`, `ulid`, `nanoid`, `objectid`, `snowflake` |
+| `--format <format>` | Force a format instead of inferring it from the file name; an unknown name falls back to a text read rather than failing |
+| `--strict` | Exit 2 if anything was refused or any file could not be read, rather than reporting it and carrying on |
+| `--stdin` | Read one document from stdin |
+| `--hidden` | Walk hidden files and directories too |
+| `--no-ignore` | Walk files that `.gitignore` excludes |
+
+A filter narrows what this tool claims, never what it declined to claim:
+a refusal survives `--kind`.
+
 ## Formats
 
 JSON (and JSONC), YAML, TOML, INI (`.cfg`, `.conf`, `.properties`),
@@ -175,14 +191,7 @@ nothing in it could be named.
 
 It does not generate identifiers, rewrite them, redact them, or decide
 whether one should be where it is. It reads; nothing is written. It never
-touches the network. Full list in [SPEC.md](SPEC.md), "Non-goals".
-
-## Part of LE Tools
-
-One of a family of small, single-purpose extractors — `numbers-le`,
-`urls-le`, `paths-le`, `secrets-le`, and the rest — at
-[letools.dev](https://letools.dev). Each stands on its own: no shared
-crate, no published core.
+touches the network. Full list in [SPEC.md](https://github.com/nolindnaidoo/ids-le/blob/main/crate/SPEC.md), "Non-goals".
 
 ## More from the LE family
 
@@ -218,6 +227,7 @@ Each stands on its own: no shared crate, no published core. Where two of them
 agree, it is because the same answer was right twice.
 
 **Contact** — [nolindnaidoo.com](https://nolindnaidoo.com) · [GitHub](https://github.com/nolindnaidoo) · [LinkedIn](https://www.linkedin.com/in/nolindnaidoo/)
+
 ## Also by nolindnaidoo
 
 **Rust** — pixelcoords and pixelactions are one loop: pixelcoords answers
