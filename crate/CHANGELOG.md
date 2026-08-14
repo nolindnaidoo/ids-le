@@ -5,7 +5,7 @@ The Rust CLI and MCP server.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.2.0] - 2026-08-14
 
 **0.2.0, not 0.1.1.** Two of the changes below narrow what this crate
 names, so a run against the same tree returns fewer findings than 0.1.0
@@ -280,3 +280,4 @@ First release. Core functionality; not yet hardened.
   says why `uuid` was considered and rejected.
 
 [0.1.0]: https://crates.io/crates/ids-le/0.1.0
+[0.2.0]: https://crates.io/crates/ids-le/0.2.0

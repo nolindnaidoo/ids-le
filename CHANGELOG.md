@@ -7,7 +7,7 @@ is the repository's view.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.2.0] - 2026-08-14
 
 Breaking, and 0.x, so the next release is **0.2.0** rather than a patch:
 two of the changes below narrow what gets named.
@@ -78,3 +78,4 @@ See [`crate/CHANGELOG.md`](crate/CHANGELOG.md) for the full release note,
 including the decisions worth knowing before reading the code.
 
 [0.1.0]: https://crates.io/crates/ids-le/0.1.0
+[0.2.0]: https://crates.io/crates/ids-le/0.2.0
