@@ -9,7 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Breaking, and 0.x, so the next release is **0.2.0** rather than a patch:
+two of the changes below narrow what gets named.
+
+### Added
+
+- **A terminal demo** at [`assets/demo.gif`](assets/demo.gif), driving
+  the real binary over the files in [`assets/demo/`](assets/demo/).
+  [`assets/demo.tape`](assets/demo.tape) is the `vhs` script that
+  produced it, so `cd assets && vhs demo.tape` reproduces the recording
+  rather than leaving an artifact nobody can regenerate. Both sit above
+  `crate/`, where `cargo package` cannot reach them.
+
 ### Changed
+
+- **New icon artwork.** All sixteen tools were redrawn in one style, so
+  the family reads as one set wherever the cards sit side by side. The
+  framing is unchanged — the drawing fills 65.8% of an 800×800 canvas
+  and every smaller size is derived from that one file rather than drawn
+  again.
 
 - **An ObjectId is named only where the document names the field an
   identifier** — a key path whose leaf ends in `id`, plus a plausible
@@ -20,6 +38,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   always applied, extended to the other kind with nothing to validate,
   and the two now share one predicate. See
   [`crate/CHANGELOG.md`](crate/CHANGELOG.md) for the full note.
+
+### Fixed
+
+- **The README's images resolve away from GitHub.** They were repository
+  paths, which crates.io and every other renderer resolves against its
+  own origin, so the demo and the icon were broken everywhere this file
+  is read that is not this repository. They are absolute URLs now.
 
 ## [0.1.0]
 
@@ -51,3 +76,5 @@ First release. Core functionality; not yet published to crates.io.
 
 See [`crate/CHANGELOG.md`](crate/CHANGELOG.md) for the full release note,
 including the decisions worth knowing before reading the code.
+
+[0.1.0]: https://crates.io/crates/ids-le/0.1.0

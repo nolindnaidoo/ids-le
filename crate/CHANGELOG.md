@@ -7,7 +7,18 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+**0.2.0, not 0.1.1.** Two of the changes below narrow what this crate
+names, so a run against the same tree returns fewer findings than 0.1.0
+did. That is a breaking change to the answer, and 0.x spends the minor
+on it.
+
 ### Changed
+
+- **One sentence describes this crate everywhere it is described.** The
+  `description` in `Cargo.toml`, the line under the title in
+  `README.md`, and the entry on letools.dev had drifted into three
+  paraphrases, so the crate a reader met on crates.io was not obviously
+  the one they met on the site. Nothing about the tool moved.
 
 - **Which reader a document gets is a type, not a string.** `key_spans`
   dispatched on `&str` with a `_ => Vec::new()` catch-all, so a reader
@@ -267,3 +278,5 @@ First release. Core functionality; not yet hardened.
 - **No dependency per identifier kind, and no date library.** `serde`,
   `serde_json` and ripgrep's `ignore` are the whole tree; the Cargo.toml
   says why `uuid` was considered and rejected.
+
+[0.1.0]: https://crates.io/crates/ids-le/0.1.0
