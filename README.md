@@ -107,7 +107,11 @@ The full table, and the boundaries the tool holds itself to, are in
 
 ## Install
 
-**Not on crates.io yet.** Today it installs from a checkout:
+```console
+cargo install ids-le
+```
+
+Or from a checkout:
 
 ```console
 git clone https://github.com/nolindnaidoo/ids-le

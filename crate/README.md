@@ -63,8 +63,8 @@ The full table, and the boundaries the tool holds, are in
 ## Install
 
 ```console
-cargo install ids-le          # once published
-cargo install --path crate    # from a checkout, today
+cargo install ids-le          # from crates.io
+cargo install --path crate    # from a checkout
 ```
 
 ## Use it

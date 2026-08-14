@@ -418,9 +418,6 @@ of subjects.
 
 Named here so nobody mistakes them for oversights:
 
-- **Not published.** `cargo install ids-le` does not work yet; the README
-  says so plainly rather than printing a line that fails. Publication is a
-  release decision, not a code one.
 - **No VS Code extension beside it**, so unlike the siblings there is no
   parity corpus and no second implementation to be held equal to.
   `fixtures/extraction.json` is a characterisation record of this crate's
