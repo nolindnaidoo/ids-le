@@ -11,11 +11,20 @@
   <a href="https://crates.io/crates/ids-le">
     <img src="https://img.shields.io/crates/v/ids-le?style=for-the-badge&label=Rust%20CLI&color=blue&logo=rust" alt="ids-le on crates.io" />
   </a>
-  <a href="https://letools.dev/tools/ids-le">
-    <img src="https://img.shields.io/badge/LE%20Tools-letools.dev-blue?style=for-the-badge" alt="LE Tools" />
+  <a href="https://crates.io/crates/ids-le">
+    <img src="https://img.shields.io/crates/d/ids-le?style=for-the-badge&label=Downloads&color=blue" alt="crates.io downloads" />
+  </a>
+  <a href="https://github.com/nolindnaidoo/ids-le/actions/workflows/ci-crate.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/nolindnaidoo/ids-le/ci-crate.yml?branch=main&style=for-the-badge&label=CI&color=blue&logo=githubactions&logoColor=white" alt="CI" />
+  </a>
+  <a href="https://github.com/nolindnaidoo/ids-le/blob/main/crate/Cargo.toml">
+    <img src="https://img.shields.io/badge/rustc-1.88+-blue?style=for-the-badge&logo=rust" alt="MSRV: Rust 1.88+" />
   </a>
   <a href="https://github.com/nolindnaidoo/ids-le/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="MIT licensed" />
+  </a>
+  <a href="https://letools.dev/tools/ids-le">
+    <img src="https://img.shields.io/badge/LE%20Tools-letools.dev-blue?style=for-the-badge" alt="LE Tools" />
   </a>
 </p>
 
