@@ -406,7 +406,10 @@ jobs:
       - name: Every kind, reason, version and format, named back from a fixture
         run: |
           set -o pipefail
-          cargo test --locked --test coverage_matrix -- --nocapture | tee matrix.log
+          # Serialised on purpose: --nocapture lets these tests interleave their
+          # output when run in parallel, so a prefix lands on another test's line
+          # and the greps below miss a line the run actually printed.
+          cargo test --locked --test coverage_matrix -- --nocapture --test-threads=1 | tee matrix.log
           grep -q 'coverage-matrix: complete' matrix.log
 
   # A gated tier is a tier that does not run. `versions-le` shipped a
