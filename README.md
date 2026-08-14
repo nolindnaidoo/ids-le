@@ -1,3 +1,6 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/nolindnaidoo/ids-le/main/assets/icon.png" alt="IDs-LE logo" width="96" height="96"/>
+</p>
 <h1 align="center">ids-le</h1>
 <p align="center">
   <b>Find every identifier in a codebase, decode the time inside it, and refuse the ones that cannot be named</b><br/>
@@ -13,7 +16,7 @@
 ---
 
 <p align="center">
-  <img src="assets/demo.gif" alt="IDs-LE demo — the real binary, recorded by assets/demo.tape" style="max-width: 100%; height: auto;" />
+  <img src="https://raw.githubusercontent.com/nolindnaidoo/ids-le/main/assets/demo.gif" alt="IDs-LE demo — the real binary, recorded by assets/demo.tape" style="max-width: 100%; height: auto;" />
 </p>
 
 ## What it does
