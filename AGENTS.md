@@ -78,4 +78,4 @@ nothing at all.
   whole documents and whole answers; update them in the same commit, with a
   CHANGELOG entry describing the behaviour change.
 - **Commits are conventional** (`feat:`, `fix:`, `docs:`, `test:`, `ci:`…),
-  imperative, subject under 72 characters. A hook enforces the shape.
+  imperative, subject under 100 characters. A hook enforces the shape.
