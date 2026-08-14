@@ -12,6 +12,10 @@
 
 ---
 
+<p align="center">
+  <img src="assets/demo.gif" alt="IDs-LE demo — the real binary, recorded by assets/demo.tape" style="max-width: 100%; height: auto;" />
+</p>
+
 ## What it does
 
 Point it at a file or a tree. For every identifier it finds it reports the
@@ -118,8 +122,8 @@ git clone https://github.com/nolindnaidoo/ids-le
 cargo install --path ids-le/crate
 ```
 
-`cargo install ids-le` starts working the day it is published, and this line
-changes then rather than before.
+Needs **Rust 1.88+**, and nothing else. No runtime, no network, nothing
+written.
 
 ## Use it
 
