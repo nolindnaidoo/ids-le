@@ -193,6 +193,15 @@ It does not generate identifiers, rewrite them, redact them, or decide
 whether one should be where it is. It reads; nothing is written. It never
 touches the network. Full list in [SPEC.md](https://github.com/nolindnaidoo/ids-le/blob/main/crate/SPEC.md), "Non-goals".
 
+## Documentation
+
+| What | Where |
+|---|---|
+| What this tool is allowed to say — scope, output contract, refusals, non-goals | [SPEC.md](https://github.com/nolindnaidoo/ids-le/blob/main/crate/SPEC.md) |
+| How the code is written and held together — architecture, invariants, the gates | [AGENTS.md](https://github.com/nolindnaidoo/ids-le/blob/main/crate/AGENTS.md) |
+| What changed | [CHANGELOG.md](https://github.com/nolindnaidoo/ids-le/blob/main/crate/CHANGELOG.md) |
+| The tool's page, and the other fifteen | [letools.dev/tools/ids-le](https://letools.dev/tools/ids-le) |
+
 ## More from the LE family
 
 Sixteen single-purpose tools for the work in front of every model. Each ships
