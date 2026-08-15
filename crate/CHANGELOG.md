@@ -5,6 +5,37 @@ The Rust CLI and MCP server.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-08-15
+
+A behavioural audit drove the binary rather than reading the spec, and
+found two readers naming a document something it was not. A key path is
+evidence for four kinds here, so both changed verdicts.
+
+### Fixed
+
+- **A `.tsv` column is keyed by its own header.** `.tsv` named the comma
+  reader, so a tab row was one field whose name was every header joined
+  by tabs. That name is the evidence deciding whether a run is an
+  identifier, so it broke both ways: `6a7bb780a1b2c3d4e5f60718` under a
+  `checksum` column was named an ObjectId, and the same run under
+  `user_id` was refused. Neither answer was about the column it was in.
+
+- **`.conf` and `.cfg` are read as text.** They named the INI reader,
+  which finds `key: value` inside free-form prose — so "The failing
+  request id: 6a7bb780…" became a key, an English sentence supplied the
+  evidence, and a run the text scan refuses was named. `.properties`
+  keeps the INI reader: `app.id=…` really is INI.
+
+### Added
+
+- `tsv` is a format in its own right — it resolves, names itself in a
+  report, is offered in the MCP schema, and `fixtures/documents/ids.tsv`
+  pins both halves: a named column and an unnamed one.
+
+- Two contract tests over the built binary, each observed failing before
+  the fix: a tab column is named by its own header, and prose never
+  supplies the key that names a run.
+
 ## [0.2.1] - 2026-08-15
 
 ### Fixed
@@ -294,3 +325,4 @@ First release. Core functionality; not yet hardened.
 [0.1.0]: https://crates.io/crates/ids-le/0.1.0
 [0.2.0]: https://crates.io/crates/ids-le/0.2.0
 [0.2.1]: https://crates.io/crates/ids-le/0.2.1
+[0.3.0]: https://crates.io/crates/ids-le/0.3.0

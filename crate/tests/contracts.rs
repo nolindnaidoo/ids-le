@@ -579,3 +579,53 @@ fn the_cli_and_the_mcp_server_report_the_same_thing() {
         .clone();
     assert_eq!(from_mcp, from_cli, "the two surfaces disagree");
 }
+
+/// **A key path is evidence, so a reader that mislabels one decides a
+/// verdict.** Both directions of that shipped, from one cause: `.tsv`
+/// named the comma reader, so a tab row was a single column whose name
+/// was every header joined by tabs. A run under `checksum` was named an
+/// ObjectId; the same run under `user_id` was refused.
+///
+/// The property is the fix, not the two cases: for any delimiter the
+/// tool claims to read, a value's key must be its own column's name.
+#[test]
+fn a_tab_separated_column_is_named_by_its_own_header() {
+    let tree = Tree::new("tsv-keys");
+    let named = tree.write(
+        "named.tsv",
+        "name\tuser_id\nalpha\t6a7bb780a1b2c3d4e5f60718\n",
+    );
+    let unnamed = tree.write(
+        "unnamed.tsv",
+        "name\tchecksum\nalpha\t6a7bb780a1b2c3d4e5f60718\n",
+    );
+
+    let named_run = run(&[&named.to_string_lossy()]);
+    let rows = reports(&named_run);
+    assert_eq!(rows[0]["ids"][0]["key"], "user_id", "{}", named_run.stdout);
+    assert_eq!(rows[0]["ids"][0]["kind"], "objectid");
+    assert_eq!(rows[0]["ids"][0]["valid"], true);
+
+    let unnamed_run = run(&[&unnamed.to_string_lossy()]);
+    let rows = reports(&unnamed_run);
+    assert_eq!(rows[0]["ids"][0]["key"], "checksum");
+    assert_eq!(rows[0]["ids"][0]["valid"], false);
+    assert_eq!(rows[0]["ids"][0]["refused"], "ambiguous_kind");
+}
+
+/// A sentence is not a field name. `.conf` named the INI reader, which
+/// reads `key: value` out of prose, so an English sentence supplied the
+/// evidence that named a run — and the same bytes as `.txt` refused it.
+#[test]
+fn prose_never_supplies_the_key_that_names_a_run() {
+    let tree = Tree::new("prose-keys");
+    let body = "The failing request id: 6a7bb780a1b2c3d4e5f60718 was logged twice.\n";
+    let as_conf = tree.write("notes.conf", body);
+    let as_text = tree.write("notes.txt", body);
+
+    let conf = reports(&run(&[&as_conf.to_string_lossy()]));
+    let text = reports(&run(&[&as_text.to_string_lossy()]));
+    assert_eq!(conf[0]["ids"][0]["valid"], text[0]["ids"][0]["valid"]);
+    assert_eq!(conf[0]["ids"][0]["key"], text[0]["ids"][0]["key"]);
+    assert_eq!(conf[0]["ids"][0]["valid"], false, "{:?}", conf[0]["ids"][0]);
+}

@@ -251,8 +251,8 @@ report line, counted on stderr, and it never fails the run.
 
 ## Formats
 
-JSON (and JSONC), YAML, TOML, INI (`.cfg`, `.conf`, `.properties`), dotenv
-and CSV give each finding a key path — `service.requestId`,
+JSON (and JSONC), YAML, TOML, INI (`.properties`), dotenv, CSV and TSV
+give each finding a key path — `service.requestId`,
 `documents.[0]._id`, `discord.channel_id`. Everything else is read as text:
 **the same runs, in the same places, without the key**. That is why you can
 point this at a repository nobody has described to it and get an answer out

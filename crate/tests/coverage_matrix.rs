@@ -245,7 +245,7 @@ fn every_kind_reason_version_and_format_is_reachable_from_a_fixture() {
         .filter_map(|report| report["format"].as_str().map(str::to_string))
         .collect();
     let offered = offered_formats();
-    assert_eq!(offered.len(), 7, "a format arrived or left: {offered:?}");
+    assert_eq!(offered.len(), 8, "a format arrived or left: {offered:?}");
     for format in &offered {
         assert!(
             productive.contains(format),

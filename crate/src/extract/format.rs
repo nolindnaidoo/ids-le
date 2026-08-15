@@ -31,6 +31,10 @@ pub(crate) enum Reader {
     Ini,
     Dotenv,
     Csv,
+    /// The same reader with a tab between fields. Separate because the
+    /// header row is the evidence that names a column an identifier, and
+    /// splitting a tab row on commas made the whole row one column name.
+    Tsv,
     /// No keys at all. The honest answer for a `.md` or a `.rs`, not a
     /// degraded mode — see `FALLBACK_FORMAT`.
     Text,
@@ -48,6 +52,7 @@ impl Reader {
             Self::Ini => "ini",
             Self::Dotenv => "env",
             Self::Csv => "csv",
+            Self::Tsv => "tsv",
             Self::Text => "text",
         }
     }
@@ -57,17 +62,20 @@ impl Reader {
 ///
 /// Both a VS Code `languageId` and a file extension appear here, because
 /// an editor resolves by the first and this crate by the second.
-const ALIASES: [(&str, Reader); 15] = [
+/// `conf` and `cfg` are deliberately absent. They named the INI reader,
+/// which reads `key: value` out of free-form prose — so "The failing
+/// request id: 6a7bb780…" became a key that named the run an ObjectId,
+/// and an English sentence decided a verdict. They fall to the text
+/// scan, which finds the same run and refuses it for want of a name.
+const ALIASES: [(&str, Reader); 13] = [
     ("json", Reader::Json),
     ("jsonc", Reader::Json),
     ("yaml", Reader::Yaml),
     ("yml", Reader::Yaml),
     ("csv", Reader::Csv),
-    ("tsv", Reader::Csv),
+    ("tsv", Reader::Tsv),
     ("toml", Reader::Toml),
     ("ini", Reader::Ini),
-    ("cfg", Reader::Ini),
-    ("conf", Reader::Ini),
     ("properties", Reader::Ini),
     ("env", Reader::Dotenv),
     ("dotenv", Reader::Dotenv),
@@ -78,8 +86,8 @@ const ALIASES: [(&str, Reader); 15] = [
 /// The formats a caller can name, for the tool schema's enum. Held equal
 /// to the alias table by a test, so a format can never be offered and
 /// then not resolve.
-pub(crate) const SUPPORTED_FORMATS: [&str; 7] =
-    ["json", "yaml", "csv", "toml", "ini", "env", "text"];
+pub(crate) const SUPPORTED_FORMATS: [&str; 8] =
+    ["json", "yaml", "csv", "tsv", "toml", "ini", "env", "text"];
 
 /// What the engine uses when it recognises nothing.
 ///
@@ -155,9 +163,7 @@ mod tests {
         for (alias, expected) in [
             ("jsonc", "json"),
             ("yml", "yaml"),
-            ("tsv", "csv"),
-            ("cfg", "ini"),
-            ("conf", "ini"),
+            ("tsv", "tsv"),
             ("properties", "ini"),
             ("dotenv", "env"),
         ] {
@@ -187,7 +193,10 @@ mod tests {
     /// finds the same identifiers and reports them without a key.
     #[test]
     fn anything_unrecognised_falls_back() {
-        for name in ["markdown", "dockerfile", "", "wat"] {
+        // `conf` and `cfg` are here on purpose: they named the INI
+        // reader, which found keys in prose and let a sentence decide a
+        // verdict.
+        for name in ["markdown", "dockerfile", "", "wat", "conf", "cfg"] {
             assert_eq!(resolve_format(Some(name), None), FALLBACK_FORMAT, "{name}");
         }
         assert_eq!(resolve_format(None, Some("README.md")), FALLBACK_FORMAT);
@@ -234,6 +243,7 @@ mod tests {
             Reader::Ini,
             Reader::Dotenv,
             Reader::Csv,
+            Reader::Tsv,
             Reader::Text,
         ] {
             let name = match reader {
@@ -243,6 +253,7 @@ mod tests {
                 Reader::Ini => "ini",
                 Reader::Dotenv => "env",
                 Reader::Csv => "csv",
+                Reader::Tsv => "tsv",
                 Reader::Text => "text",
             };
             assert_eq!(reader.name(), name);

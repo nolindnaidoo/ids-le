@@ -198,8 +198,15 @@ parallel source of truth.
 
 ## Formats
 
-`json` (and JSONC), `yaml`, `toml`, `ini` (`.cfg`, `.conf`,
-`.properties`), `env`, `csv`, and `text` for everything else.
+`json` (and JSONC), `yaml`, `toml`, `ini` (`.properties`), `env`, `csv`,
+`tsv`, and `text` for everything else.
+
+`.conf` and `.cfg` are read as text on purpose. They named the INI
+reader, which finds `key: value` inside free-form prose — so "The failing
+request id: 6a7bb780…" became a key that named the run an ObjectId, and
+an English sentence decided a verdict. `tsv` is `csv` with a tab, and is
+its own name because the header row is the evidence: split on commas, a
+tab row is one column whose name is every header joined together.
 
 **The format changes only the key path, never which runs are found.** The
 identifier scan is one scanner over raw text for every document, so a

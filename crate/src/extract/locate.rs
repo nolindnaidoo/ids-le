@@ -49,7 +49,8 @@ pub(crate) fn key_spans(text: &str, reader: Reader) -> Vec<KeySpan> {
         Reader::Toml => toml::key_spans(text),
         Reader::Ini => ini::key_spans(text),
         Reader::Dotenv => dotenv::key_spans(text),
-        Reader::Csv => csv::key_spans(text),
+        Reader::Csv => csv::key_spans(text, csv::COMMA),
+        Reader::Tsv => csv::key_spans(text, csv::TAB),
         // Exhaustive on purpose: a reader added to `format.rs` does not
         // compile until it says what it does here.
         Reader::Text => Vec::new(),

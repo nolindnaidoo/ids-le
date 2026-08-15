@@ -1,741 +1,769 @@
 {
-  "now": 1786492800000,
-  "documents": [
-    {
-      "name": "ids.json as json",
-      "file": "ids.json",
-      "fileType": "json",
-      "expected": [
-        {
-          "kind": "uuid",
-          "value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-          "line": 3,
-          "column": 12,
-          "key": "service.id",
-          "valid": true,
-          "version": 4,
-          "variant": "rfc4122"
-        },
-        {
-          "kind": "uuid",
-          "value": "019ff344-cc00-7abc-8def-0123456789ab",
-          "line": 4,
-          "column": 19,
-          "key": "service.requestId",
-          "valid": true,
-          "version": 7,
-          "variant": "rfc4122",
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "ulid",
-          "value": "01KZSM9K00ABCDEFGH12345678",
-          "line": 7,
-          "column": 14,
-          "key": "session.ulid",
-          "valid": true,
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "nanoid",
-          "value": "V1StGXR8_Z5jdHi6B-myT",
-          "line": 8,
-          "column": 16,
-          "key": "session.nanoId",
-          "valid": true
-        },
-        {
-          "kind": "objectid",
-          "value": "6a7bb780a1b2c3d4e5f60718",
-          "line": 11,
-          "column": 15,
-          "key": "documents.[0]._id",
-          "valid": true,
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "snowflake",
-          "value": "1536886938009600000",
-          "line": 13,
-          "column": 30,
-          "key": "discord.channel_id",
-          "valid": true,
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "uuid",
-          "value": "00000000-0000-0000-0000-000000000000",
-          "line": 14,
-          "column": 19,
-          "key": "placeholder",
-          "valid": false,
-          "refused": "nil_or_max",
-          "detail": "the nil UUID: 128 zero bits, which RFC 9562 defines as naming nothing"
-        }
-      ]
-    },
-    {
-      "name": "ids.yaml as yaml",
-      "file": "ids.yaml",
-      "fileType": "yaml",
-      "expected": [
-        {
-          "kind": "uuid",
-          "value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-          "line": 2,
-          "column": 7,
-          "key": "service.id",
-          "valid": true,
-          "version": 4,
-          "variant": "rfc4122"
-        },
-        {
-          "kind": "uuid",
-          "value": "019ff344-cc00-7abc-8def-0123456789ab",
-          "line": 3,
-          "column": 14,
-          "key": "service.requestId",
-          "valid": true,
-          "version": 7,
-          "variant": "rfc4122",
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "ulid",
-          "value": "01KZSM9K00ABCDEFGH12345678",
-          "line": 5,
-          "column": 9,
-          "key": "session.ulid",
-          "valid": true,
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "nanoid",
-          "value": "V1StGXR8_Z5jdHi6B-myT",
-          "line": 6,
-          "column": 11,
-          "key": "session.nanoId",
-          "valid": true
-        },
-        {
-          "kind": "objectid",
-          "value": "6a7bb780a1b2c3d4e5f60718",
-          "line": 8,
-          "column": 10,
-          "key": "documents.[0]._id",
-          "valid": true,
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "snowflake",
-          "value": "1536886938009600000",
-          "line": 10,
-          "column": 15,
-          "key": "discord.channel_id",
-          "valid": true,
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "uuid",
-          "value": "00000000-0000-0000-0000-000000000000",
-          "line": 11,
-          "column": 14,
-          "key": "placeholder",
-          "valid": false,
-          "refused": "nil_or_max",
-          "detail": "the nil UUID: 128 zero bits, which RFC 9562 defines as naming nothing"
-        }
-      ]
-    },
-    {
-      "name": "ids.toml as toml",
-      "file": "ids.toml",
-      "fileType": "toml",
-      "expected": [
-        {
-          "kind": "uuid",
-          "value": "00000000-0000-0000-0000-000000000000",
-          "line": 1,
-          "column": 16,
-          "key": "placeholder",
-          "valid": false,
-          "refused": "nil_or_max",
-          "detail": "the nil UUID: 128 zero bits, which RFC 9562 defines as naming nothing"
-        },
-        {
-          "kind": "uuid",
-          "value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-          "line": 4,
-          "column": 7,
-          "key": "service.id",
-          "valid": true,
-          "version": 4,
-          "variant": "rfc4122"
-        },
-        {
-          "kind": "uuid",
-          "value": "019ff344-cc00-7abc-8def-0123456789ab",
-          "line": 5,
-          "column": 14,
-          "key": "service.requestId",
-          "valid": true,
-          "version": 7,
-          "variant": "rfc4122",
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "ulid",
-          "value": "01KZSM9K00ABCDEFGH12345678",
-          "line": 8,
-          "column": 9,
-          "key": "session.ulid",
-          "valid": true,
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "nanoid",
-          "value": "V1StGXR8_Z5jdHi6B-myT",
-          "line": 9,
-          "column": 11,
-          "key": "session.nanoId",
-          "valid": true
-        },
-        {
-          "kind": "snowflake",
-          "value": "1536886938009600000",
-          "line": 12,
-          "column": 14,
-          "key": "discord.channel_id",
-          "valid": true,
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        }
-      ]
-    },
-    {
-      "name": "ids.ini as ini",
-      "file": "ids.ini",
-      "fileType": "ini",
-      "expected": [
-        {
-          "kind": "uuid",
-          "value": "00000000-0000-0000-0000-000000000000",
-          "line": 2,
-          "column": 15,
-          "key": "placeholder",
-          "valid": false,
-          "refused": "nil_or_max",
-          "detail": "the nil UUID: 128 zero bits, which RFC 9562 defines as naming nothing"
-        },
-        {
-          "kind": "uuid",
-          "value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-          "line": 5,
-          "column": 6,
-          "key": "service.id",
-          "valid": true,
-          "version": 4,
-          "variant": "rfc4122"
-        },
-        {
-          "kind": "uuid",
-          "value": "019ff344-cc00-7abc-8def-0123456789ab",
-          "line": 6,
-          "column": 13,
-          "key": "service.requestId",
-          "valid": true,
-          "version": 7,
-          "variant": "rfc4122",
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "snowflake",
-          "value": "1536886938009600000",
-          "line": 9,
-          "column": 14,
-          "key": "discord.channel_id",
-          "valid": true,
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        }
-      ]
-    },
-    {
-      "name": "ids.env as env",
-      "file": "ids.env",
-      "fileType": "env",
-      "expected": [
-        {
-          "kind": "uuid",
-          "value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-          "line": 2,
-          "column": 12,
-          "key": "SERVICE_ID",
-          "valid": true,
-          "version": 4,
-          "variant": "rfc4122"
-        },
-        {
-          "kind": "uuid",
-          "value": "019ff344-cc00-7abc-8def-0123456789ab",
-          "line": 3,
-          "column": 12,
-          "key": "REQUEST_ID",
-          "valid": true,
-          "version": 7,
-          "variant": "rfc4122",
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "ulid",
-          "value": "01KZSM9K00ABCDEFGH12345678",
-          "line": 4,
-          "column": 15,
-          "key": "SESSION_ULID",
-          "valid": true,
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "snowflake",
-          "value": "1536886938009600000",
-          "line": 5,
-          "column": 27,
-          "key": "DISCORD_CHANNEL_ID",
-          "valid": true,
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "uuid",
-          "value": "00000000-0000-0000-0000-000000000000",
-          "line": 6,
-          "column": 13,
-          "key": "PLACEHOLDER",
-          "valid": false,
-          "refused": "nil_or_max",
-          "detail": "the nil UUID: 128 zero bits, which RFC 9562 defines as naming nothing"
-        }
-      ]
-    },
-    {
-      "name": "ids.csv as csv",
-      "file": "ids.csv",
-      "fileType": "csv",
-      "expected": [
-        {
-          "kind": "uuid",
-          "value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-          "line": 2,
-          "column": 7,
-          "key": "service_id",
-          "valid": true,
-          "version": 4,
-          "variant": "rfc4122"
-        },
-        {
-          "kind": "snowflake",
-          "value": "1536886938009600000",
-          "line": 2,
-          "column": 44,
-          "key": "channel_id",
-          "valid": true,
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "uuid",
-          "value": "019ff344-cc00-7abc-8def-0123456789ab",
-          "line": 3,
-          "column": 6,
-          "key": "service_id",
-          "valid": true,
-          "version": 7,
-          "variant": "rfc4122",
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "snowflake",
-          "value": "1536886938009600000",
-          "line": 3,
-          "column": 43,
-          "key": "channel_id",
-          "valid": true,
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        }
-      ]
-    },
-    {
-      "name": "ids.txt as text",
-      "file": "ids.txt",
-      "fileType": "text",
-      "expected": [
-        {
-          "kind": "uuid",
-          "value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-          "line": 3,
-          "column": 23,
-          "valid": true,
-          "version": 4,
-          "variant": "rfc4122"
-        },
-        {
-          "kind": "uuid",
-          "value": "019ff344-cc00-7abc-8def-0123456789ab",
-          "line": 4,
-          "column": 25,
-          "valid": true,
-          "version": 7,
-          "variant": "rfc4122",
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "ulid",
-          "value": "01KZSM9K00ABCDEFGH12345678",
-          "line": 5,
-          "column": 13,
-          "valid": true,
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": null,
-          "value": "6a7bb780a1b2c3d4e5f60718",
-          "line": 6,
-          "column": 1,
-          "valid": false,
-          "timestamp": "2026-08-12T00:00:00.000Z",
-          "refused": "ambiguous_kind",
-          "detail": "24 hex digits are an ObjectId, a truncated hash and a hex dump in equal measure, and nothing in this document names this field an identifier"
-        }
-      ]
-    },
-    {
-      "name": "the ambiguity set",
-      "file": "ambiguous.json",
-      "fileType": "json",
-      "expected": [
-        {
-          "kind": null,
-          "value": "5d41402abc4b2a76b9719d911017c592",
-          "line": 2,
-          "column": 14,
-          "key": "digest",
-          "valid": false,
-          "refused": "ambiguous_kind",
-          "detail": "32 hex digits are an unhyphenated UUID and an MD5 digest in equal measure; nothing in this document chooses between them"
-        },
-        {
-          "kind": null,
-          "value": "01kzsm9k00AbCdEfGh12345678",
-          "line": 3,
-          "column": 13,
-          "key": "token",
-          "valid": false,
-          "refused": "ambiguous_kind",
-          "detail": "a valid ULID is canonically uppercase; in this case it is equally a token from another 26-character scheme, and no key here says which"
-        },
-        {
-          "kind": null,
-          "value": "e83c5163316f89bfbde7d9ab",
-          "line": 4,
-          "column": 14,
-          "key": "commit",
-          "valid": false,
-          "timestamp": "2093-06-19T16:25:07.000Z",
-          "refused": "ambiguous_kind",
-          "detail": "24 hex digits are an ObjectId, a truncated hash and a hex dump in equal measure, and nothing in this document names this field an identifier"
-        },
-        {
-          "kind": null,
-          "value": "V1StGXR8xZ5jdHi6BxmyT",
-          "line": 5,
-          "column": 14,
-          "key": "secret",
-          "valid": false,
-          "refused": "ambiguous_kind",
-          "detail": "21 base62 characters are a NanoID, a short token and a truncated hash in equal measure; only a `-` or `_`, or a key naming the scheme, separates them"
-        },
-        {
-          "kind": "snowflake",
-          "value": "1536886938009600000",
-          "line": 6,
-          "column": 14,
-          "key": "user_id",
-          "valid": false,
-          "timestamp": "2022-06-15T01:42:54.657Z",
-          "refused": "ambiguous_kind",
-          "detail": "the Twitter epoch decodes this to 2022-06-15T01:42:54.657Z and the Discord epoch to 2026-08-12T00:00:00.000Z; both are plausible and no key here names the platform"
-        },
-        {
-          "kind": "uuid",
-          "value": "f47ac10b-58cc-4372-1567-0e02b2c3d479",
-          "line": 7,
-          "column": 14,
-          "key": "legacy",
-          "valid": false,
-          "variant": "ncs",
-          "refused": "malformed",
-          "detail": "the variant bits say NCS, not RFC 4122, so the version nibble is not a version"
-        },
-        {
-          "kind": "ulid",
-          "value": "01KZSM9K00ABCDEFGH123456I8",
-          "line": 8,
-          "column": 16,
-          "key": "mistyped",
-          "valid": false,
-          "refused": "malformed",
-          "detail": "26 characters is a ULID's length, and Crockford base32 excludes I, L, O and U"
-        },
-        {
-          "kind": null,
-          "value": "6a7bb780a1b2c3d4e5f6071",
-          "line": 9,
-          "column": 17,
-          "key": "truncated",
-          "valid": false,
-          "refused": "malformed",
-          "detail": "23 hex digits is not a whole number of bytes and is one digit from a hex identifier this tool knows"
-        },
-        {
-          "kind": "uuid",
-          "value": "00000000-0000-0000-0000-000000000000",
-          "line": 10,
-          "column": 11,
-          "key": "nil",
-          "valid": false,
-          "refused": "nil_or_max",
-          "detail": "the nil UUID: 128 zero bits, which RFC 9562 defines as naming nothing"
-        },
-        {
-          "kind": "uuid",
-          "value": "ffffffff-ffff-ffff-ffff-ffffffffffff",
-          "line": 11,
-          "column": 11,
-          "key": "max",
-          "valid": false,
-          "refused": "nil_or_max",
-          "detail": "the max UUID: 128 one bits, which RFC 9562 defines as naming nothing"
-        },
-        {
-          "kind": "uuid",
-          "value": "00000000-0000-4000-8000-000000000000",
-          "line": 12,
-          "column": 14,
-          "key": "zeroed",
-          "valid": false,
-          "version": 4,
-          "variant": "rfc4122",
-          "refused": "version_claim_mismatch",
-          "detail": "the version nibble claims v4, which is 122 random bits, and 15 of its nibbles in a row are zero"
-        },
-        {
-          "kind": "uuid",
-          "value": "7fffffff-ffff-7abc-8def-0123456789ab",
-          "line": 13,
-          "column": 15,
-          "key": "faraway",
-          "valid": false,
-          "version": 7,
-          "variant": "rfc4122",
-          "timestamp": "6429-10-17T02:45:55.327Z",
-          "refused": "timestamp_implausible",
-          "detail": "the v7 time field decodes outside the plausible range"
-        }
-      ]
-    },
-    {
-      "name": "the timestamp set",
-      "file": "timestamps.json",
-      "fileType": "json",
-      "expected": [
-        {
-          "kind": "uuid",
-          "value": "c232ab00-9414-11ec-b3c8-9e6bdeced846",
-          "line": 2,
-          "column": 15,
-          "key": "uuid_v1",
-          "valid": true,
-          "version": 1,
-          "variant": "rfc4122",
-          "timestamp": "2022-02-22T19:22:22.000Z"
-        },
-        {
-          "kind": "uuid",
-          "value": "1ec9414c-232a-6b00-b3c8-9e6bdeced846",
-          "line": 3,
-          "column": 15,
-          "key": "uuid_v6",
-          "valid": true,
-          "version": 6,
-          "variant": "rfc4122",
-          "timestamp": "2022-02-22T19:22:22.000Z"
-        },
-        {
-          "kind": "uuid",
-          "value": "019ff344-cc00-7abc-8def-0123456789ab",
-          "line": 4,
-          "column": 15,
-          "key": "uuid_v7",
-          "valid": true,
-          "version": 7,
-          "variant": "rfc4122",
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "ulid",
-          "value": "01KZSM9K00ABCDEFGH12345678",
-          "line": 5,
-          "column": 12,
-          "key": "ulid",
-          "valid": true,
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "objectid",
-          "value": "6a7bb780a1b2c3d4e5f60718",
-          "line": 6,
-          "column": 16,
-          "key": "objectid",
-          "valid": true,
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "snowflake",
-          "value": "1536886938009600000",
-          "line": 7,
-          "column": 30,
-          "key": "discord.message_id",
-          "valid": true,
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "snowflake",
-          "value": "2087328207467446272",
-          "line": 8,
-          "column": 28,
-          "key": "twitter.tweet_id",
-          "valid": true,
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        }
-      ]
-    },
-    {
-      "name": "a trailing comment lends no key",
-      "file": "comments.toml",
-      "fileType": "toml",
-      "expected": [
-        {
-          "kind": "objectid",
-          "value": "6a7bb780a1b2c3d4e5f60718",
-          "line": 5,
-          "column": 8,
-          "key": "_id",
-          "valid": true,
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": "objectid",
-          "value": "6a7bb780a1b2c3d4e5f60718",
-          "line": 6,
-          "column": 18,
-          "key": "quoted_id",
-          "valid": true,
-          "timestamp": "2026-08-12T00:00:00.000Z"
-        },
-        {
-          "kind": null,
-          "value": "6a7bb780a1b2c3d4e5f60718",
-          "line": 7,
-          "column": 18,
-          "valid": false,
-          "timestamp": "2026-08-12T00:00:00.000Z",
-          "refused": "ambiguous_kind",
-          "detail": "24 hex digits are an ObjectId, a truncated hash and a hex dump in equal measure, and nothing in this document names this field an identifier"
-        }
-      ]
-    }
-  ],
-  "ambiguity": [
-    {
-      "value": "5d41402abc4b2a76b9719d911017c592",
-      "reason": "ambiguous_kind"
-    },
-    {
-      "value": "01kzsm9k00AbCdEfGh12345678",
-      "reason": "ambiguous_kind"
-    },
-    {
-      "value": "e83c5163316f89bfbde7d9ab",
-      "reason": "ambiguous_kind"
-    },
-    {
-      "value": "V1StGXR8xZ5jdHi6BxmyT",
-      "reason": "ambiguous_kind"
-    },
-    {
-      "value": "1536886938009600000",
-      "reason": "ambiguous_kind"
-    },
-    {
-      "value": "f47ac10b-58cc-4372-1567-0e02b2c3d479",
-      "reason": "malformed"
-    },
-    {
-      "value": "01KZSM9K00ABCDEFGH123456I8",
-      "reason": "malformed"
-    },
-    {
-      "value": "6a7bb780a1b2c3d4e5f6071",
-      "reason": "malformed"
-    },
-    {
-      "value": "00000000-0000-0000-0000-000000000000",
-      "reason": "nil_or_max"
-    },
-    {
-      "value": "ffffffff-ffff-ffff-ffff-ffffffffffff",
-      "reason": "nil_or_max"
-    },
-    {
-      "value": "00000000-0000-4000-8000-000000000000",
-      "reason": "version_claim_mismatch"
-    },
-    {
-      "value": "7fffffff-ffff-7abc-8def-0123456789ab",
-      "reason": "timestamp_implausible"
-    }
-  ],
-  "timestamps": [
-    {
-      "value": "c232ab00-9414-11ec-b3c8-9e6bdeced846",
-      "kind": "uuid",
-      "timestamp": "2022-02-22T19:22:22.000Z"
-    },
-    {
-      "value": "1ec9414c-232a-6b00-b3c8-9e6bdeced846",
-      "kind": "uuid",
-      "timestamp": "2022-02-22T19:22:22.000Z"
-    },
-    {
-      "value": "019ff344-cc00-7abc-8def-0123456789ab",
-      "kind": "uuid",
-      "timestamp": "2026-08-12T00:00:00.000Z"
-    },
-    {
-      "value": "01KZSM9K00ABCDEFGH12345678",
-      "kind": "ulid",
-      "timestamp": "2026-08-12T00:00:00.000Z"
-    },
-    {
-      "value": "6a7bb780a1b2c3d4e5f60718",
-      "kind": "objectid",
-      "timestamp": "2026-08-12T00:00:00.000Z"
-    },
-    {
-      "value": "1536886938009600000",
-      "kind": "snowflake",
-      "timestamp": "2026-08-12T00:00:00.000Z"
-    },
-    {
-      "value": "2087328207467446272",
-      "kind": "snowflake",
-      "timestamp": "2026-08-12T00:00:00.000Z"
-    }
-  ]
+	"now": 1786492800000,
+	"documents": [
+		{
+			"name": "ids.json as json",
+			"file": "ids.json",
+			"fileType": "json",
+			"expected": [
+				{
+					"kind": "uuid",
+					"value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+					"line": 3,
+					"column": 12,
+					"key": "service.id",
+					"valid": true,
+					"version": 4,
+					"variant": "rfc4122"
+				},
+				{
+					"kind": "uuid",
+					"value": "019ff344-cc00-7abc-8def-0123456789ab",
+					"line": 4,
+					"column": 19,
+					"key": "service.requestId",
+					"valid": true,
+					"version": 7,
+					"variant": "rfc4122",
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "ulid",
+					"value": "01KZSM9K00ABCDEFGH12345678",
+					"line": 7,
+					"column": 14,
+					"key": "session.ulid",
+					"valid": true,
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "nanoid",
+					"value": "V1StGXR8_Z5jdHi6B-myT",
+					"line": 8,
+					"column": 16,
+					"key": "session.nanoId",
+					"valid": true
+				},
+				{
+					"kind": "objectid",
+					"value": "6a7bb780a1b2c3d4e5f60718",
+					"line": 11,
+					"column": 15,
+					"key": "documents.[0]._id",
+					"valid": true,
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "snowflake",
+					"value": "1536886938009600000",
+					"line": 13,
+					"column": 30,
+					"key": "discord.channel_id",
+					"valid": true,
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "uuid",
+					"value": "00000000-0000-0000-0000-000000000000",
+					"line": 14,
+					"column": 19,
+					"key": "placeholder",
+					"valid": false,
+					"refused": "nil_or_max",
+					"detail": "the nil UUID: 128 zero bits, which RFC 9562 defines as naming nothing"
+				}
+			]
+		},
+		{
+			"name": "ids.yaml as yaml",
+			"file": "ids.yaml",
+			"fileType": "yaml",
+			"expected": [
+				{
+					"kind": "uuid",
+					"value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+					"line": 2,
+					"column": 7,
+					"key": "service.id",
+					"valid": true,
+					"version": 4,
+					"variant": "rfc4122"
+				},
+				{
+					"kind": "uuid",
+					"value": "019ff344-cc00-7abc-8def-0123456789ab",
+					"line": 3,
+					"column": 14,
+					"key": "service.requestId",
+					"valid": true,
+					"version": 7,
+					"variant": "rfc4122",
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "ulid",
+					"value": "01KZSM9K00ABCDEFGH12345678",
+					"line": 5,
+					"column": 9,
+					"key": "session.ulid",
+					"valid": true,
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "nanoid",
+					"value": "V1StGXR8_Z5jdHi6B-myT",
+					"line": 6,
+					"column": 11,
+					"key": "session.nanoId",
+					"valid": true
+				},
+				{
+					"kind": "objectid",
+					"value": "6a7bb780a1b2c3d4e5f60718",
+					"line": 8,
+					"column": 10,
+					"key": "documents.[0]._id",
+					"valid": true,
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "snowflake",
+					"value": "1536886938009600000",
+					"line": 10,
+					"column": 15,
+					"key": "discord.channel_id",
+					"valid": true,
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "uuid",
+					"value": "00000000-0000-0000-0000-000000000000",
+					"line": 11,
+					"column": 14,
+					"key": "placeholder",
+					"valid": false,
+					"refused": "nil_or_max",
+					"detail": "the nil UUID: 128 zero bits, which RFC 9562 defines as naming nothing"
+				}
+			]
+		},
+		{
+			"name": "ids.toml as toml",
+			"file": "ids.toml",
+			"fileType": "toml",
+			"expected": [
+				{
+					"kind": "uuid",
+					"value": "00000000-0000-0000-0000-000000000000",
+					"line": 1,
+					"column": 16,
+					"key": "placeholder",
+					"valid": false,
+					"refused": "nil_or_max",
+					"detail": "the nil UUID: 128 zero bits, which RFC 9562 defines as naming nothing"
+				},
+				{
+					"kind": "uuid",
+					"value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+					"line": 4,
+					"column": 7,
+					"key": "service.id",
+					"valid": true,
+					"version": 4,
+					"variant": "rfc4122"
+				},
+				{
+					"kind": "uuid",
+					"value": "019ff344-cc00-7abc-8def-0123456789ab",
+					"line": 5,
+					"column": 14,
+					"key": "service.requestId",
+					"valid": true,
+					"version": 7,
+					"variant": "rfc4122",
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "ulid",
+					"value": "01KZSM9K00ABCDEFGH12345678",
+					"line": 8,
+					"column": 9,
+					"key": "session.ulid",
+					"valid": true,
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "nanoid",
+					"value": "V1StGXR8_Z5jdHi6B-myT",
+					"line": 9,
+					"column": 11,
+					"key": "session.nanoId",
+					"valid": true
+				},
+				{
+					"kind": "snowflake",
+					"value": "1536886938009600000",
+					"line": 12,
+					"column": 14,
+					"key": "discord.channel_id",
+					"valid": true,
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				}
+			]
+		},
+		{
+			"name": "ids.ini as ini",
+			"file": "ids.ini",
+			"fileType": "ini",
+			"expected": [
+				{
+					"kind": "uuid",
+					"value": "00000000-0000-0000-0000-000000000000",
+					"line": 2,
+					"column": 15,
+					"key": "placeholder",
+					"valid": false,
+					"refused": "nil_or_max",
+					"detail": "the nil UUID: 128 zero bits, which RFC 9562 defines as naming nothing"
+				},
+				{
+					"kind": "uuid",
+					"value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+					"line": 5,
+					"column": 6,
+					"key": "service.id",
+					"valid": true,
+					"version": 4,
+					"variant": "rfc4122"
+				},
+				{
+					"kind": "uuid",
+					"value": "019ff344-cc00-7abc-8def-0123456789ab",
+					"line": 6,
+					"column": 13,
+					"key": "service.requestId",
+					"valid": true,
+					"version": 7,
+					"variant": "rfc4122",
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "snowflake",
+					"value": "1536886938009600000",
+					"line": 9,
+					"column": 14,
+					"key": "discord.channel_id",
+					"valid": true,
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				}
+			]
+		},
+		{
+			"name": "ids.env as env",
+			"file": "ids.env",
+			"fileType": "env",
+			"expected": [
+				{
+					"kind": "uuid",
+					"value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+					"line": 2,
+					"column": 12,
+					"key": "SERVICE_ID",
+					"valid": true,
+					"version": 4,
+					"variant": "rfc4122"
+				},
+				{
+					"kind": "uuid",
+					"value": "019ff344-cc00-7abc-8def-0123456789ab",
+					"line": 3,
+					"column": 12,
+					"key": "REQUEST_ID",
+					"valid": true,
+					"version": 7,
+					"variant": "rfc4122",
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "ulid",
+					"value": "01KZSM9K00ABCDEFGH12345678",
+					"line": 4,
+					"column": 15,
+					"key": "SESSION_ULID",
+					"valid": true,
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "snowflake",
+					"value": "1536886938009600000",
+					"line": 5,
+					"column": 27,
+					"key": "DISCORD_CHANNEL_ID",
+					"valid": true,
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "uuid",
+					"value": "00000000-0000-0000-0000-000000000000",
+					"line": 6,
+					"column": 13,
+					"key": "PLACEHOLDER",
+					"valid": false,
+					"refused": "nil_or_max",
+					"detail": "the nil UUID: 128 zero bits, which RFC 9562 defines as naming nothing"
+				}
+			]
+		},
+		{
+			"name": "ids.csv as csv",
+			"file": "ids.csv",
+			"fileType": "csv",
+			"expected": [
+				{
+					"kind": "uuid",
+					"value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+					"line": 2,
+					"column": 7,
+					"key": "service_id",
+					"valid": true,
+					"version": 4,
+					"variant": "rfc4122"
+				},
+				{
+					"kind": "snowflake",
+					"value": "1536886938009600000",
+					"line": 2,
+					"column": 44,
+					"key": "channel_id",
+					"valid": true,
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "uuid",
+					"value": "019ff344-cc00-7abc-8def-0123456789ab",
+					"line": 3,
+					"column": 6,
+					"key": "service_id",
+					"valid": true,
+					"version": 7,
+					"variant": "rfc4122",
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "snowflake",
+					"value": "1536886938009600000",
+					"line": 3,
+					"column": 43,
+					"key": "channel_id",
+					"valid": true,
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				}
+			]
+		},
+		{
+			"name": "ids.tsv as tsv",
+			"file": "ids.tsv",
+			"fileType": "tsv",
+			"expected": [
+				{
+					"kind": "uuid",
+					"value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+					"line": 2,
+					"column": 7,
+					"key": "service_id",
+					"valid": true,
+					"version": 4,
+					"variant": "rfc4122"
+				},
+				{
+					"kind": null,
+					"value": "6a7bb780a1b2c3d4e5f60718",
+					"line": 2,
+					"column": 44,
+					"key": "checksum",
+					"valid": false,
+					"refused": "ambiguous_kind",
+					"detail": "24 hex digits are an ObjectId, a truncated hash and a hex dump in equal measure, and nothing in this document names this field an identifier",
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				}
+			]
+		},
+		{
+			"name": "ids.txt as text",
+			"file": "ids.txt",
+			"fileType": "text",
+			"expected": [
+				{
+					"kind": "uuid",
+					"value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+					"line": 3,
+					"column": 23,
+					"valid": true,
+					"version": 4,
+					"variant": "rfc4122"
+				},
+				{
+					"kind": "uuid",
+					"value": "019ff344-cc00-7abc-8def-0123456789ab",
+					"line": 4,
+					"column": 25,
+					"valid": true,
+					"version": 7,
+					"variant": "rfc4122",
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "ulid",
+					"value": "01KZSM9K00ABCDEFGH12345678",
+					"line": 5,
+					"column": 13,
+					"valid": true,
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": null,
+					"value": "6a7bb780a1b2c3d4e5f60718",
+					"line": 6,
+					"column": 1,
+					"valid": false,
+					"timestamp": "2026-08-12T00:00:00.000Z",
+					"refused": "ambiguous_kind",
+					"detail": "24 hex digits are an ObjectId, a truncated hash and a hex dump in equal measure, and nothing in this document names this field an identifier"
+				}
+			]
+		},
+		{
+			"name": "the ambiguity set",
+			"file": "ambiguous.json",
+			"fileType": "json",
+			"expected": [
+				{
+					"kind": null,
+					"value": "5d41402abc4b2a76b9719d911017c592",
+					"line": 2,
+					"column": 14,
+					"key": "digest",
+					"valid": false,
+					"refused": "ambiguous_kind",
+					"detail": "32 hex digits are an unhyphenated UUID and an MD5 digest in equal measure; nothing in this document chooses between them"
+				},
+				{
+					"kind": null,
+					"value": "01kzsm9k00AbCdEfGh12345678",
+					"line": 3,
+					"column": 13,
+					"key": "token",
+					"valid": false,
+					"refused": "ambiguous_kind",
+					"detail": "a valid ULID is canonically uppercase; in this case it is equally a token from another 26-character scheme, and no key here says which"
+				},
+				{
+					"kind": null,
+					"value": "e83c5163316f89bfbde7d9ab",
+					"line": 4,
+					"column": 14,
+					"key": "commit",
+					"valid": false,
+					"timestamp": "2093-06-19T16:25:07.000Z",
+					"refused": "ambiguous_kind",
+					"detail": "24 hex digits are an ObjectId, a truncated hash and a hex dump in equal measure, and nothing in this document names this field an identifier"
+				},
+				{
+					"kind": null,
+					"value": "V1StGXR8xZ5jdHi6BxmyT",
+					"line": 5,
+					"column": 14,
+					"key": "secret",
+					"valid": false,
+					"refused": "ambiguous_kind",
+					"detail": "21 base62 characters are a NanoID, a short token and a truncated hash in equal measure; only a `-` or `_`, or a key naming the scheme, separates them"
+				},
+				{
+					"kind": "snowflake",
+					"value": "1536886938009600000",
+					"line": 6,
+					"column": 14,
+					"key": "user_id",
+					"valid": false,
+					"timestamp": "2022-06-15T01:42:54.657Z",
+					"refused": "ambiguous_kind",
+					"detail": "the Twitter epoch decodes this to 2022-06-15T01:42:54.657Z and the Discord epoch to 2026-08-12T00:00:00.000Z; both are plausible and no key here names the platform"
+				},
+				{
+					"kind": "uuid",
+					"value": "f47ac10b-58cc-4372-1567-0e02b2c3d479",
+					"line": 7,
+					"column": 14,
+					"key": "legacy",
+					"valid": false,
+					"variant": "ncs",
+					"refused": "malformed",
+					"detail": "the variant bits say NCS, not RFC 4122, so the version nibble is not a version"
+				},
+				{
+					"kind": "ulid",
+					"value": "01KZSM9K00ABCDEFGH123456I8",
+					"line": 8,
+					"column": 16,
+					"key": "mistyped",
+					"valid": false,
+					"refused": "malformed",
+					"detail": "26 characters is a ULID's length, and Crockford base32 excludes I, L, O and U"
+				},
+				{
+					"kind": null,
+					"value": "6a7bb780a1b2c3d4e5f6071",
+					"line": 9,
+					"column": 17,
+					"key": "truncated",
+					"valid": false,
+					"refused": "malformed",
+					"detail": "23 hex digits is not a whole number of bytes and is one digit from a hex identifier this tool knows"
+				},
+				{
+					"kind": "uuid",
+					"value": "00000000-0000-0000-0000-000000000000",
+					"line": 10,
+					"column": 11,
+					"key": "nil",
+					"valid": false,
+					"refused": "nil_or_max",
+					"detail": "the nil UUID: 128 zero bits, which RFC 9562 defines as naming nothing"
+				},
+				{
+					"kind": "uuid",
+					"value": "ffffffff-ffff-ffff-ffff-ffffffffffff",
+					"line": 11,
+					"column": 11,
+					"key": "max",
+					"valid": false,
+					"refused": "nil_or_max",
+					"detail": "the max UUID: 128 one bits, which RFC 9562 defines as naming nothing"
+				},
+				{
+					"kind": "uuid",
+					"value": "00000000-0000-4000-8000-000000000000",
+					"line": 12,
+					"column": 14,
+					"key": "zeroed",
+					"valid": false,
+					"version": 4,
+					"variant": "rfc4122",
+					"refused": "version_claim_mismatch",
+					"detail": "the version nibble claims v4, which is 122 random bits, and 15 of its nibbles in a row are zero"
+				},
+				{
+					"kind": "uuid",
+					"value": "7fffffff-ffff-7abc-8def-0123456789ab",
+					"line": 13,
+					"column": 15,
+					"key": "faraway",
+					"valid": false,
+					"version": 7,
+					"variant": "rfc4122",
+					"timestamp": "6429-10-17T02:45:55.327Z",
+					"refused": "timestamp_implausible",
+					"detail": "the v7 time field decodes outside the plausible range"
+				}
+			]
+		},
+		{
+			"name": "the timestamp set",
+			"file": "timestamps.json",
+			"fileType": "json",
+			"expected": [
+				{
+					"kind": "uuid",
+					"value": "c232ab00-9414-11ec-b3c8-9e6bdeced846",
+					"line": 2,
+					"column": 15,
+					"key": "uuid_v1",
+					"valid": true,
+					"version": 1,
+					"variant": "rfc4122",
+					"timestamp": "2022-02-22T19:22:22.000Z"
+				},
+				{
+					"kind": "uuid",
+					"value": "1ec9414c-232a-6b00-b3c8-9e6bdeced846",
+					"line": 3,
+					"column": 15,
+					"key": "uuid_v6",
+					"valid": true,
+					"version": 6,
+					"variant": "rfc4122",
+					"timestamp": "2022-02-22T19:22:22.000Z"
+				},
+				{
+					"kind": "uuid",
+					"value": "019ff344-cc00-7abc-8def-0123456789ab",
+					"line": 4,
+					"column": 15,
+					"key": "uuid_v7",
+					"valid": true,
+					"version": 7,
+					"variant": "rfc4122",
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "ulid",
+					"value": "01KZSM9K00ABCDEFGH12345678",
+					"line": 5,
+					"column": 12,
+					"key": "ulid",
+					"valid": true,
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "objectid",
+					"value": "6a7bb780a1b2c3d4e5f60718",
+					"line": 6,
+					"column": 16,
+					"key": "objectid",
+					"valid": true,
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "snowflake",
+					"value": "1536886938009600000",
+					"line": 7,
+					"column": 30,
+					"key": "discord.message_id",
+					"valid": true,
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "snowflake",
+					"value": "2087328207467446272",
+					"line": 8,
+					"column": 28,
+					"key": "twitter.tweet_id",
+					"valid": true,
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				}
+			]
+		},
+		{
+			"name": "a trailing comment lends no key",
+			"file": "comments.toml",
+			"fileType": "toml",
+			"expected": [
+				{
+					"kind": "objectid",
+					"value": "6a7bb780a1b2c3d4e5f60718",
+					"line": 5,
+					"column": 8,
+					"key": "_id",
+					"valid": true,
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": "objectid",
+					"value": "6a7bb780a1b2c3d4e5f60718",
+					"line": 6,
+					"column": 18,
+					"key": "quoted_id",
+					"valid": true,
+					"timestamp": "2026-08-12T00:00:00.000Z"
+				},
+				{
+					"kind": null,
+					"value": "6a7bb780a1b2c3d4e5f60718",
+					"line": 7,
+					"column": 18,
+					"valid": false,
+					"timestamp": "2026-08-12T00:00:00.000Z",
+					"refused": "ambiguous_kind",
+					"detail": "24 hex digits are an ObjectId, a truncated hash and a hex dump in equal measure, and nothing in this document names this field an identifier"
+				}
+			]
+		}
+	],
+	"ambiguity": [
+		{
+			"value": "5d41402abc4b2a76b9719d911017c592",
+			"reason": "ambiguous_kind"
+		},
+		{
+			"value": "01kzsm9k00AbCdEfGh12345678",
+			"reason": "ambiguous_kind"
+		},
+		{
+			"value": "e83c5163316f89bfbde7d9ab",
+			"reason": "ambiguous_kind"
+		},
+		{
+			"value": "V1StGXR8xZ5jdHi6BxmyT",
+			"reason": "ambiguous_kind"
+		},
+		{
+			"value": "1536886938009600000",
+			"reason": "ambiguous_kind"
+		},
+		{
+			"value": "f47ac10b-58cc-4372-1567-0e02b2c3d479",
+			"reason": "malformed"
+		},
+		{
+			"value": "01KZSM9K00ABCDEFGH123456I8",
+			"reason": "malformed"
+		},
+		{
+			"value": "6a7bb780a1b2c3d4e5f6071",
+			"reason": "malformed"
+		},
+		{
+			"value": "00000000-0000-0000-0000-000000000000",
+			"reason": "nil_or_max"
+		},
+		{
+			"value": "ffffffff-ffff-ffff-ffff-ffffffffffff",
+			"reason": "nil_or_max"
+		},
+		{
+			"value": "00000000-0000-4000-8000-000000000000",
+			"reason": "version_claim_mismatch"
+		},
+		{
+			"value": "7fffffff-ffff-7abc-8def-0123456789ab",
+			"reason": "timestamp_implausible"
+		}
+	],
+	"timestamps": [
+		{
+			"value": "c232ab00-9414-11ec-b3c8-9e6bdeced846",
+			"kind": "uuid",
+			"timestamp": "2022-02-22T19:22:22.000Z"
+		},
+		{
+			"value": "1ec9414c-232a-6b00-b3c8-9e6bdeced846",
+			"kind": "uuid",
+			"timestamp": "2022-02-22T19:22:22.000Z"
+		},
+		{
+			"value": "019ff344-cc00-7abc-8def-0123456789ab",
+			"kind": "uuid",
+			"timestamp": "2026-08-12T00:00:00.000Z"
+		},
+		{
+			"value": "01KZSM9K00ABCDEFGH12345678",
+			"kind": "ulid",
+			"timestamp": "2026-08-12T00:00:00.000Z"
+		},
+		{
+			"value": "6a7bb780a1b2c3d4e5f60718",
+			"kind": "objectid",
+			"timestamp": "2026-08-12T00:00:00.000Z"
+		},
+		{
+			"value": "1536886938009600000",
+			"kind": "snowflake",
+			"timestamp": "2026-08-12T00:00:00.000Z"
+		},
+		{
+			"value": "2087328207467446272",
+			"kind": "snowflake",
+			"timestamp": "2026-08-12T00:00:00.000Z"
+		}
+	]
 }
