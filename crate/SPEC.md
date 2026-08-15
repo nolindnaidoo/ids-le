@@ -283,7 +283,7 @@ ids-le --version | --help
 
 | Flag | Effect |
 |---|---|
-| `--kind <kind>` | Report only `uuid`, `ulid`, `nanoid`, `objectid` or `snowflake`. **A view over the report, applied after the analysis** — a refusal that named no kind disappears under any `--kind`, so the unfiltered run is the complete one. An unknown kind is refused. |
+| `--kind <kind>` | Report only `uuid`, `ulid`, `nanoid`, `objectid` or `snowflake`. **A view over which identifiers are *named*, never over whether the document could be read** — every refusal survives it, so `summary.refused` and the exit code mean the same thing filtered or not. This once dropped refusals, and `--strict --kind uuid` exited 1 over a file of 620 of them, reporting `refused: 0`. An unknown kind is refused. |
 | `--format <format>` | Force a format. An unknown name reads the text directly rather than failing. |
 | `--strict` | Exit 2 on any refusal or unreadable text file. |
 | `--stdin` | Read one document from stdin. Takes no file arguments. |

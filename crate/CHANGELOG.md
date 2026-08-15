@@ -5,6 +5,25 @@ The Rust CLI and MCP server.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2026-08-15
+
+### Fixed
+
+- **A refusal survives `--kind`, so a filter cannot weaken `--strict`.**
+  `--strict` exits 2 from `summary.refused`, and the kind filter ran
+  before that count — so `ids-le --strict --kind uuid` over
+  `fixtures/documents/hashes.txt`, which is 620 refusals, exited **1**
+  and reported `refused: 0`. A script branching on 2 ("could not
+  answer") against 1 ("found things") got the wrong answer, and nothing
+  downstream could see the refusals at all.
+
+  `README.md` already said "a refusal survives `--kind`"; SPEC.md
+  described the filter as applying after the analysis and is corrected
+  here. The filter narrows which identifiers are *named*; whether the
+  document could be read is not its to judge.
+
+  Filtering still works: a `--kind uuid` run names only uuids.
+
 ## [0.3.0] - 2026-08-15
 
 A behavioural audit drove the binary rather than reading the spec, and
@@ -326,3 +345,4 @@ First release. Core functionality; not yet hardened.
 [0.2.0]: https://crates.io/crates/ids-le/0.2.0
 [0.2.1]: https://crates.io/crates/ids-le/0.2.1
 [0.3.0]: https://crates.io/crates/ids-le/0.3.0
+[0.3.1]: https://crates.io/crates/ids-le/0.3.1

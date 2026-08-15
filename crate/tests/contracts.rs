@@ -629,3 +629,42 @@ fn prose_never_supplies_the_key_that_names_a_run() {
     assert_eq!(conf[0]["ids"][0]["key"], text[0]["ids"][0]["key"]);
     assert_eq!(conf[0]["ids"][0]["valid"], false, "{:?}", conf[0]["ids"][0]);
 }
+
+/// **A filter may not decide a gate.** `--strict` exits 2 from
+/// `summary.refused`, and `--kind` used to drop refusals before it was
+/// computed — so `--strict --kind uuid` over a file of 620 refusals
+/// exited 1 and reported `refused: 0`. The filter narrows which
+/// identifiers are *named*; it has no standing over whether the
+/// document could be read.
+#[test]
+fn a_kind_filter_cannot_hide_a_refusal_from_strict() {
+    let tree = Tree::new("kind-strict");
+    // 24 hex under a key that names nothing: refused `ambiguous_kind`,
+    // and it carries `kind: null`, while the UUID beside it does not.
+    let file = tree.write(
+        "ids.json",
+        "{\"checksum\":\"6a7bb780a1b2c3d4e5f60718\",\
+          \"id\":\"f47ac10b-58cc-4372-a567-0e02b2c3d479\"}\n",
+    );
+    let path = file.to_string_lossy().to_string();
+
+    assert_eq!(run(&["--strict", &path]).code, 2);
+    assert_eq!(
+        run(&["--strict", "--kind", "uuid", &path]).code,
+        2,
+        "a --kind filter hid the refusal that --strict exists to catch"
+    );
+
+    // And the filter still does its own job: the named row is narrowed.
+    let filtered = run(&["--kind", "uuid", &path]);
+    let report = &reports(&filtered)[0];
+    assert_eq!(report["summary"]["refused"], 1, "{}", filtered.stdout);
+    let named: Vec<&str> = report["ids"]
+        .as_array()
+        .expect("ids")
+        .iter()
+        .filter(|row| row["valid"] == true)
+        .map(|row| row["kind"].as_str().expect("a kind"))
+        .collect();
+    assert_eq!(named, ["uuid"]);
+}

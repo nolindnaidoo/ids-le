@@ -88,7 +88,16 @@ pub(crate) fn extract(text: &str, format: &str, options: Options) -> Vec<Found> 
             let key = locate::key_at(&spans, candidate.start).filter(|path| !path.is_empty());
             row(candidate.text, candidate.start, key, &index, options.clock)
         })
-        .filter(|found| options.kind.is_none_or(|kind| found.kind == Some(kind)))
+        // **A refusal survives `--kind`.** The filter narrows which
+        // identifiers are named, not whether the document could be read,
+        // and `--strict` exits 2 from `summary.refused` — so filtering a
+        // refusal out made `ids-le --strict --kind uuid` exit 1 over a
+        // file of 620 refusals, reporting `refused: 0`. A refusal that
+        // names a kind is a run this crate could *not* name, which is
+        // exactly what a kind filter has no standing to judge.
+        .filter(|found| {
+            found.refused.is_some() || options.kind.is_none_or(|kind| found.kind == Some(kind))
+        })
         .collect()
 }
 
