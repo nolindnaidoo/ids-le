@@ -392,8 +392,7 @@ type(optional-scope): imperative subject
 `type` is one of **feat · fix · docs · style · refactor · perf · test ·
 build · ci · chore · revert**. A scope is optional and free-form —
 `fix(uuid):` and `fix:` are both fine; use one when it tells the reader
-where to look. Append `!` for a breaking change. **The subject is capped
-at 100 characters.**
+where to look. Append `!` for a breaking change.
 
 **Both are enforced, and by CI rather than only by the hook.** The
 `commits` job in `.github/workflows/ci-crate.yml` checks every pushed

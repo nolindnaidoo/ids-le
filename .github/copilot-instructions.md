@@ -29,7 +29,7 @@ standard lives in one place so it cannot drift between tools.
   named in the report, not dropped from it.
 - Comments explain **why**, never what.
 - Commits are conventional (`feat:`, `fix:`, `docs:`, `test:`, `ci:`…),
-  imperative, subject under 100 characters, enforced by a hook and by CI.
+  imperative, enforced by a hook and by CI.
 
 ## Before you commit
 
