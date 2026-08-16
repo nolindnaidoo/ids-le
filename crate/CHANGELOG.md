@@ -5,6 +5,22 @@ The Rust CLI and MCP server.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.2] - 2026-08-15
+
+### Fixed
+
+- **`.env.local` and its siblings are read as dotenv, so a key still
+  names a run.** Resolution split on the last dot, so `.env.local` and
+  `.env.production` fell to the plain-text reader, which has no keys. A
+  key path is evidence for four kinds here, so this did not merely lose
+  a locator — it changed verdicts:
+  `USER_ID=6a7bb780a1b2c3d4e5f60718` was a named ObjectId in `.env` and
+  a refusal in the `.env.local` beside it.
+
+  The leading dot is the signal, so the check runs before `normalise`
+  strips it: `env.ts` must not be handed a key grammar it does not have.
+  `.envrc` is direnv's shell script and stays out. Both are pinned.
+
 ## [0.3.1] - 2026-08-15
 
 ### Fixed
@@ -346,3 +362,4 @@ First release. Core functionality; not yet hardened.
 [0.2.1]: https://crates.io/crates/ids-le/0.2.1
 [0.3.0]: https://crates.io/crates/ids-le/0.3.0
 [0.3.1]: https://crates.io/crates/ids-le/0.3.1
+[0.3.2]: https://crates.io/crates/ids-le/0.3.2

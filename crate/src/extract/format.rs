@@ -140,11 +140,67 @@ fn resolve_reader(format: Option<&str>, filename: Option<&str>) -> Reader {
         return whole;
     }
 
+    // **A dotenv file is `.env` and everything after it.** Splitting on
+    // the last dot asks `local` for a format and gets nothing, so
+    // `.env.local` fell to the plain-text reader — which has no keys.
+    // A key path is evidence for four kinds here, so this did not merely
+    // lose a locator: `USER_ID=6a7bb780a1b2c3d4e5f60718` was a named
+    // ObjectId in `.env` and a refusal in the `.env.local` beside it.
+    if is_dotenv(&filename.trim().to_lowercase()) {
+        return Reader::Dotenv;
+    }
+
     filename
         .rsplit_once('.')
         .map_or(Reader::Text, |(_, extension)| {
             canonical(&normalise(extension))
         })
+}
+
+/// Whether a filename names a dotenv file.
+///
+/// `.env` and any suffix of it — `.env.local`, `.env.production`,
+/// `.env.test.local` — plus the `<name>.env` spelling.
+///
+/// **The leading dot is the signal**, so this takes the name before
+/// `normalise` strips it. Without it `env.ts` would read as dotenv,
+/// which is the worse mistake: it hands a source file a key grammar it
+/// does not have. `.envrc` is direnv's shell script, not a dotenv file.
+fn is_dotenv(name: &str) -> bool {
+    name == ".env"
+        || name.starts_with(".env.")
+        || name == "env"
+        || name
+            .strip_suffix(".env")
+            .is_some_and(|stem| !stem.is_empty())
+}
+
+#[cfg(test)]
+mod dotenv_tests {
+    use super::{Reader, resolve_reader as resolve};
+
+    /// The key path is evidence for four kinds, so falling to the
+    /// plain-text reader turned a named ObjectId into a refusal.
+    #[test]
+    fn every_dotenv_spelling_resolves() {
+        for name in [
+            ".env",
+            ".env.local",
+            ".env.production",
+            ".env.test.local",
+            "app.env",
+            "env",
+        ] {
+            assert_eq!(resolve(None, Some(name)), Reader::Dotenv, "{name}");
+        }
+    }
+
+    #[test]
+    fn a_name_that_merely_starts_with_env_is_not_dotenv() {
+        for name in [".envrc", "environment.json", "env.ts", "sender.env.rs"] {
+            assert_ne!(resolve(None, Some(name)), Reader::Dotenv, "{name}");
+        }
+    }
 }
 
 #[cfg(test)]
