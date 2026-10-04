@@ -1,7 +1,7 @@
 id = "ids-le"
 name = "IDs-LE"
 description = "Extract every UUID, ULID, NanoID, ObjectId and Snowflake, and decode the time inside."
-version = "1.0.0"
+version = "1.0.1"
 schema_version = 1
 authors = ["nolindnaidoo"]
 repository = "https://github.com/nolindnaidoo/ids-le"
