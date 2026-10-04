@@ -1,27 +1,24 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/nolindnaidoo/ids-le/main/assets/icon.png" alt="IDs-LE logo" width="96" height="96"/>
+  <img src="src/assets/images/icon.png" alt="IDs-LE Logo" width="96" height="96"/>
 </p>
-<h1 align="center">IDs-LE</h1>
+<h1 align="center">IDs-LE: The ID That Only Looks Like One</h1>
 <p align="center">
-  <b>Find every identifier in a codebase, decode the time inside it, and refuse the ones that cannot be named</b><br/>
+  <b>Find every identifier in a document, decode the time inside it, and refuse the ones that cannot be named</b><br/>
   <i>UUID · ULID · NanoID · MongoDB ObjectId · Snowflake</i>
 </p>
 
 <p align="center">
+  <a href="https://marketplace.visualstudio.com/items?itemName=nolindnaidoo.ids-le">
+    <img src="https://img.shields.io/badge/Install%20from-VS%20Code-blue?style=for-the-badge&logo=visualstudiocode" alt="Install from VS Code Marketplace" />
+  </a>
+  <a href="https://open-vsx.org/extension/OffensiveEdge/ids-le">
+    <img src="https://img.shields.io/open-vsx/dt/OffensiveEdge/ids-le?style=for-the-badge&label=Open%20VSX&color=blue" alt="Open VSX downloads" />
+  </a>
+  <a href="https://www.npmjs.com/package/ids-le-mcp">
+    <img src="https://img.shields.io/npm/v/ids-le-mcp?style=for-the-badge&label=MCP%20server&color=blue&logo=npm" alt="ids-le-mcp on npm" />
+  </a>
   <a href="https://crates.io/crates/ids-le">
     <img src="https://img.shields.io/crates/v/ids-le?style=for-the-badge&label=Rust%20CLI&color=blue&logo=rust" alt="ids-le on crates.io" />
-  </a>
-  <a href="https://crates.io/crates/ids-le">
-    <img src="https://img.shields.io/crates/d/ids-le?style=for-the-badge&label=Downloads&color=blue" alt="crates.io downloads" />
-  </a>
-  <a href="https://github.com/nolindnaidoo/ids-le/actions/workflows/ci-crate.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/nolindnaidoo/ids-le/ci-crate.yml?branch=main&style=for-the-badge&label=CI&color=blue&logo=githubactions&logoColor=white" alt="CI" />
-  </a>
-  <a href="https://github.com/nolindnaidoo/ids-le/blob/main/crate/Cargo.toml">
-    <img src="https://img.shields.io/badge/rustc-1.88+-blue?style=for-the-badge&logo=rust" alt="MSRV: Rust 1.88+" />
-  </a>
-  <a href="https://github.com/nolindnaidoo/ids-le/blob/main/LICENSE">
-    <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="MIT licensed" />
   </a>
   <a href="https://letools.dev/tools/ids-le">
     <img src="https://img.shields.io/badge/LE%20Tools-letools.dev-blue?style=for-the-badge" alt="LE Tools" />
@@ -30,74 +27,32 @@
 
 ---
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/nolindnaidoo/ids-le/main/assets/demo.gif" alt="IDs-LE demo — the real binary, recorded by assets/demo.tape" style="max-width: 100%; height: auto;" />
-</p>
-
-> **Useful?** A star is how other developers find it —
+> **Useful?** A star or rating is how other developers find it —
 > [★ GitHub](https://github.com/nolindnaidoo/ids-le) ·
-> [letools.dev/tools/ids-le](https://letools.dev/tools/ids-le)
+> [★ Open VSX](https://open-vsx.org/extension/OffensiveEdge/ids-le/reviews) ·
+> [★ Marketplace](https://marketplace.visualstudio.com/items?itemName=nolindnaidoo.ids-le&ssr=false#review-details)
 
 ## What it does
 
-Point it at a file or a tree. For every identifier it finds it reports the
-kind, the raw text, where it is — line, column, and the document's own key
-path — whether it is valid, and, where the identifier embeds a timestamp,
-that timestamp as an ISO-8601 UTC string.
+A support ticket quotes `6a7bb780a1b2c3d4e5f60718` and asks when the record was made. A regex says ObjectId, minted 2026-08-12. It is the front of a git commit hash, and the date is noise that happens to land in a plausible year.
 
-```console
-$ ids-le ids.json
-ids.json:3:12  uuid v4  f47ac10b-58cc-4372-a567-0e02b2c3d479
-ids.json:4:19  uuid v7  019ff344-cc00-7abc-8def-0123456789ab  2026-08-12T00:00:00.000Z
-ids.json:7:14  ulid  01KZSM9K00ABCDEFGH12345678  2026-08-12T00:00:00.000Z
-ids.json:8:16  nanoid  V1StGXR8_Z5jdHi6B-myT
-ids.json:11:15  objectid  6a7bb780a1b2c3d4e5f60718  2026-08-12T00:00:00.000Z
-ids.json:13:30  snowflake  1536886938009600000  2026-08-12T00:00:00.000Z
-ids.json:14:19  refused (nil_or_max)  00000000-0000-0000-0000-000000000000  — the nil UUID: 128 zero bits, which RFC 9562 defines as naming nothing
-6 identifiers in 1 file
-1 run refused
-```
+Open a document, press `Ctrl+Alt+I` (`Cmd+Alt+I` on Mac), and every identifier in it is listed by kind with its line and column, the document's own key path for it, whether it is valid, and — for the six schemes that carry a clock — the instant it was minted, as ISO-8601 UTC. The report opens beside the editor. Works in VS Code and in VS Code–based editors like Cursor and VSCodium (installable from Open VSX).
 
-That is stderr. stdout carried the same seven rows as one JSON line, which is
-what a pipeline reads:
+- **Reading a log or a dump** — which of these are UUID v7s, and when was each minted?
+- **Reviewing a config** — the placeholder nil UUID that escaped into production
+- **Before trusting a hex string** — whether the document actually says it is an identifier
 
-```json
-{
-  "schema": 1,
-  "file": "ids.json",
-  "format": "json",
-  "ids": [
-    {
-      "kind": "uuid",
-      "value": "019ff344-cc00-7abc-8def-0123456789ab",
-      "line": 4,
-      "column": 19,
-      "key": "service.requestId",
-      "valid": true,
-      "version": 7,
-      "variant": "rfc4122",
-      "timestamp": "2026-08-12T00:00:00.000Z"
-    },
-    {
-      "kind": "uuid",
-      "value": "00000000-0000-0000-0000-000000000000",
-      "line": 14,
-      "column": 19,
-      "key": "placeholder",
-      "valid": false,
-      "refused": "nil_or_max",
-      "detail": "the nil UUID: 128 zero bits, which RFC 9562 defines as naming nothing"
-    }
-  ],
-  "diagnostics": [],
-  "summary": { "ids": 6, "refused": 1 }
-}
-```
+**A run it cannot name honestly is reported with the reason, never dropped.** **It rewrites nothing.**
 
-`kind` is always present, and `null` where naming a kind is exactly what was
-refused — a reader has to be able to tell "no kind" from "field missing".
-Columns are counted in **UTF-16 code units**, so they match what an editor
-shows you.
+## Install
+
+| Where | What you get | Install |
+|---|---|---|
+| **VS Code** | The extraction, in your editor, on a keystroke | [Marketplace](https://marketplace.visualstudio.com/items?itemName=nolindnaidoo.ids-le) |
+| **Cursor, VSCodium, Windsurf** | The same extension | [Open VSX](https://open-vsx.org/extension/OffensiveEdge/ids-le) |
+| **A terminal or a CI step** | A whole tree, with an exit code | `cargo install ids-le` · [crates.io](https://crates.io/crates/ids-le) |
+| **Any MCP agent, via Node** | `extract_ids` over stdio | `npx ids-le-mcp` · [npm](https://www.npmjs.com/package/ids-le-mcp) |
+| **Zed** | The MCP server as a context server | [add it by hand](https://zed.dev/docs/ai/mcp) *(no listing yet)* |
 
 ## It refuses rather than guesses
 
@@ -130,45 +85,6 @@ confidently wrong:
 
 The full table, and the boundaries the tool holds itself to, are in
 [`crate/SPEC.md`](crate/SPEC.md).
-
-## Install
-
-```console
-cargo install ids-le
-```
-
-Or from a checkout:
-
-```console
-git clone https://github.com/nolindnaidoo/ids-le
-cargo install --path ids-le/crate
-```
-
-Needs **Rust 1.88+**, and nothing else. No runtime, no network, nothing
-written.
-
-## Use it
-
-```console
-ids-le src/                    # a tree
-ids-le --kind uuid src/        # one scheme
-ids-le --strict src/           # fail on anything that could not be named
-ids-le --hidden src/           # include .env
-cat config.yaml | ids-le --stdin --format yaml
-```
-
-stdout is protocol — one JSON object per line, one line per file. stderr is
-for you. There is no `--json` flag: one mode, and the human summary is a
-projection of the same reports so the two cannot drift.
-
-| Flag | Effect |
-|---|---|
-| `--kind <kind>` | Report only `uuid`, `ulid`, `nanoid`, `objectid` or `snowflake`. A view over the report, applied after the analysis — the unfiltered run is the complete one. |
-| `--format <format>` | Force a format. An unknown name reads the text directly rather than failing. |
-| `--strict` | Exit 2 on any refusal or unreadable text file. |
-| `--stdin` | Read one document from stdin. Takes no file arguments. |
-| `--hidden` | Walk hidden files and directories — which is where `.env` lives. |
-| `--no-ignore` | Walk files `.gitignore` excludes. |
 
 ## The kinds
 
@@ -218,84 +134,157 @@ A decode that lands before 1990 or more than a year from now is refused as
 `timestamp_implausible` — and the decode is on the row next to the flag,
 because a refusal that hides its evidence is a verdict a reader cannot check.
 
-## Options
-
-Taken from `ids-le --help`, which is the authority.
-
-| Option | What it does |
-|---|---|
-| `--kind <kind>` | Report only one of `uuid`, `ulid`, `nanoid`, `objectid`, `snowflake` |
-| `--format <format>` | Force a format instead of inferring it from the file name; an unknown name falls back to a text read rather than failing |
-| `--strict` | Exit 2 if anything was refused or any file could not be read, rather than reporting it and carrying on |
-| `--stdin` | Read one document from stdin |
-| `--hidden` | Walk hidden files and directories too |
-| `--no-ignore` | Walk files that `.gitignore` excludes |
-
-A filter narrows what this tool claims, never what it declined to claim:
-a refusal survives `--kind`.
-
-## Exit codes
-
-Follow grep, so a shell can branch on them:
-
-| Code | Meaning |
-|---|---|
-| `0` | Identifiers found |
-| `1` | None found — an answer, not an error |
-| `2` | The question was malformed, or a scan gave up part way |
-
-**A refusal does not move the exit code.** Refusing is the tool working;
-`--strict` is how a pipeline turns it into a failure. A binary file — a NUL
-byte in its first 8 KiB, ripgrep's own test — is never a text candidate: no
-report line, counted on stderr, and it never fails the run.
-
 ## Formats
 
 JSON (and JSONC), YAML, TOML, INI (`.properties`), dotenv, CSV and TSV
 give each finding a key path — `service.requestId`,
 `documents.[0]._id`, `discord.channel_id`. Everything else is read as text:
-**the same runs, in the same places, without the key**. That is why you can
-point this at a repository nobody has described to it and get an answer out
-of the `.md`, the `.sql` and the `.tf` as well as the config.
+**the same runs, in the same places, without the key**.
 
 The key path is evidence, not decoration. ObjectId and Snowflake are named
 only under a field the document calls an id, so a run that is named in the
 `.json` comes back `ambiguous_kind` in the `.md` beside it — same row, same
 position, same decode, and a reason instead of a name.
 
-## For agents
+## Use it from an AI agent
 
-```console
-ids-le mcp
+The same engine runs as an [MCP](https://modelcontextprotocol.io) server, so an agent can call it directly instead of guessing which hex string is which.
+
+| Editor | How |
+|---|---|
+| **VS Code** 1.101+ | Nothing to install — the extension registers `extract_ids` with agent mode |
+| **Zed** | No listing yet — [add the MCP server by hand](https://zed.dev/docs/ai/mcp) |
+| **Claude Code** | `claude mcp add ids-le -- npx -y ids-le-mcp` |
+| **Cursor, Windsurf, anything else** | point it at `npx ids-le-mcp` |
+
+```
+extract_ids(content, format?, filename?, kind?, maxResults?)
 ```
 
-Speaks the Model Context Protocol on stdio and offers two tools:
-`extract_ids`, which reads a document handed to it and touches no filesystem,
-and `ids_le_scan`, which reads files and directories. Both return one
-envelope — `{ ok, data, diagnostics, meta }` — where `ok` means the check
-ran, never that the answer was yes.
+It returns the rows the editor renders, refusals included, as data — capped at 500 by default with `meta.truncated`. It reads no files and makes no network requests. Published as [`ids-le-mcp`](https://www.npmjs.com/package/ids-le-mcp) on npm and as `io.github.nolindnaidoo/ids-le` in the [MCP registry](https://registry.modelcontextprotocol.io). It answers exactly as the Rust CLI's server does: one corpus runs against both, and a differential test feeds both thousands of generated documents in every format and compares every answer.
 
-Refusals reach the agent as rows, exactly as they reach the terminal. An
-agent that received only the identifiers this crate was willing to name would
-conclude a document was clean when what actually happened is that nothing in
-it could be named.
+<details>
+<summary><b>Configuring it by hand</b> — any host with an MCP config file</summary>
 
-## What it will not do
+```json
+{
+  "mcpServers": {
+    "ids-le": {
+      "command": "npx",
+      "args": ["-y", "ids-le-mcp"]
+    }
+  }
+}
+```
 
-It does not generate identifiers, rewrite them, redact them, or decide
-whether one should be where it is. It reads; nothing is written. It never
-touches the network, and it verifies nothing against a database or an API.
-Full list in [`crate/SPEC.md`](crate/SPEC.md), "Non-goals".
+Or install it once with `npm install -g ids-le-mcp` and point at `ids-le-mcp`. It needs no environment variables, no API key and no configuration of its own. To check it:
+
+```bash
+echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | npx -y ids-le-mcp
+```
+
+</details>
+
+## The CLI
+
+The same extraction runs over a whole tree from a terminal or a CI step: a Rust CLI in [`crate/`](crate/README.md), sharing one corpus with the extension — [`crate/fixtures/`](crate/fixtures/) — so the two can never read an identifier differently.
+
+<p align="center">
+  <img src="assets/demo.gif" alt="ids-le in a terminal" style="max-width: 100%; height: auto;" />
+</p>
+
+```bash
+ids-le src/                    # a tree, one JSON line per file
+ids-le --kind uuid src/        # one scheme; refusals still reported
+ids-le --strict src/           # exit 2 on anything that could not be named
+ids-le --hidden src/           # include .env
+ids-le mcp                     # extract_ids and ids_le_scan over MCP on stdio
+```
+
+**Exit codes follow grep** — 0 identifiers found, 1 none found, 2 the question was malformed. A refusal does not move the exit code; `--strict` is how a pipeline turns one into a failure.
+
+## Commands
+
+| Command | Description |
+|---|---|
+| `IDs-LE: Extract IDs` (`Ctrl+Alt+I` / `Cmd+Alt+I`) | Extract every identifier in the active document |
+| `IDs-LE: Open Settings` | Open IDs-LE settings |
+| `IDs-LE: Help & Troubleshooting` | Built-in documentation |
+
+## Settings
+
+| Setting | Default | Description |
+|---|---|---|
+| `ids-le.kind` | `all` | Name only one kind; runs that could not be named are reported whatever this is |
+| `ids-le.openResultsSideBySide` | `true` | Open the report beside the current editor |
+| `ids-le.copyToClipboardEnabled` | `false` | Also copy the report to the clipboard |
+| `ids-le.safety.enabled` | `true` | Warn before extracting from a large file |
+| `ids-le.safety.fileSizeWarnBytes` | `1000000` | The size that warning starts at |
+| `ids-le.notificationsLevel` | `silent` | `all` = every notification, `important` = warnings + errors, `silent` = errors only |
+| `ids-le.statusBar.enabled` | `true` | Show the status bar item |
+| `ids-le.telemetryEnabled` | `false` | Local-only event log (see Privacy) |
+
+## Languages
+
+Twelve languages besides English:
+
+German · Spanish · French · Indonesian · Italian · Japanese · Korean ·
+Portuguese (Brazil) · Russian · Ukrainian · Vietnamese · Chinese (Simplified)
+
+Both halves are covered — the manifest (command titles, setting names and descriptions) and everything shown while the extension runs (notifications, the status bar and the report's headings). A refusal's detail is the engine's English, identical to the CLI's.
+
+## Privacy & security
+
+- **No network access.** The extension never sends data anywhere, and it verifies nothing against a database or an API. The `telemetryEnabled` setting only writes events to a local Output Channel you can inspect (`IDs-LE`).
+- **The MCP server holds the same line.** It takes content as an argument and returns data: no filesystem access, no network calls, no telemetry.
+- Error notifications redact home directories and credential-shaped fragments.
 
 ## Documentation
 
 | What | Where |
 |---|---|
-| What the tool is allowed to say — scope, output contract, refusals, non-goals | [`crate/SPEC.md`](crate/SPEC.md) |
-| How the code is written and held together — architecture, invariants, the gates | [`crate/AGENTS.md`](crate/AGENTS.md) |
-| The crate's own front page | [`crate/README.md`](crate/README.md) |
+| What the tool is allowed to say — kinds, refusals, the output contract, non-goals | [`crate/SPEC.md`](crate/SPEC.md) |
+| How the extension is built and held together — architecture, invariants, toolchain, release | [AGENTS.md](AGENTS.md) |
+| How the CLI is built and held together | [`crate/AGENTS.md`](crate/AGENTS.md) |
 | What changed | [CHANGELOG.md](CHANGELOG.md) · [`crate/CHANGELOG.md`](crate/CHANGELOG.md) |
 | The tool's page, and the other fifteen | [letools.dev/tools/ids-le](https://letools.dev/tools/ids-le) |
+
+## Performance
+
+<!-- performance:start -->
+| Input | Size | Found | Time | Rate | Scan speed |
+| --- | --- | --- | --- | --- | --- |
+| JSON records | 2.39 MB | 40,000 | 52.56 ms | 761,092/sec | 45.5 MB/s |
+| Application log | 3.16 MB | 40,000 | 43.08 ms | 928,448/sec | 73.4 MB/s |
+| CSV export | 2.78 MB | 90,000 | 75 ms | 1,200,003/sec | 37 MB/s |
+
+Median of 7 runs after warmup, on Apple M5 Pro, 24 GB RAM, Node 24.3.0. Inputs are generated
+by `scripts/benchmark.ts` rather than checked in, so the sizes above are
+exactly what was measured. Reproduce with `bun run benchmark`.
+
+These are machine-specific and are not asserted in CI — a benchmark that gates
+a build only tells you how busy the runner was.
+<!-- performance:end -->
+
+## Testing
+
+<!-- coverage:start -->
+| Metric | Coverage |
+| --- | --- |
+| Statements | 88.83% |
+| Branches | 83.11% |
+| Functions | 91.36% |
+| Lines | 90.60% |
+
+97 test cases across 11 files, plus an integration suite that runs
+in a real VS Code extension host and an end-to-end test that installs the
+built `.vsix` into a clean profile.
+
+Generated from a real run — `coverage/coverage-summary.json` and
+`coverage/test-results.json` — by `scripts/coverage-readme.js`; CI fails if
+this section drifts. Reproduce with `bun run test:coverage`, and the case
+count is the one vitest prints.
+<!-- coverage:end -->
 
 ## More from the LE family
 

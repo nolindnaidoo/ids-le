@@ -1,0 +1,244 @@
+{
+	"name": "ids-le",
+	"publisher": "nolindnaidoo",
+	"displayName": "IDs-LE",
+	"description": "Extract every UUID, ULID, NanoID, ObjectId and Snowflake, decode the time inside, and refuse the ambiguous ones by name",
+	"version": "1.0.0",
+	"license": "MIT",
+	"author": {
+		"name": "nolindnaidoo",
+		"url": "https://nolindnaidoo.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nolindnaidoo/ids-le.git"
+	},
+	"bugs": {
+		"url": "https://github.com/nolindnaidoo/ids-le/issues"
+	},
+	"homepage": "https://letools.dev/tools/ids-le",
+	"engines": {
+		"vscode": "^1.101.0",
+		"node": ">=20.0.0"
+	},
+	"categories": [
+		"Other",
+		"Data Science"
+	],
+	"keywords": [
+		"uuid",
+		"ulid",
+		"nanoid",
+		"objectid",
+		"snowflake",
+		"identifier",
+		"identifiers",
+		"guid",
+		"timestamp",
+		"decode",
+		"extract",
+		"mongodb",
+		"discord",
+		"twitter",
+		"mcp",
+		"model-context-protocol"
+	],
+	"icon": "src/assets/images/icon.png",
+	"l10n": "./l10n",
+	"main": "./dist/extension.js",
+	"activationEvents": [
+		"onLanguage:json",
+		"onLanguage:jsonc",
+		"onLanguage:yaml",
+		"onLanguage:toml",
+		"onLanguage:ini",
+		"onLanguage:properties",
+		"onLanguage:dotenv",
+		"onLanguage:csv",
+		"onLanguage:plaintext"
+	],
+	"capabilities": {
+		"virtualWorkspaces": {
+			"supported": "limited",
+			"description": "%manifest.capability.untrusted-workspaces.desc%"
+		},
+		"untrustedWorkspaces": {
+			"supported": "limited",
+			"description": "%manifest.capability.untrusted-workspaces.desc%"
+		}
+	},
+	"contributes": {
+		"commands": [
+			{
+				"command": "ids-le.extract",
+				"title": "%manifest.command.extract.title%",
+				"category": "%manifest.command.category%"
+			},
+			{
+				"command": "ids-le.openSettings",
+				"title": "%manifest.command.settings.title%",
+				"category": "%manifest.command.category%"
+			},
+			{
+				"command": "ids-le.help",
+				"title": "%manifest.command.help.title%",
+				"category": "%manifest.command.category%"
+			}
+		],
+		"menus": {
+			"editor/context": [
+				{
+					"command": "ids-le.extract",
+					"group": "1_modification@1"
+				}
+			],
+			"commandPalette": [
+				{
+					"command": "ids-le.extract"
+				},
+				{
+					"command": "ids-le.openSettings"
+				},
+				{
+					"command": "ids-le.help"
+				}
+			]
+		},
+		"keybindings": [
+			{
+				"command": "ids-le.extract",
+				"key": "ctrl+alt+i",
+				"mac": "cmd+alt+i",
+				"when": "editorTextFocus"
+			}
+		],
+		"configuration": {
+			"title": "%manifest.settings.title%",
+			"properties": {
+				"ids-le.copyToClipboardEnabled": {
+					"type": "boolean",
+					"default": false,
+					"description": "%manifest.settings.copy.clipboard.desc%"
+				},
+				"ids-le.kind": {
+					"type": "string",
+					"default": "all",
+					"enum": [
+						"all",
+						"uuid",
+						"ulid",
+						"nanoid",
+						"objectid",
+						"snowflake"
+					],
+					"enumDescriptions": [
+						"%manifest.settings.kind.option.all%",
+						"%manifest.settings.kind.option.uuid%",
+						"%manifest.settings.kind.option.ulid%",
+						"%manifest.settings.kind.option.nanoid%",
+						"%manifest.settings.kind.option.objectid%",
+						"%manifest.settings.kind.option.snowflake%"
+					],
+					"description": "%manifest.settings.kind.desc%"
+				},
+				"ids-le.notificationsLevel": {
+					"type": "string",
+					"default": "silent",
+					"enum": [
+						"all",
+						"important",
+						"silent"
+					],
+					"enumDescriptions": [
+						"%manifest.settings.notifications.level.option.all%",
+						"%manifest.settings.notifications.level.option.important%",
+						"%manifest.settings.notifications.level.option.silent%"
+					],
+					"description": "%manifest.settings.notifications.level.desc%"
+				},
+				"ids-le.openResultsSideBySide": {
+					"type": "boolean",
+					"default": true,
+					"description": "%manifest.settings.open.side-by-side.desc%"
+				},
+				"ids-le.safety.enabled": {
+					"type": "boolean",
+					"default": true,
+					"description": "%manifest.settings.safety.enabled.desc%"
+				},
+				"ids-le.safety.fileSizeWarnBytes": {
+					"type": "number",
+					"default": 1000000,
+					"minimum": 1000,
+					"description": "%manifest.settings.safety.warn.file-size.desc%"
+				},
+				"ids-le.statusBar.enabled": {
+					"type": "boolean",
+					"default": true,
+					"description": "%manifest.settings.statusbar.enabled.desc%"
+				},
+				"ids-le.telemetryEnabled": {
+					"type": "boolean",
+					"default": false,
+					"description": "%manifest.settings.telemetry.desc%"
+				}
+			}
+		},
+		"mcpServerDefinitionProviders": [
+			{
+				"id": "ids-le",
+				"label": "%manifest.mcp.label%"
+			}
+		]
+	},
+	"scripts": {
+		"clean": "node -e \"const fs=require('fs');['dist','coverage','release'].forEach(d=>fs.rmSync(d,{recursive:true,force:true}))\"",
+		"clean:i18n": "node -e \"const fs=require('fs');fs.readdirSync('.').filter(f=>f.startsWith('package.nls.')&&f.endsWith('.json')&&f!=='package.nls.json').forEach(f=>fs.unlinkSync(f))\"",
+		"copy:i18n": "node -e \"const fs=require('fs');fs.readdirSync('src/i18n').filter(f=>f.startsWith('package.nls.')&&f.endsWith('.json')).forEach(f=>fs.copyFileSync('src/i18n/'+f,f))\"",
+		"build": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --target=node20 --main-fields=module,main --sourcemap",
+		"build:prod": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --target=node20 --main-fields=module,main --minify --sourcemap=external",
+		"watch": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --target=node20 --main-fields=module,main --sourcemap --watch",
+		"typecheck": "tsc --noEmit",
+		"check:bundle": "node scripts/check-bundle.js",
+		"build:mcp": "node scripts/build-mcp.js",
+		"build:mcp:prod": "node scripts/build-mcp.js --prod",
+		"check:mcp-bundle": "node scripts/check-mcp-bundle.js",
+		"build:npm": "node scripts/build-npm.js",
+		"check:npm-package": "node scripts/check-npm-package.js",
+		"test": "vitest run --pool=threads",
+		"test:watch": "vitest --pool=threads",
+		"test:coverage": "vitest run --coverage --pool=threads --reporter=default --reporter=json --outputFile.json=coverage/test-results.json",
+		"benchmark": "bun scripts/benchmark.ts",
+		"perf:readme": "node scripts/perf-readme.js",
+		"coverage:readme": "node scripts/coverage-readme.js",
+		"coverage:readme:check": "node scripts/coverage-readme.js --check",
+		"readme": "bun run test:coverage && bun run coverage:readme",
+		"test:integration": "npm run build && tsc -p tsconfig.it.json && vscode-test",
+		"test:e2e-vsix": "node scripts/e2e-vsix.js",
+		"lint": "biome check .",
+		"lint:fix": "biome check --write .",
+		"vscode:prepublish": "npm run typecheck && npm run build:prod && npm run build:mcp:prod && npm run check:bundle && npm run check:mcp-bundle && npm run copy:i18n",
+		"package": "node -e \"require('fs').mkdirSync('release',{recursive:true})\" && vsce package --no-dependencies --out release/ && npm run clean:i18n",
+		"publish": "vsce publish",
+		"hooks:install": "node scripts/install-hooks.js",
+		"lint:commits": "node scripts/commit-lint.js --range origin/main..HEAD",
+		"prepare": "node scripts/install-hooks.js"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.5.15",
+		"@types/ini": "^4.1.1",
+		"@types/js-yaml": "^4.0.9",
+		"@types/mocha": "^10.0.10",
+		"@types/node": "^26.6.3",
+		"@types/vscode": "1.101.0",
+		"@vitest/coverage-v8": "^4.1.11",
+		"@vscode/test-cli": "^0.0.15",
+		"@vscode/test-electron": "^3.1.0",
+		"@vscode/vsce": "^4.0.0",
+		"esbuild": "^0.28.2",
+		"mocha": "^12.0.2",
+		"ovsx": "^1.2.0",
+		"typescript": "^7.0.2",
+		"vitest": "^4.1.11"
+	}
+}

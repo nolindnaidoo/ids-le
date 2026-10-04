@@ -1,0 +1,15 @@
+{
+	"Could not be named ({0})": "特定できなかった値 ({0})",
+	"Could not copy to clipboard": "クリップボードにコピーできませんでした",
+	"Could not open results": "結果を開けませんでした",
+	"File is empty": "ファイルが空です",
+	"IDs-LE report": "IDs-LE レポート",
+	"Large file detected ({0} bytes). Extraction may take longer.": "大きなファイルを検出しました ({0} バイト)。抽出に時間がかかる場合があります。",
+	"No active editor": "アクティブなエディターがありません",
+	"No identifiers found.": "識別子は見つかりませんでした。",
+	"Run IDs-LE: Extract IDs": "IDs-LE を実行: ID を抽出",
+	"key": "キー",
+	"{0} identifier(s)": "{0} 個の識別子",
+	"{0} named, {1} could not be named": "{0} 個を特定、{1} 個は特定できず",
+	"{0} run(s) could not be named; the report gives each reason": "{0} 個の値を特定できませんでした。レポートにそれぞれの理由があります"
+}

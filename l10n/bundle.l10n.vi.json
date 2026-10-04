@@ -1,0 +1,15 @@
+{
+	"Could not be named ({0})": "Không nhận diện được ({0})",
+	"Could not copy to clipboard": "Không thể sao chép vào khay nhớ tạm",
+	"Could not open results": "Không thể mở kết quả",
+	"File is empty": "Tệp trống",
+	"IDs-LE report": "Báo cáo IDs-LE",
+	"Large file detected ({0} bytes). Extraction may take longer.": "Phát hiện tệp lớn ({0} byte). Việc trích xuất có thể mất nhiều thời gian hơn.",
+	"No active editor": "Không có trình soạn thảo nào đang mở",
+	"No identifiers found.": "Không tìm thấy định danh nào.",
+	"Run IDs-LE: Extract IDs": "Chạy IDs-LE: Trích xuất ID",
+	"key": "khóa",
+	"{0} identifier(s)": "{0} định danh",
+	"{0} named, {1} could not be named": "{0} đã nhận diện, {1} không nhận diện được",
+	"{0} run(s) could not be named; the report gives each reason": "{0} giá trị không nhận diện được; báo cáo nêu lý do của từng giá trị"
+}

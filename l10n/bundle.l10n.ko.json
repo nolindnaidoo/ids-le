@@ -1,0 +1,15 @@
+{
+	"Could not be named ({0})": "식별할 수 없는 값 ({0})",
+	"Could not copy to clipboard": "클립보드에 복사할 수 없습니다",
+	"Could not open results": "결과를 열 수 없습니다",
+	"File is empty": "파일이 비어 있습니다",
+	"IDs-LE report": "IDs-LE 보고서",
+	"Large file detected ({0} bytes). Extraction may take longer.": "큰 파일이 감지되었습니다({0}바이트). 추출에 시간이 더 걸릴 수 있습니다.",
+	"No active editor": "활성 편집기가 없습니다",
+	"No identifiers found.": "식별자를 찾지 못했습니다.",
+	"Run IDs-LE: Extract IDs": "IDs-LE 실행: ID 추출",
+	"key": "키",
+	"{0} identifier(s)": "식별자 {0}개",
+	"{0} named, {1} could not be named": "{0}개 식별, {1}개 식별 불가",
+	"{0} run(s) could not be named; the report gives each reason": "값 {0}개를 식별할 수 없었습니다. 보고서에 각각의 이유가 있습니다"
+}
