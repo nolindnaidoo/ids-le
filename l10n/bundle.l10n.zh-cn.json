@@ -1,0 +1,15 @@
+{
+	"Could not be named ({0})": "无法识别的值({0})",
+	"Could not copy to clipboard": "无法复制到剪贴板",
+	"Could not open results": "无法打开结果",
+	"File is empty": "文件为空",
+	"IDs-LE report": "IDs-LE 报告",
+	"Large file detected ({0} bytes). Extraction may take longer.": "检测到大文件({0} 字节)。提取可能需要更长时间。",
+	"No active editor": "没有活动的编辑器",
+	"No identifiers found.": "未找到标识符。",
+	"Run IDs-LE: Extract IDs": "运行 IDs-LE:提取标识符",
+	"key": "键",
+	"{0} identifier(s)": "{0} 个标识符",
+	"{0} named, {1} could not be named": "已识别 {0} 个,{1} 个无法识别",
+	"{0} run(s) could not be named; the report gives each reason": "{0} 个值无法识别;报告中给出了每个值的原因"
+}

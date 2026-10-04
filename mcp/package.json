@@ -1,0 +1,56 @@
+{
+	"name": "ids-le-mcp",
+	"version": "1.0.0",
+	"mcpName": "io.github.nolindnaidoo/ids-le",
+	"description": "Extract every UUID, ULID, NanoID, ObjectId and Snowflake, and decode the time inside.",
+	"keywords": [
+		"mcp",
+		"modelcontextprotocol",
+		"model-context-protocol",
+		"mcp-server",
+		"ai-agent",
+		"claude",
+		"cursor",
+		"zed",
+		"vscode",
+		"llm-tools",
+		"ids-le",
+		"ids-le-mcp",
+		"nolindnaidoo",
+		"letools",
+		"uuid",
+		"ulid",
+		"snowflake",
+		"objectid"
+	],
+	"license": "MIT",
+	"author": {
+		"name": "Nolin Naidoo",
+		"url": "https://nolindnaidoo.com"
+	},
+	"homepage": "https://letools.dev/tools/ids-le",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nolindnaidoo/ids-le.git",
+		"directory": "mcp"
+	},
+	"bugs": {
+		"url": "https://github.com/nolindnaidoo/ids-le/issues"
+	},
+	"type": "commonjs",
+	"bin": {
+		"ids-le-mcp": "server.js"
+	},
+	"files": [
+		"server.js",
+		"README.md",
+		"LICENSE"
+	],
+	"engines": {
+		"node": ">=20"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	}
+}

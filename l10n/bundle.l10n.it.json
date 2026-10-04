@@ -1,0 +1,15 @@
+{
+	"Could not be named ({0})": "Non identificati ({0})",
+	"Could not copy to clipboard": "Impossibile copiare negli appunti",
+	"Could not open results": "Impossibile aprire i risultati",
+	"File is empty": "Il file è vuoto",
+	"IDs-LE report": "Rapporto di IDs-LE",
+	"Large file detected ({0} bytes). Extraction may take longer.": "Rilevato file di grandi dimensioni ({0} byte). L’estrazione potrebbe richiedere più tempo.",
+	"No active editor": "Nessun editor attivo",
+	"No identifiers found.": "Nessun identificatore trovato.",
+	"Run IDs-LE: Extract IDs": "Esegui IDs-LE: estrai identificatori",
+	"key": "chiave",
+	"{0} identifier(s)": "{0} identificatori",
+	"{0} named, {1} could not be named": "{0} identificati, {1} non identificati",
+	"{0} run(s) could not be named; the report gives each reason": "{0} valori non sono stati identificati; il rapporto indica ogni motivo"
+}
