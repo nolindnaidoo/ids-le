@@ -1,5 +1,9 @@
 {
 	"Could not be named ({0})": "Nicht benennbar ({0})",
+	"Enjoying {0}? A rating helps other developers find it.": "Gefällt Ihnen {0}? Eine Bewertung hilft anderen Entwicklern, es zu finden.",
+	"Rate": "Bewerten",
+	"Later": "Später",
+	"Don't Ask Again": "Nicht mehr fragen",
 	"Could not copy to clipboard": "In die Zwischenablage kopieren fehlgeschlagen",
 	"Could not open results": "Ergebnisse konnten nicht geöffnet werden",
 	"File is empty": "Datei ist leer",
