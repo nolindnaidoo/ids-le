@@ -3,7 +3,7 @@
 	"publisher": "nolindnaidoo",
 	"displayName": "IDs-LE",
 	"description": "Extract every UUID, ULID, NanoID, ObjectId and Snowflake, decode the time inside, and refuse the ambiguous ones by name",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"license": "MIT",
 	"author": {
 		"name": "nolindnaidoo",
