@@ -37,9 +37,6 @@
 		"timestamp",
 		"decode",
 		"extract",
-		"mongodb",
-		"discord",
-		"twitter",
 		"mcp",
 		"model-context-protocol"
 	],
