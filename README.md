@@ -11,8 +11,8 @@
   <a href="https://marketplace.visualstudio.com/items?itemName=nolindnaidoo.ids-le">
     <img src="https://img.shields.io/badge/Install%20from-VS%20Code-blue?style=for-the-badge&logo=visualstudiocode" alt="Install from VS Code Marketplace" />
   </a>
-  <a href="https://open-vsx.org/extension/OffensiveEdge/ids-le">
-    <img src="https://img.shields.io/open-vsx/dt/OffensiveEdge/ids-le?style=for-the-badge&label=Open%20VSX&color=blue" alt="Open VSX downloads" />
+  <a href="https://open-vsx.org/extension/nolindnaidoo/ids-le">
+    <img src="https://img.shields.io/open-vsx/dt/nolindnaidoo/ids-le?style=for-the-badge&label=Open%20VSX&color=blue" alt="Open VSX downloads" />
   </a>
   <a href="https://www.npmjs.com/package/ids-le-mcp">
     <img src="https://img.shields.io/npm/v/ids-le-mcp?style=for-the-badge&label=MCP%20server&color=blue&logo=npm" alt="ids-le-mcp on npm" />
@@ -29,7 +29,7 @@
 
 > **Useful?** A star or rating is how other developers find it —
 > [★ GitHub](https://github.com/nolindnaidoo/ids-le) ·
-> [★ Open VSX](https://open-vsx.org/extension/OffensiveEdge/ids-le/reviews) ·
+> [★ Open VSX](https://open-vsx.org/extension/nolindnaidoo/ids-le/reviews) ·
 > [★ Marketplace](https://marketplace.visualstudio.com/items?itemName=nolindnaidoo.ids-le&ssr=false#review-details)
 
 ## What it does
@@ -49,7 +49,7 @@ Open a document, press `Ctrl+Alt+I` (`Cmd+Alt+I` on Mac), and every identifier i
 | Where | What you get | Install |
 |---|---|---|
 | **VS Code** | The extraction, in your editor, on a keystroke | [Marketplace](https://marketplace.visualstudio.com/items?itemName=nolindnaidoo.ids-le) |
-| **Cursor, VSCodium, Windsurf** | The same extension | [Open VSX](https://open-vsx.org/extension/OffensiveEdge/ids-le) |
+| **Cursor, VSCodium, Windsurf** | The same extension | [Open VSX](https://open-vsx.org/extension/nolindnaidoo/ids-le) |
 | **A terminal or a CI step** | A whole tree, with an exit code | `cargo install ids-le` · [crates.io](https://crates.io/crates/ids-le) |
 | **Any MCP agent, via Node** | `extract_ids` over stdio | `npx ids-le-mcp` · [npm](https://www.npmjs.com/package/ids-le-mcp) |
 | **Zed** | The MCP server as a context server | [add it by hand](https://zed.dev/docs/ai/mcp) *(no listing yet)* |
