@@ -7,12 +7,16 @@ export type KindSetting = 'all' | Kind;
 
 /** The extension's settings, read once per command and frozen. */
 export interface Configuration {
+	/** Whether the copy on the clipboard carries positions, whatever the report shows. */
+	readonly clipboardIncludesPositions: boolean;
 	readonly copyToClipboardEnabled: boolean;
 	readonly kind: KindSetting;
 	readonly notificationsLevel: NotificationLevel;
 	readonly openResultsSideBySide: boolean;
 	readonly safetyEnabled: boolean;
 	readonly safetyFileSizeWarnBytes: number;
+	/** Whether the report gives the line and column of each identifier. */
+	readonly showPositions: boolean;
 	readonly statusBarEnabled: boolean;
 	readonly telemetryEnabled: boolean;
 }

@@ -27,6 +27,27 @@ describe('the report', () => {
 		);
 	});
 
+	it('leads each row with its line and column, unless told not to', () => {
+		const rows = extract('f47ac10b-58cc-4372-a567-0e02b2c3d479', 'text', {
+			clock: CLOCK,
+			kind: undefined,
+		});
+		const shown = formatReport({ file: 'a.txt', format: 'text', rows });
+		const hidden = formatReport({
+			file: 'a.txt',
+			format: 'text',
+			rows,
+			positions: false,
+		});
+		expect(shown).toContain(
+			'- **1:1** · `f47ac10b-58cc-4372-a567-0e02b2c3d479`',
+		);
+		expect(hidden).toContain('- `f47ac10b-58cc-4372-a567-0e02b2c3d479`');
+		expect(hidden).not.toMatch(/\*\*\d+:\d+\*\*/);
+		// Nothing but the position goes: the same rows, the same count.
+		expect(hidden.split('\n').length).toBe(shown.split('\n').length);
+	});
+
 	it('keeps a backtick in a key from closing its code span', () => {
 		const rows = extract(
 			'{"a`id":"f47ac10b-58cc-4372-a567-0e02b2c3d479"}',

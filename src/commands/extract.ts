@@ -61,7 +61,17 @@ export async function extractFromActiveDocument(
 	const file = document.isUntitled
 		? document.fileName
 		: vscode.workspace.asRelativePath(document.uri, false);
-	await showReport(formatReport({ file, format, rows }), config, deps);
+	await showReport(
+		formatReport({ file, format, rows, positions: config.showPositions }),
+		config,
+		deps,
+		formatReport({
+			file,
+			format,
+			rows,
+			positions: config.clipboardIncludesPositions,
+		}),
+	);
 
 	deps.telemetry.event('extracted', {
 		named: String(named),
