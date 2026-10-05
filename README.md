@@ -52,7 +52,6 @@ Open a document, press `Ctrl+Alt+I` (`Cmd+Alt+I` on Mac), and every identifier i
 | **Cursor, VSCodium, Windsurf** | The same extension | [Open VSX](https://open-vsx.org/extension/nolindnaidoo/ids-le) |
 | **A terminal or a CI step** | A whole tree, with an exit code | `cargo install ids-le` · [crates.io](https://crates.io/crates/ids-le) |
 | **Any MCP agent, via Node** | `extract_ids` over stdio | `npx ids-le-mcp` · [npm](https://www.npmjs.com/package/ids-le-mcp) |
-| **Zed** | The MCP server as a context server | [add it by hand](https://zed.dev/docs/ai/mcp) *(no listing yet)* |
 
 ## It refuses rather than guesses
 
@@ -153,7 +152,6 @@ The same engine runs as an [MCP](https://modelcontextprotocol.io) server, so an 
 | Editor | How |
 |---|---|
 | **VS Code** 1.101+ | Nothing to install — the extension registers `extract_ids` with agent mode |
-| **Zed** | No listing yet — [add the MCP server by hand](https://zed.dev/docs/ai/mcp) |
 | **Claude Code** | `claude mcp add ids-le -- npx -y ids-le-mcp` |
 | **Cursor, Windsurf, anything else** | point it at `npx ids-le-mcp` |
 
