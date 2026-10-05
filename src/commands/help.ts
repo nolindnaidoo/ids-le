@@ -38,7 +38,7 @@ export function generateHelpContent(): string {
 		'',
 		'## Commands',
 		'',
-		'- **Extract IDs** (`Ctrl+Alt+I`, Mac `Cmd+Alt+I`): the active document, as the editor holds it.',
+		'- **Extract IDs**: the active document, as the editor holds it.',
 		'',
 		'## Kinds',
 		'',
