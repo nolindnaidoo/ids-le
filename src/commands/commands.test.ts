@@ -148,6 +148,30 @@ describe('ids-le.extract', () => {
 		await runCommand('ids-le.extract');
 		expect(_clipboardText()).toBe(report());
 	});
+
+	it('shows no positions when the setting is off', async () => {
+		_setConfig('ids-le.showPositions', false);
+		_setActiveEditor(
+			_createDocument({ content: DOCUMENT, languageId: 'json' }),
+		);
+		await runCommand('ids-le.extract');
+		expect(report()).not.toMatch(/\*\*\d+:\d+\*\*/);
+		expect(report()).toContain('`f47ac10b-58cc-4372-a567-0e02b2c3d479`');
+	});
+
+	it('decides positions for the clipboard separately from the report', async () => {
+		_setConfig('ids-le.copyToClipboardEnabled', true);
+		_setConfig('ids-le.clipboardIncludesPositions', false);
+		_setActiveEditor(
+			_createDocument({ content: DOCUMENT, languageId: 'json' }),
+		);
+		await runCommand('ids-le.extract');
+		expect(report()).toMatch(/\*\*\d+:\d+\*\*/);
+		expect(_clipboardText()).not.toMatch(/\*\*\d+:\d+\*\*/);
+		expect(_clipboardText()).toContain(
+			'`f47ac10b-58cc-4372-a567-0e02b2c3d479`',
+		);
+	});
 });
 
 describe('settings and help', () => {

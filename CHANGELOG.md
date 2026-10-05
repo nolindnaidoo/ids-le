@@ -12,6 +12,13 @@ repository while it held the CLI alone.
 
 ## [Unreleased]
 
+### Added
+
+- Positions are now a setting. `ids-le.showPositions` decides whether the
+  report gives the line and column of each identifier, and
+  `ids-le.clipboardIncludesPositions` decides the same for the copy on the
+  clipboard. Both are on by default, so the report is what it was.
+
 ### Changed
 
 - No command is bound to a key by default any more. The one default this

@@ -5,6 +5,8 @@ export interface ReportInput {
 	readonly file: string;
 	readonly format: string;
 	readonly rows: readonly Found[];
+	/** Whether each row leads with its line and column. On unless said otherwise. */
+	readonly positions?: boolean;
 }
 
 /**
@@ -13,7 +15,12 @@ export interface ReportInput {
  * dropped, because a reader counting only the named ones would understate the
  * document.
  */
-export function formatReport({ file, format, rows }: ReportInput): string {
+export function formatReport({
+	file,
+	format,
+	rows,
+	positions = true,
+}: ReportInput): string {
 	const [named, refused] = counts(rows);
 	const lines: string[] = [`# ${vscode.l10n.t('IDs-LE report')}`, ''];
 	lines.push(
@@ -29,7 +36,7 @@ export function formatReport({ file, format, rows }: ReportInput): string {
 		const ofKind = rows.filter((row) => row.valid && row.kind === kind);
 		if (ofKind.length === 0) continue;
 		lines.push(`## ${kind} (${ofKind.length})`, '');
-		for (const row of ofKind) lines.push(item(row));
+		for (const row of ofKind) lines.push(item(row, positions));
 		lines.push('');
 	}
 
@@ -41,7 +48,7 @@ export function formatReport({ file, format, rows }: ReportInput): string {
 		);
 		for (const row of refusals) {
 			lines.push(
-				item(row),
+				item(row, positions),
 				'',
 				`  ${row.refused ?? ''}: ${row.detail ?? ''}`,
 				'',
@@ -51,9 +58,11 @@ export function formatReport({ file, format, rows }: ReportInput): string {
 	return lines.join('\n');
 }
 
-/** One row: where, what, under which key, and what was decoded. */
-function item(row: Found): string {
-	const parts = [`**${row.line}:${row.column}**`, code(row.value)];
+/** One row: where, if asked for, then what, under which key, and what was decoded. */
+function item(row: Found, positions: boolean): string {
+	const parts = positions
+		? [`**${row.line}:${row.column}**`, code(row.value)]
+		: [code(row.value)];
 	if (!row.valid && row.kind) parts.push(row.kind);
 	if (row.key !== undefined)
 		parts.push(`${vscode.l10n.t('key')} ${code(row.key)}`);

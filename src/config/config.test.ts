@@ -21,12 +21,14 @@ describe('config defaults parity with package.json', () => {
 	};
 	const props = manifest.contributes.configuration.properties;
 	const KEY_MAP: Record<string, keyof typeof CONFIG_DEFAULTS> = {
+		'ids-le.clipboardIncludesPositions': 'clipboardIncludesPositions',
 		'ids-le.copyToClipboardEnabled': 'copyToClipboardEnabled',
 		'ids-le.kind': 'kind',
 		'ids-le.notificationsLevel': 'notificationsLevel',
 		'ids-le.openResultsSideBySide': 'openResultsSideBySide',
 		'ids-le.safety.enabled': 'safetyEnabled',
 		'ids-le.safety.fileSizeWarnBytes': 'safetyFileSizeWarnBytes',
+		'ids-le.showPositions': 'showPositions',
 		'ids-le.statusBar.enabled': 'statusBarEnabled',
 		'ids-le.telemetryEnabled': 'telemetryEnabled',
 	};

@@ -8,12 +8,14 @@ import type { Configuration, KindSetting, NotificationLevel } from '../types';
  * drifting apart.
  */
 export const CONFIG_DEFAULTS = Object.freeze({
+	clipboardIncludesPositions: true,
 	copyToClipboardEnabled: false,
 	kind: 'all' as const,
 	notificationsLevel: 'silent' as const,
 	openResultsSideBySide: true,
 	safetyEnabled: true,
 	safetyFileSizeWarnBytes: 1_000_000,
+	showPositions: true,
 	statusBarEnabled: true,
 	telemetryEnabled: false,
 });
@@ -21,6 +23,11 @@ export const CONFIG_DEFAULTS = Object.freeze({
 export function readConfig(): Configuration {
 	const config = vscode.workspace.getConfiguration('ids-le');
 	return Object.freeze({
+		clipboardIncludesPositions: readBoolean(
+			config,
+			'clipboardIncludesPositions',
+			CONFIG_DEFAULTS.clipboardIncludesPositions,
+		),
 		copyToClipboardEnabled: readBoolean(
 			config,
 			'copyToClipboardEnabled',
@@ -43,6 +50,11 @@ export function readConfig(): Configuration {
 			'safety.fileSizeWarnBytes',
 			CONFIG_DEFAULTS.safetyFileSizeWarnBytes,
 			1000,
+		),
+		showPositions: readBoolean(
+			config,
+			'showPositions',
+			CONFIG_DEFAULTS.showPositions,
 		),
 		statusBarEnabled: readBoolean(
 			config,

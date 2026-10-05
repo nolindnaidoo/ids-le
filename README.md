@@ -217,7 +217,9 @@ No command is bound to a key by default. Give any of them one under **Keyboard S
 |---|---|---|
 | `ids-le.kind` | `all` | Name only one kind; runs that could not be named are reported whatever this is |
 | `ids-le.openResultsSideBySide` | `true` | Open the report beside the current editor |
+| `ids-le.showPositions` | `true` | Show the line and column of each identifier in the report |
 | `ids-le.copyToClipboardEnabled` | `false` | Also copy the report to the clipboard |
+| `ids-le.clipboardIncludesPositions` | `true` | Include the line and column in that copy |
 | `ids-le.safety.enabled` | `true` | Warn before extracting from a large file |
 | `ids-le.safety.fileSizeWarnBytes` | `1000000` | The size that warning starts at |
 | `ids-le.notificationsLevel` | `silent` | `all` = every notification, `important` = warnings + errors, `silent` = errors only |
@@ -272,11 +274,11 @@ a build only tells you how busy the runner was.
 | Metric | Coverage |
 | --- | --- |
 | Statements | 88.83% |
-| Branches | 83.11% |
+| Branches | 83.23% |
 | Functions | 91.36% |
 | Lines | 90.60% |
 
-97 test cases across 11 files, plus an integration suite that runs
+102 test cases across 11 files, plus an integration suite that runs
 in a real VS Code extension host and an end-to-end test that installs the
 built `.vsix` into a clean profile.
 
