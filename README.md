@@ -36,7 +36,7 @@
 
 A support ticket quotes `6a7bb780a1b2c3d4e5f60718` and asks when the record was made. A regex says ObjectId, minted 2026-08-12. It is the front of a git commit hash, and the date is noise that happens to land in a plausible year.
 
-Open a document, press `Ctrl+Alt+I` (`Cmd+Alt+I` on Mac), and every identifier in it is listed by kind with its line and column, the document's own key path for it, whether it is valid, and — for the six schemes that carry a clock — the instant it was minted, as ISO-8601 UTC. The report opens beside the editor. Works in VS Code and in VS Code–based editors like Cursor and VSCodium (installable from Open VSX).
+Open a document, run `IDs-LE: Extract IDs`, and every identifier in it is listed by kind with its line and column, the document's own key path for it, whether it is valid, and — for the six schemes that carry a clock — the instant it was minted, as ISO-8601 UTC. The report opens beside the editor. Works in VS Code and in VS Code–based editors like Cursor and VSCodium (installable from Open VSX).
 
 - **Reading a log or a dump** — which of these are UUID v7s, and when was each minted?
 - **Reviewing a config** — the placeholder nil UUID that escaped into production
@@ -205,9 +205,11 @@ ids-le mcp                     # extract_ids and ids_le_scan over MCP on stdio
 
 | Command | Description |
 |---|---|
-| `IDs-LE: Extract IDs` (`Ctrl+Alt+I` / `Cmd+Alt+I`) | Extract every identifier in the active document |
+| `IDs-LE: Extract IDs` | Extract every identifier in the active document |
 | `IDs-LE: Open Settings` | Open IDs-LE settings |
 | `IDs-LE: Help & Troubleshooting` | Built-in documentation |
+
+No command is bound to a key by default. Give any of them one under **Keyboard Shortcuts** in the editor.
 
 ## Settings
 
