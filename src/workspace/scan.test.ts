@@ -113,6 +113,23 @@ describe('listFiles', () => {
 		expect(labels).toEqual(['a.txt']);
 	});
 
+	it('labels a file the same when the folder arrives with a slash on the end', async () => {
+		openWorkspace({ '/w/pkg/a.txt': 'a' });
+		const labels: string[] = [];
+		await scanFiles(
+			Uri.file('/w/pkg').with({ path: '/w/pkg/' }) as never,
+			[Uri.file('/w/pkg/a.txt')] as never[],
+			LIMITS,
+			TOKEN as never,
+			() => {},
+			({ file }) => {
+				labels.push(file);
+				return undefined;
+			},
+		);
+		expect(labels).toEqual(['a.txt']);
+	});
+
 	it('knows a Windows folder whichever case its drive letter arrives in', async () => {
 		// The folder as it was picked, the files as the search returns them.
 		openWorkspace({

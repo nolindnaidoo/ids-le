@@ -259,11 +259,13 @@ export async function scanFiles(
 
 /** A folder that was picked is the reader's frame of reference, wherever the workspace is. */
 function labelOf(root: vscode.Uri | undefined, uri: vscode.Uri): string {
-	if (
-		root !== undefined &&
-		comparable(uri.path).startsWith(`${comparable(root.path)}/`)
-	)
-		return uri.path.slice(root.path.length + 1);
+	if (root !== undefined) {
+		// A folder can arrive with a slash on the end, and a file's path never
+		// has two in a row.
+		const base = root.path.replace(/\/+$/, '');
+		if (comparable(uri.path).startsWith(`${comparable(base)}/`))
+			return uri.path.slice(base.length + 1);
+	}
 	return vscode.workspace.asRelativePath(uri, false);
 }
 
