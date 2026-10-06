@@ -10,7 +10,7 @@ separate product on its own cadence and keeps its own
 [CHANGELOG](crate/CHANGELOG.md). The entries below 1.0.0 describe this
 repository while it held the CLI alone.
 
-## [Unreleased]
+## [1.1.0] - 2026-10-06
 
 ### Added
 
@@ -35,11 +35,6 @@ repository while it held the CLI alone.
   panel. Both are off by default: across a project they run to thousands,
   mostly digests in generated files.
 - The positions settings apply to a scan as they do to Extract.
-
-## [1.1.0] - 2026-10-05
-
-### Added
-
 - Positions are now a setting. `ids-le.showPositions` decides whether the
   report gives the line and column of each identifier, and
   `ids-le.clipboardIncludesPositions` decides the same for the copy on the
