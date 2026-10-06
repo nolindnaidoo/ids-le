@@ -78,7 +78,7 @@ export async function listFiles(
 				exclude,
 			)) {
 				const key = uri.toString();
-				if (seen.has(key) || ignored?.(uri.path)) continue;
+				if (seen.has(key) || ignored?.(comparable(uri.path))) continue;
 				seen.add(key);
 				out.push(uri);
 			}
@@ -120,7 +120,10 @@ async function ignoreFilesFor(
 			const text = decodeText(await vscode.workspace.fs.readFile(uri));
 			if (text === undefined) continue;
 			files.push(
-				parseIgnoreFile(uri.path.slice(0, uri.path.lastIndexOf('/')), text),
+				parseIgnoreFile(
+					comparable(uri.path.slice(0, uri.path.lastIndexOf('/'))),
+					text,
+				),
 			);
 		} catch {
 			// Most directories on the way up have no .gitignore.
@@ -216,9 +219,25 @@ export async function scanFiles(
 
 /** A folder that was picked is the reader's frame of reference, wherever the workspace is. */
 function labelOf(root: vscode.Uri | undefined, uri: vscode.Uri): string {
-	if (root !== undefined && uri.path.startsWith(`${root.path}/`))
+	if (
+		root !== undefined &&
+		comparable(uri.path).startsWith(`${comparable(root.path)}/`)
+	)
 		return uri.path.slice(root.path.length + 1);
 	return vscode.workspace.asRelativePath(uri, false);
+}
+
+/**
+ * A path with its Windows drive letter in one case.
+ *
+ * The same folder arrives as `/C:/...` from a path that was picked and as
+ * `/c:/...` from the file search, and compared as written they are two
+ * places: no file was under the folder it was found in.
+ */
+function comparable(path: string): string {
+	return /^\/[A-Za-z]:/.test(path)
+		? `/${(path[1] as string).toLowerCase()}${path.slice(2)}`
+		: path;
 }
 
 /** The lines a report adds for whatever a scan left unread. Empty when it read everything. */

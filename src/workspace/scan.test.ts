@@ -110,6 +110,36 @@ describe('listFiles', () => {
 		expect(labels).toEqual(['a.txt']);
 	});
 
+	it('knows a Windows folder whichever case its drive letter arrives in', async () => {
+		// The folder as it was picked, the files as the search returns them.
+		openWorkspace({
+			'/c:/w/pkg/.gitignore': 'skip.txt\n',
+			'/c:/w/pkg/a.txt': 'a',
+			'/c:/w/pkg/skip.txt': 's',
+			'/c:/w/.git/HEAD': 'ref',
+			'/c:/w/.gitignore': 'a.log\n',
+			'/c:/w/pkg/a.log': 'l',
+		});
+		const root = Uri.file('/C:/w/pkg') as never;
+		const files = [
+			Uri.file('/c:/w/pkg/a.txt'),
+			Uri.file('/c:/w/pkg/skip.txt'),
+		] as never[];
+		const labels: string[] = [];
+		await scanFiles(
+			root,
+			files,
+			LIMITS,
+			TOKEN as never,
+			() => {},
+			({ file }) => {
+				labels.push(file);
+				return undefined;
+			},
+		);
+		expect(labels).toEqual(['a.txt', 'skip.txt']);
+	});
+
 	it('says when more files matched than the limit', async () => {
 		openWorkspace({ '/w/a': 'a', '/w/b': 'b', '/w/c': 'c' });
 		const two = await listFiles(undefined, { ...LIMITS, maxFiles: 2 });
