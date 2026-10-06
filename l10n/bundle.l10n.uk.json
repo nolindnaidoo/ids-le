@@ -11,5 +11,16 @@
 	"key": "ключ",
 	"{0} identifier(s)": "ідентифікаторів: {0}",
 	"{0} named, {1} could not be named": "розпізнано: {0}, не розпізнано: {1}",
-	"{0} run(s) could not be named; the report gives each reason": "не вдалося розпізнати значень: {0}; у звіті вказано причину для кожного"
+	"{0} run(s) could not be named; the report gives each reason": "не вдалося розпізнати значень: {0}; у звіті вказано причину для кожного",
+	"No workspace open. Please open a workspace folder first.": "Робочу область не відкрито. Спочатку відкрийте папку робочої області.",
+	"Scanning files...": "Сканування файлів...",
+	"{0} of {1} files": "{0} з {1} файлів",
+	"{0} file(s) read": "Прочитано файлів: {0}",
+	"Scan Folder": "Сканувати папку",
+	"{0} workspace report": "Звіт {0} щодо робочої області",
+	"More files matched than the limit of {0}. The rest were not read.": "Знайдено більше файлів, ніж ліміт {0}. Решту не було прочитано.",
+	"The results limit was reached. The rest of the files were not read.": "Досягнуто ліміту результатів. Решту файлів не було прочитано.",
+	"{0} file(s) larger than the safety limit were not read.": "Файлів, більших за безпечний ліміт, які не було прочитано: {0}.",
+	"{0} file(s) that are not UTF-8 text were not read.": "Файлів, що не є текстом UTF-8, які не було прочитано: {0}.",
+	"{0} identifier(s) in {1} file(s)": "Ідентифікаторів: {0}, файлів: {1}"
 }

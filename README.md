@@ -206,6 +206,8 @@ ids-le mcp                     # extract_ids and ids_le_scan over MCP on stdio
 | Command | Description |
 |---|---|
 | `IDs-LE: Extract IDs` | Extract every identifier in the active document |
+| `IDs-LE: Scan Workspace for IDs` | Extract from every file in the workspace, one section per file |
+| `IDs-LE: Scan Folder for IDs` | The same for one folder. Also on a folder in the Explorer |
 | `IDs-LE: Open Settings` | Open IDs-LE settings |
 | `IDs-LE: Help & Troubleshooting` | Built-in documentation |
 
@@ -220,6 +222,10 @@ No command is bound to a key by default. Give any of them one under **Keyboard S
 | `ids-le.showPositions` | `true` | Show the line and column of each identifier in the report |
 | `ids-le.copyToClipboardEnabled` | `false` | Also copy the report to the clipboard |
 | `ids-le.clipboardIncludesPositions` | `true` | Include the line and column in that copy |
+| `ids-le.workspace.scanPatterns` | `["**/*"]` | The files a folder or workspace scan reads |
+| `ids-le.workspace.scanExcludes` | `node_modules`, `.git`, `dist`, `build`, `target`, `*.min.js` | The files it skips |
+| `ids-le.workspace.scanMaxFiles` | `5000` | The most files one scan reads |
+| `ids-le.workspace.scanMaxResults` | `10000` | The most identifiers one scan reports before it stops reading |
 | `ids-le.safety.enabled` | `true` | Warn before extracting from a large file |
 | `ids-le.safety.fileSizeWarnBytes` | `1000000` | The size that warning starts at |
 | `ids-le.notificationsLevel` | `silent` | `all` = every notification, `important` = warnings + errors, `silent` = errors only |
@@ -273,12 +279,12 @@ a build only tells you how busy the runner was.
 <!-- coverage:start -->
 | Metric | Coverage |
 | --- | --- |
-| Statements | 88.83% |
-| Branches | 83.23% |
-| Functions | 91.36% |
-| Lines | 90.60% |
+| Statements | 89.91% |
+| Branches | 83.44% |
+| Functions | 92.63% |
+| Lines | 91.64% |
 
-102 test cases across 11 files, plus an integration suite that runs
+122 test cases across 12 files, plus an integration suite that runs
 in a real VS Code extension host and an end-to-end test that installs the
 built `.vsix` into a clean profile.
 

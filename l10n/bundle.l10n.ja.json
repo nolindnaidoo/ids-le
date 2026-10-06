@@ -11,5 +11,16 @@
 	"key": "キー",
 	"{0} identifier(s)": "{0} 個の識別子",
 	"{0} named, {1} could not be named": "{0} 個を特定、{1} 個は特定できず",
-	"{0} run(s) could not be named; the report gives each reason": "{0} 個の値を特定できませんでした。レポートにそれぞれの理由があります"
+	"{0} run(s) could not be named; the report gives each reason": "{0} 個の値を特定できませんでした。レポートにそれぞれの理由があります",
+	"No workspace open. Please open a workspace folder first.": "ワークスペースが開かれていません。先にワークスペースフォルダーを開いてください。",
+	"Scanning files...": "ファイルをスキャンしています...",
+	"{0} of {1} files": "{1} 個中 {0} 個のファイル",
+	"{0} file(s) read": "{0} 個のファイルを読み取りました",
+	"Scan Folder": "フォルダーをスキャン",
+	"{0} workspace report": "{0} ワークスペースレポート",
+	"More files matched than the limit of {0}. The rest were not read.": "上限の {0} 個を超えるファイルが一致しました。残りは読み取られていません。",
+	"The results limit was reached. The rest of the files were not read.": "結果の上限に達しました。残りのファイルは読み取られていません。",
+	"{0} file(s) larger than the safety limit were not read.": "安全上限を超える {0} 個のファイルは読み取られていません。",
+	"{0} file(s) that are not UTF-8 text were not read.": "UTF-8 テキストではない {0} 個のファイルは読み取られていません。",
+	"{0} identifier(s) in {1} file(s)": "{1} 個のファイルに {0} 個の識別子"
 }

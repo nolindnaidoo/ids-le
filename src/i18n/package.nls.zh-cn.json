@@ -1,6 +1,8 @@
 {
 	"manifest.command.category": "IDs-LE",
 	"manifest.command.extract.title": "提取标识符",
+	"manifest.command.scan-workspace.title": "扫描工作区中的 ID",
+	"manifest.command.scan-folder.title": "扫描文件夹中的 ID",
 	"manifest.command.settings.title": "打开设置",
 	"manifest.command.help.title": "帮助与故障排除",
 	"manifest.settings.title": "IDs-LE 设置",
@@ -24,5 +26,9 @@
 	"manifest.settings.statusbar.enabled.desc": "在状态栏中显示 IDs-LE 条目以便快速访问",
 	"manifest.settings.telemetry.desc": "启用仅限本地的遥测日志,输出到“输出”面板",
 	"manifest.capability.untrusted-workspaces.desc": "在不受信任的工作区中功能受限",
-	"manifest.mcp.label": "面向智能体模式的 IDs-LE 标识符提取"
+	"manifest.mcp.label": "面向智能体模式的 IDs-LE 标识符提取",
+	"manifest.settings.workspace.excludes.desc": "文件夹或工作区扫描要跳过的文件的 glob 模式",
+	"manifest.settings.workspace.max-files.desc": "一次文件夹或工作区扫描最多读取的文件数",
+	"manifest.settings.workspace.max-results.desc": "一次文件夹或工作区扫描在停止读取前最多报告的结果数",
+	"manifest.settings.workspace.patterns.desc": "文件夹或工作区扫描要读取的文件的 glob 模式"
 }

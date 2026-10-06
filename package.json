@@ -72,6 +72,16 @@
 				"category": "%manifest.command.category%"
 			},
 			{
+				"command": "ids-le.scanWorkspace",
+				"title": "%manifest.command.scan-workspace.title%",
+				"category": "%manifest.command.category%"
+			},
+			{
+				"command": "ids-le.scanFolder",
+				"title": "%manifest.command.scan-folder.title%",
+				"category": "%manifest.command.category%"
+			},
+			{
 				"command": "ids-le.openSettings",
 				"title": "%manifest.command.settings.title%",
 				"category": "%manifest.command.category%"
@@ -94,10 +104,23 @@
 					"command": "ids-le.extract"
 				},
 				{
+					"command": "ids-le.scanWorkspace"
+				},
+				{
+					"command": "ids-le.scanFolder"
+				},
+				{
 					"command": "ids-le.openSettings"
 				},
 				{
 					"command": "ids-le.help"
+				}
+			],
+			"explorer/context": [
+				{
+					"command": "ids-le.scanFolder",
+					"when": "explorerResourceIsFolder",
+					"group": "7_modification@1"
 				}
 			]
 		},
@@ -180,6 +203,43 @@
 					"type": "boolean",
 					"default": false,
 					"description": "%manifest.settings.telemetry.desc%"
+				},
+				"ids-le.workspace.scanExcludes": {
+					"type": "array",
+					"default": [
+						"**/node_modules/**",
+						"**/.git/**",
+						"**/dist/**",
+						"**/build/**",
+						"**/target/**",
+						"**/*.min.js"
+					],
+					"items": {
+						"type": "string"
+					},
+					"description": "%manifest.settings.workspace.excludes.desc%"
+				},
+				"ids-le.workspace.scanMaxFiles": {
+					"type": "number",
+					"default": 5000,
+					"minimum": 1,
+					"description": "%manifest.settings.workspace.max-files.desc%"
+				},
+				"ids-le.workspace.scanMaxResults": {
+					"type": "number",
+					"default": 10000,
+					"minimum": 1,
+					"description": "%manifest.settings.workspace.max-results.desc%"
+				},
+				"ids-le.workspace.scanPatterns": {
+					"type": "array",
+					"default": [
+						"**/*"
+					],
+					"items": {
+						"type": "string"
+					},
+					"description": "%manifest.settings.workspace.patterns.desc%"
 				}
 			}
 		},

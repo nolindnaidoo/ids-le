@@ -39,6 +39,8 @@ export function generateHelpContent(): string {
 		'## Commands',
 		'',
 		'- **Extract IDs**: the active document, as the editor holds it.',
+		'- **Scan Workspace for IDs**: every file in the workspace, read from disk, one section per file.',
+		'- **Scan Folder for IDs**: the same for one folder. Also on a folder in the Explorer.',
 		'',
 		'## Kinds',
 		'',

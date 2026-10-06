@@ -1,6 +1,8 @@
 {
 	"manifest.command.category": "IDs-LE",
 	"manifest.command.extract.title": "Extraer identificadores",
+	"manifest.command.scan-workspace.title": "Buscar IDs en el área de trabajo",
+	"manifest.command.scan-folder.title": "Buscar IDs en la carpeta",
 	"manifest.command.settings.title": "Abrir configuración",
 	"manifest.command.help.title": "Ayuda y solución de problemas",
 	"manifest.settings.title": "Configuración de IDs-LE",
@@ -24,5 +26,9 @@
 	"manifest.settings.statusbar.enabled.desc": "Mostrar la entrada de IDs-LE en la barra de estado para un acceso rápido",
 	"manifest.settings.telemetry.desc": "Activar registros de telemetría solo locales en el panel de salida",
 	"manifest.capability.untrusted-workspaces.desc": "Funcionalidad limitada en áreas de trabajo que no son de confianza",
-	"manifest.mcp.label": "Extracción de identificadores de IDs-LE para el modo agente"
+	"manifest.mcp.label": "Extracción de identificadores de IDs-LE para el modo agente",
+	"manifest.settings.workspace.excludes.desc": "Patrones glob de los archivos que omite un análisis de carpeta o de área de trabajo",
+	"manifest.settings.workspace.max-files.desc": "El máximo de archivos que lee un análisis de carpeta o de área de trabajo",
+	"manifest.settings.workspace.max-results.desc": "El máximo de resultados que informa un análisis de carpeta o de área de trabajo antes de dejar de leer",
+	"manifest.settings.workspace.patterns.desc": "Patrones glob de los archivos que lee un análisis de carpeta o de área de trabajo"
 }

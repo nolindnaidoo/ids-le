@@ -18,6 +18,17 @@ export const CONFIG_DEFAULTS = Object.freeze({
 	showPositions: true,
 	statusBarEnabled: true,
 	telemetryEnabled: false,
+	workspaceScanExcludes: Object.freeze([
+		'**/node_modules/**',
+		'**/.git/**',
+		'**/dist/**',
+		'**/build/**',
+		'**/target/**',
+		'**/*.min.js',
+	]) as readonly string[],
+	workspaceScanMaxFiles: 5000,
+	workspaceScanMaxResults: 10000,
+	workspaceScanPatterns: Object.freeze(['**/*']) as readonly string[],
 });
 
 export function readConfig(): Configuration {
@@ -66,6 +77,28 @@ export function readConfig(): Configuration {
 			'telemetryEnabled',
 			CONFIG_DEFAULTS.telemetryEnabled,
 		),
+		workspaceScanExcludes: readStrings(
+			config,
+			'workspace.scanExcludes',
+			CONFIG_DEFAULTS.workspaceScanExcludes,
+		),
+		workspaceScanMaxFiles: readNumber(
+			config,
+			'workspace.scanMaxFiles',
+			CONFIG_DEFAULTS.workspaceScanMaxFiles,
+			1,
+		),
+		workspaceScanMaxResults: readNumber(
+			config,
+			'workspace.scanMaxResults',
+			CONFIG_DEFAULTS.workspaceScanMaxResults,
+			1,
+		),
+		workspaceScanPatterns: readStrings(
+			config,
+			'workspace.scanPatterns',
+			CONFIG_DEFAULTS.workspaceScanPatterns,
+		),
 	});
 }
 
@@ -87,6 +120,19 @@ function readNumber(
 	const value = Number(config.get(key, defaultValue));
 	if (!Number.isFinite(value)) return defaultValue;
 	return Math.max(minValue, value);
+}
+
+function readStrings(
+	config: vscode.WorkspaceConfiguration,
+	key: string,
+	defaultValue: readonly string[],
+): readonly string[] {
+	const value = config.get<unknown>(key, defaultValue);
+	return Object.freeze(
+		Array.isArray(value)
+			? value.filter((item): item is string => typeof item === 'string')
+			: [...defaultValue],
+	);
 }
 
 /** An unknown kind falls back to all: a filter must never hide a run silently. */

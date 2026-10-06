@@ -31,6 +31,10 @@ describe('config defaults parity with package.json', () => {
 		'ids-le.showPositions': 'showPositions',
 		'ids-le.statusBar.enabled': 'statusBarEnabled',
 		'ids-le.telemetryEnabled': 'telemetryEnabled',
+		'ids-le.workspace.scanExcludes': 'workspaceScanExcludes',
+		'ids-le.workspace.scanMaxFiles': 'workspaceScanMaxFiles',
+		'ids-le.workspace.scanMaxResults': 'workspaceScanMaxResults',
+		'ids-le.workspace.scanPatterns': 'workspaceScanPatterns',
 	};
 
 	it('covers every declared setting', () => {

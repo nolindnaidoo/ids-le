@@ -1,6 +1,8 @@
 {
 	"manifest.command.category": "IDs-LE",
 	"manifest.command.extract.title": "Trích xuất ID",
+	"manifest.command.scan-workspace.title": "Quét ID trong không gian làm việc",
+	"manifest.command.scan-folder.title": "Quét ID trong thư mục",
 	"manifest.command.settings.title": "Mở cài đặt",
 	"manifest.command.help.title": "Trợ giúp và khắc phục sự cố",
 	"manifest.settings.title": "Cài đặt IDs-LE",
@@ -24,5 +26,9 @@
 	"manifest.settings.statusbar.enabled.desc": "Hiển thị mục IDs-LE trên thanh trạng thái để truy cập nhanh",
 	"manifest.settings.telemetry.desc": "Bật nhật ký đo từ xa chỉ lưu cục bộ trong bảng Đầu ra",
 	"manifest.capability.untrusted-workspaces.desc": "Chức năng bị hạn chế trong không gian làm việc không đáng tin cậy",
-	"manifest.mcp.label": "Trích xuất định danh của IDs-LE cho chế độ tác tử"
+	"manifest.mcp.label": "Trích xuất định danh của IDs-LE cho chế độ tác tử",
+	"manifest.settings.workspace.excludes.desc": "Mẫu glob của các tệp mà lượt quét thư mục hoặc không gian làm việc bỏ qua",
+	"manifest.settings.workspace.max-files.desc": "Số tệp tối đa mà một lượt quét thư mục hoặc không gian làm việc đọc",
+	"manifest.settings.workspace.max-results.desc": "Số kết quả tối đa mà một lượt quét thư mục hoặc không gian làm việc báo cáo trước khi ngừng đọc",
+	"manifest.settings.workspace.patterns.desc": "Mẫu glob của các tệp mà lượt quét thư mục hoặc không gian làm việc đọc"
 }

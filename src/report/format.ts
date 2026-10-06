@@ -1,5 +1,10 @@
 import * as vscode from 'vscode';
 import { counts, type Found, KIND_NAMES } from '../extract';
+import {
+	type ScanLimits,
+	type ScanSummary,
+	unreadNotes,
+} from '../workspace/scan';
 
 export interface ReportInput {
 	readonly file: string;
@@ -58,12 +63,74 @@ export function formatReport({
 	return lines.join('\n');
 }
 
-/** One row: where, if asked for, then what, under which key, and what was decoded. */
-function item(row: Found, positions: boolean): string {
+export interface FileRows {
+	readonly file: string;
+	readonly format: string;
+	readonly rows: readonly Found[];
+}
+
+export interface WorkspaceReportInput {
+	/** The folder that was scanned, or undefined for the whole workspace. */
+	readonly where: string | undefined;
+	readonly files: readonly FileRows[];
+	readonly summary: ScanSummary;
+	readonly limits: ScanLimits;
+	readonly positions?: boolean;
+}
+
+/**
+ * The report for a folder or a workspace: one section per file that holds an
+ * identifier, in path order, then whatever the scan left unread. A file with
+ * nothing in it is counted and not listed.
+ */
+export function formatWorkspaceReport({
+	where,
+	files,
+	summary,
+	limits,
+	positions = true,
+}: WorkspaceReportInput): string {
+	const [named, refused] = counts(files.flatMap((entry) => entry.rows));
+	const lines: string[] = [
+		`# ${vscode.l10n.t('{0} workspace report', 'IDs-LE')}`,
+		'',
+	];
+	const scope = where === undefined ? '' : `${code(where)} · `;
+	lines.push(
+		`${scope}${vscode.l10n.t('{0} file(s) read', summary.read)} · ${vscode.l10n.t('{0} named, {1} could not be named', named, refused)}`,
+		'',
+	);
+	if (files.length === 0)
+		lines.push(vscode.l10n.t('No identifiers found.'), '');
+
+	for (const entry of files) {
+		lines.push(
+			`## ${code(entry.file)} · ${entry.format} (${entry.rows.length})`,
+			'',
+		);
+		for (const row of entry.rows) {
+			lines.push(item(row, positions, true));
+			if (!row.valid)
+				lines.push('', `  ${row.refused ?? ''}: ${row.detail ?? ''}`, '');
+		}
+		lines.push('');
+	}
+
+	const notes = unreadNotes(summary, limits);
+	if (notes.length > 0) lines.push(...notes.map((note) => `> ${note}`), '');
+	return lines.join('\n');
+}
+
+/**
+ * One row: where, if asked for, then what, under which key, and what was
+ * decoded. `withKind` names the kind of a named identifier too, for a report
+ * that does not already group by it.
+ */
+function item(row: Found, positions: boolean, withKind = false): string {
 	const parts = positions
 		? [`**${row.line}:${row.column}**`, code(row.value)]
 		: [code(row.value)];
-	if (!row.valid && row.kind) parts.push(row.kind);
+	if ((withKind || !row.valid) && row.kind) parts.push(row.kind);
 	if (row.key !== undefined)
 		parts.push(`${vscode.l10n.t('key')} ${code(row.key)}`);
 	if (row.version !== undefined) parts.push(`v${row.version}`);

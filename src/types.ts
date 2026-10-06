@@ -19,4 +19,9 @@ export interface Configuration {
 	readonly showPositions: boolean;
 	readonly statusBarEnabled: boolean;
 	readonly telemetryEnabled: boolean;
+	readonly workspaceScanExcludes: readonly string[];
+	readonly workspaceScanMaxFiles: number;
+	/** The most identifiers one folder scan reports before it stops reading. */
+	readonly workspaceScanMaxResults: number;
+	readonly workspaceScanPatterns: readonly string[];
 }

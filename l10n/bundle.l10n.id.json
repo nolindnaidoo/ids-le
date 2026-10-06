@@ -11,5 +11,16 @@
 	"key": "kunci",
 	"{0} identifier(s)": "{0} pengenal",
 	"{0} named, {1} could not be named": "{0} dinamai, {1} tidak dapat dinamai",
-	"{0} run(s) could not be named; the report gives each reason": "{0} nilai tidak dapat dinamai; laporan memberikan alasan masing-masing"
+	"{0} run(s) could not be named; the report gives each reason": "{0} nilai tidak dapat dinamai; laporan memberikan alasan masing-masing",
+	"No workspace open. Please open a workspace folder first.": "Tidak ada ruang kerja yang terbuka. Buka folder ruang kerja terlebih dahulu.",
+	"Scanning files...": "Memindai file...",
+	"{0} of {1} files": "{0} dari {1} file",
+	"{0} file(s) read": "{0} file dibaca",
+	"Scan Folder": "Pindai Folder",
+	"{0} workspace report": "Laporan ruang kerja {0}",
+	"More files matched than the limit of {0}. The rest were not read.": "Jumlah file yang cocok melebihi batas {0}. Sisanya tidak dibaca.",
+	"The results limit was reached. The rest of the files were not read.": "Batas hasil telah tercapai. File lainnya tidak dibaca.",
+	"{0} file(s) larger than the safety limit were not read.": "{0} file yang lebih besar dari batas keamanan tidak dibaca.",
+	"{0} file(s) that are not UTF-8 text were not read.": "{0} file yang bukan teks UTF-8 tidak dibaca.",
+	"{0} identifier(s) in {1} file(s)": "{0} pengenal dalam {1} file"
 }
