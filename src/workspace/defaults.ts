@@ -62,6 +62,9 @@ export const DEFAULT_EXCLUDED_FOLDERS: readonly string[] = Object.freeze([
 	'.kotlin',
 	'.cxx',
 	'.externalNativeBuild',
+	'captures',
+	'ephemeral',
+	'.symlinks',
 	'.swiftpm',
 	'.build',
 	'.bundle',
@@ -108,6 +111,29 @@ export const DEFAULT_EXCLUDED_FILES: readonly string[] = Object.freeze([
 	'pnpm-lock.yaml',
 	'npm-shrinkwrap.json',
 	'go.sum',
+	// Written by an IDE or a build, and committed or left beside the source:
+	// an Xcode project file is thousands of object ids and no prose.
+	'*.pbxproj',
+	'*.iml',
+	'local.properties',
+	'output-metadata.json',
+	'.flutter-plugins',
+	'.flutter-plugins-dependencies',
+	'.packages',
+	'Generated.xcconfig',
+	'flutter_export_environment.sh',
+	'GeneratedPluginRegistrant.*',
+]);
+
+/**
+ * Generated output that is only recognisable by where it sits, as paths
+ * beneath any folder. `report.xml` is an ordinary name; `fastlane/report.xml`
+ * is not.
+ */
+export const DEFAULT_EXCLUDED_PATHS: readonly string[] = Object.freeze([
+	'fastlane/report.xml',
+	'fastlane/test_output/**',
+	'doc/api/**',
 ]);
 
 /**
@@ -194,6 +220,7 @@ export function excludeGlobs(options: {
 			globs.push(`**/${folder}/**`);
 		globs.push('**/*.egg-info/**');
 		for (const file of DEFAULT_EXCLUDED_FILES) globs.push(`**/${file}`);
+		for (const path of DEFAULT_EXCLUDED_PATHS) globs.push(`**/${path}`);
 	}
 	if (options.skipBinaryFiles)
 		for (const extension of BINARY_EXTENSIONS) globs.push(`**/*.${extension}`);
