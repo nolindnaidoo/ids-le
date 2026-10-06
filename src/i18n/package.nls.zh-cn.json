@@ -30,5 +30,8 @@
 	"manifest.settings.workspace.excludes.desc": "文件夹或工作区扫描要跳过的文件的 glob 模式",
 	"manifest.settings.workspace.max-files.desc": "一次文件夹或工作区扫描最多读取的文件数",
 	"manifest.settings.workspace.max-results.desc": "一次文件夹或工作区扫描在停止读取前最多报告的结果数",
-	"manifest.settings.workspace.patterns.desc": "文件夹或工作区扫描要读取的文件的 glob 模式"
+	"manifest.settings.workspace.patterns.desc": "文件夹或工作区扫描要读取的文件的 glob 模式",
+	"manifest.settings.workspace.gitignore.desc": "跳过项目的 .gitignore 文件所忽略的文件",
+	"manifest.settings.workspace.problems.desc": "同时在“问题”面板中显示文件夹或工作区扫描无法读取的内容",
+	"manifest.settings.workspace.refusals.desc": "逐条列出文件夹或工作区扫描无法读取的结果，而不仅是每个文件的数量"
 }

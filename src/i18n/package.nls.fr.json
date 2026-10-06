@@ -30,5 +30,8 @@
 	"manifest.settings.workspace.excludes.desc": "Motifs glob des fichiers ignorés par une analyse de dossier ou d'espace de travail",
 	"manifest.settings.workspace.max-files.desc": "Le nombre maximal de fichiers lus par une analyse de dossier ou d'espace de travail",
 	"manifest.settings.workspace.max-results.desc": "Le nombre maximal de résultats signalés par une analyse de dossier ou d'espace de travail avant l'arrêt de la lecture",
-	"manifest.settings.workspace.patterns.desc": "Motifs glob des fichiers lus par une analyse de dossier ou d'espace de travail"
+	"manifest.settings.workspace.patterns.desc": "Motifs glob des fichiers lus par une analyse de dossier ou d'espace de travail",
+	"manifest.settings.workspace.gitignore.desc": "Ignorer les fichiers que les fichiers .gitignore du projet ignorent",
+	"manifest.settings.workspace.problems.desc": "Afficher aussi dans le panneau Problèmes ce qu'une analyse de dossier ou d'espace de travail n'a pas pu lire",
+	"manifest.settings.workspace.refusals.desc": "Lister chaque résultat qu'une analyse de dossier ou d'espace de travail n'a pas pu lire, pas seulement leur nombre par fichier"
 }

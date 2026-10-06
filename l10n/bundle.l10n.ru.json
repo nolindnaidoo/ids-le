@@ -22,5 +22,9 @@
 	"The results limit was reached. The rest of the files were not read.": "Достигнут лимит результатов. Остальные файлы не были прочитаны.",
 	"{0} file(s) larger than the safety limit were not read.": "Файлов больше безопасного лимита, которые не были прочитаны: {0}.",
 	"{0} file(s) that are not UTF-8 text were not read.": "Файлов, не являющихся текстом UTF-8, которые не были прочитаны: {0}.",
-	"{0} identifier(s) in {1} file(s)": "Идентификаторов: {0}, файлов: {1}"
+	"{0} identifier(s) in {1} file(s)": "Идентификаторов: {0}, файлов: {1}",
+	"File": "Файл",
+	"What could not be read is counted per file and not listed. The {0} setting lists each one.": "То, что не удалось прочитать, подсчитывается по файлам и не перечисляется. Параметр {0} перечисляет каждое.",
+	"Named": "Названо",
+	"Could not be named": "Не удалось назвать"
 }

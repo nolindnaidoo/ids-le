@@ -286,8 +286,11 @@ export const workspace = {
 			.filter(Boolean)
 			.map((glob) => glob.replace(/\*\*\//g, '').replace(/\/\*\*$/g, '').replace(/^\*/, ''));
 		const base = typeof include === 'string' ? '' : `${include.baseUri.path}/`;
+		const glob = typeof include === 'string' ? include : include.pattern;
+		const named = /^\*\*\/([^*?/]+)$/.exec(glob)?.[1];
 		return [...workspaceFiles.keys()]
 			.filter((path) => path.startsWith(base))
+			.filter((path) => named === undefined || path.endsWith(`/${named}`))
 			.filter((path) => !excluded.some((part) => path.includes(part)))
 			.slice(0, maxResults)
 			.map((path) => Uri.file(path));

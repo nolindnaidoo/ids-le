@@ -66,7 +66,12 @@ export function formatReport({
 export interface FileRows {
 	readonly file: string;
 	readonly format: string;
+	/** The rows this report lists for the file, which may be fewer than it holds. */
 	readonly rows: readonly Found[];
+	/** How many identifiers the file holds that could be named. */
+	readonly named: number;
+	/** How many runs it holds that could not be. */
+	readonly refused: number;
 }
 
 export interface WorkspaceReportInput {
@@ -75,22 +80,29 @@ export interface WorkspaceReportInput {
 	readonly files: readonly FileRows[];
 	readonly summary: ScanSummary;
 	readonly limits: ScanLimits;
+	/** Whether the runs that could not be named are listed, or only counted. */
+	readonly refusalsListed: boolean;
 	readonly positions?: boolean;
 }
 
 /**
- * The report for a folder or a workspace: one section per file that holds an
- * identifier, in path order, then whatever the scan left unread. A file with
- * nothing in it is counted and not listed.
+ * The report for a folder or a workspace.
+ *
+ * It opens with a table of every file that holds something, because a project
+ * has too many to find by scrolling. Then one section per file, in path
+ * order, and last whatever the scan left unread. A file with nothing in it is
+ * counted and not listed.
  */
 export function formatWorkspaceReport({
 	where,
 	files,
 	summary,
 	limits,
+	refusalsListed,
 	positions = true,
 }: WorkspaceReportInput): string {
-	const [named, refused] = counts(files.flatMap((entry) => entry.rows));
+	const named = files.reduce((sum, entry) => sum + entry.named, 0);
+	const refused = files.reduce((sum, entry) => sum + entry.refused, 0);
 	const lines: string[] = [
 		`# ${vscode.l10n.t('{0} workspace report', 'IDs-LE')}`,
 		'',
@@ -103,7 +115,25 @@ export function formatWorkspaceReport({
 	if (files.length === 0)
 		lines.push(vscode.l10n.t('No identifiers found.'), '');
 
+	if (files.length > 0) {
+		lines.push(
+			`| ${vscode.l10n.t('File')} | ${vscode.l10n.t('Named')} | ${vscode.l10n.t('Could not be named')} |`,
+			'|---|---|---|',
+		);
+		for (const entry of files)
+			lines.push(
+				`| ${code(entry.file).replace(/\|/g, '\\|')} | ${entry.named} | ${entry.refused} |`,
+			);
+		lines.push('');
+	}
+	if (refused > 0 && !refusalsListed)
+		lines.push(
+			`> ${vscode.l10n.t('What could not be read is counted per file and not listed. The {0} setting lists each one.', code('ids-le.workspace.scanIncludeRefusals'))}`,
+			'',
+		);
+
 	for (const entry of files) {
+		if (entry.rows.length === 0) continue;
 		lines.push(
 			`## ${code(entry.file)} · ${entry.format} (${entry.rows.length})`,
 			'',

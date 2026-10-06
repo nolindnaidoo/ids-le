@@ -22,5 +22,9 @@
 	"The results limit was reached. The rest of the files were not read.": "Batas hasil telah tercapai. File lainnya tidak dibaca.",
 	"{0} file(s) larger than the safety limit were not read.": "{0} file yang lebih besar dari batas keamanan tidak dibaca.",
 	"{0} file(s) that are not UTF-8 text were not read.": "{0} file yang bukan teks UTF-8 tidak dibaca.",
-	"{0} identifier(s) in {1} file(s)": "{0} pengenal dalam {1} file"
+	"{0} identifier(s) in {1} file(s)": "{0} pengenal dalam {1} file",
+	"File": "File",
+	"What could not be read is counted per file and not listed. The {0} setting lists each one.": "Yang tidak dapat dibaca dihitung per file dan tidak dicantumkan. Pengaturan {0} mencantumkan masing-masing.",
+	"Named": "Bernama",
+	"Could not be named": "Tidak dapat dinamai"
 }

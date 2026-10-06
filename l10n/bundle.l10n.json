@@ -22,5 +22,9 @@
 	"The results limit was reached. The rest of the files were not read.": "The results limit was reached. The rest of the files were not read.",
 	"{0} file(s) larger than the safety limit were not read.": "{0} file(s) larger than the safety limit were not read.",
 	"{0} file(s) that are not UTF-8 text were not read.": "{0} file(s) that are not UTF-8 text were not read.",
-	"{0} identifier(s) in {1} file(s)": "{0} identifier(s) in {1} file(s)"
+	"{0} identifier(s) in {1} file(s)": "{0} identifier(s) in {1} file(s)",
+	"File": "File",
+	"What could not be read is counted per file and not listed. The {0} setting lists each one.": "What could not be read is counted per file and not listed. The {0} setting lists each one.",
+	"Named": "Named",
+	"Could not be named": "Could not be named"
 }

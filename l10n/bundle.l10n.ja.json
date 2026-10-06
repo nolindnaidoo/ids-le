@@ -22,5 +22,9 @@
 	"The results limit was reached. The rest of the files were not read.": "結果の上限に達しました。残りのファイルは読み取られていません。",
 	"{0} file(s) larger than the safety limit were not read.": "安全上限を超える {0} 個のファイルは読み取られていません。",
 	"{0} file(s) that are not UTF-8 text were not read.": "UTF-8 テキストではない {0} 個のファイルは読み取られていません。",
-	"{0} identifier(s) in {1} file(s)": "{1} 個のファイルに {0} 個の識別子"
+	"{0} identifier(s) in {1} file(s)": "{1} 個のファイルに {0} 個の識別子",
+	"File": "ファイル",
+	"What could not be read is counted per file and not listed. The {0} setting lists each one.": "読み取れなかったものはファイルごとに件数のみ表示され、一覧には表示されません。設定 {0} で個別に一覧表示できます。",
+	"Named": "名前あり",
+	"Could not be named": "名前を付けられません"
 }

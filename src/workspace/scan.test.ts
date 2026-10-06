@@ -1,5 +1,10 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { _resetMockState, _setWorkspaceFiles, Uri } from '../__mocks__/vscode';
+import {
+	_resetMockState,
+	_setWorkspaceFiles,
+	Uri,
+	workspace,
+} from '../__mocks__/vscode';
 import {
 	decodeText,
 	listFiles,
@@ -13,7 +18,13 @@ const LIMITS: ScanLimits = {
 	excludes: ['**/node_modules/**'],
 	maxFiles: 10,
 	maxFileBytes: undefined,
+	respectGitignore: true,
 };
+
+function openWorkspace(files: Record<string, string | Uint8Array>): void {
+	_setWorkspaceFiles(files);
+	workspace.workspaceFolders = [{ uri: Uri.file('/w'), name: 'w', index: 0 }];
+}
 const TOKEN = {
 	isCancellationRequested: false,
 	onCancellationRequested: () => ({ dispose: () => {} }),
@@ -23,7 +34,7 @@ afterEach(() => _resetMockState());
 
 describe('listFiles', () => {
 	it('lists in path order, leaves out the excluded, and can be rooted at a folder', async () => {
-		_setWorkspaceFiles({
+		openWorkspace({
 			'/w/b.txt': 'b',
 			'/w/a.txt': 'a',
 			'/w/node_modules/x.txt': 'x',
@@ -41,8 +52,66 @@ describe('listFiles', () => {
 		expect(sub.files.map((uri) => uri.path)).toEqual(['/w/sub/c.txt']);
 	});
 
+	it('leaves out what .gitignore leaves out, before the limit is applied', async () => {
+		openWorkspace({
+			'/w/.gitignore': 'cache/\n*.log\n',
+			'/w/cache/a': 'a',
+			'/w/cache/b': 'b',
+			'/w/cache/c': 'c',
+			'/w/run.log': 'x',
+			'/w/src/main.ts': 'x',
+			'/w/src/.gitignore': 'gen.ts\n',
+			'/w/src/gen.ts': 'x',
+		});
+		// Three ignored files sort first. Capped before filtering, they would
+		// have used the whole limit and the source would never be read.
+		const listed = await listFiles(undefined, { ...LIMITS, maxFiles: 3 });
+		expect(listed.files.map((uri) => uri.path)).toEqual([
+			'/w/.gitignore',
+			'/w/src/.gitignore',
+			'/w/src/main.ts',
+		]);
+		expect(listed.fileLimitReached).toBe(false);
+
+		const all = await listFiles(undefined, {
+			...LIMITS,
+			respectGitignore: false,
+		});
+		expect(all.files).toHaveLength(8);
+	});
+
+	it('applies a .gitignore above the folder, up to the top of the repository', async () => {
+		openWorkspace({
+			'/w/.git/HEAD': 'ref',
+			'/w/.gitignore': 'secret.txt\n',
+			'/w/pkg/sub/secret.txt': 'x',
+			'/w/pkg/sub/keep.txt': 'x',
+		});
+		const sub = await listFiles(Uri.file('/w/pkg/sub') as never, LIMITS);
+		expect(sub.files.map((uri) => uri.path)).toEqual(['/w/pkg/sub/keep.txt']);
+	});
+
+	it('labels a file relative to the folder that was scanned', async () => {
+		openWorkspace({ '/w/pkg/a.txt': 'a' });
+		const root = Uri.file('/w/pkg') as never;
+		const { files } = await listFiles(root, LIMITS);
+		const labels: string[] = [];
+		await scanFiles(
+			root,
+			files,
+			LIMITS,
+			TOKEN as never,
+			() => {},
+			({ file }) => {
+				labels.push(file);
+				return undefined;
+			},
+		);
+		expect(labels).toEqual(['a.txt']);
+	});
+
 	it('says when more files matched than the limit', async () => {
-		_setWorkspaceFiles({ '/w/a': 'a', '/w/b': 'b', '/w/c': 'c' });
+		openWorkspace({ '/w/a': 'a', '/w/b': 'b', '/w/c': 'c' });
 		const two = await listFiles(undefined, { ...LIMITS, maxFiles: 2 });
 		expect(two.files).toHaveLength(2);
 		expect(two.fileLimitReached).toBe(true);
@@ -61,7 +130,7 @@ describe('decodeText', () => {
 
 describe('scanFiles', () => {
 	it('hands over each readable file and counts the ones it left', async () => {
-		_setWorkspaceFiles({
+		openWorkspace({
 			'/w/a.txt': 'small',
 			'/w/big.txt': 'x'.repeat(50),
 			'/w/bin': new Uint8Array([0, 1, 2]),
@@ -69,6 +138,7 @@ describe('scanFiles', () => {
 		const { files } = await listFiles(undefined, LIMITS);
 		const seen: string[] = [];
 		const summary = await scanFiles(
+			undefined,
 			files,
 			{ ...LIMITS, maxFileBytes: 10 },
 			TOKEN as never,
@@ -89,10 +159,11 @@ describe('scanFiles', () => {
 	});
 
 	it('stops when the caller says so, and says it stopped only if files were left', async () => {
-		_setWorkspaceFiles({ '/w/a': 'a', '/w/b': 'b', '/w/c': 'c' });
+		openWorkspace({ '/w/a': 'a', '/w/b': 'b', '/w/c': 'c' });
 		const { files } = await listFiles(undefined, LIMITS);
 		let calls = 0;
 		const early = await scanFiles(
+			undefined,
 			files,
 			LIMITS,
 			TOKEN as never,
@@ -107,6 +178,7 @@ describe('scanFiles', () => {
 
 		calls = 0;
 		const atEnd = await scanFiles(
+			undefined,
 			files,
 			LIMITS,
 			TOKEN as never,
@@ -120,9 +192,10 @@ describe('scanFiles', () => {
 	});
 
 	it('reports a cancel and reads no further', async () => {
-		_setWorkspaceFiles({ '/w/a': 'a' });
+		openWorkspace({ '/w/a': 'a' });
 		const { files } = await listFiles(undefined, LIMITS);
 		const summary = await scanFiles(
+			undefined,
 			files,
 			LIMITS,
 			{ ...TOKEN, isCancellationRequested: true } as never,

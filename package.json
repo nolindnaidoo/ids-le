@@ -211,8 +211,18 @@
 						"**/.git/**",
 						"**/dist/**",
 						"**/build/**",
+						"**/out/**",
 						"**/target/**",
-						"**/*.min.js"
+						"**/coverage/**",
+						"**/vendor/**",
+						"**/.next/**",
+						"**/.vscode-test/**",
+						"**/.venv/**",
+						"**/__pycache__/**",
+						"**/*.min.js",
+						"**/*.map",
+						"**/*.lock",
+						"**/package-lock.json"
 					],
 					"items": {
 						"type": "string"
@@ -240,6 +250,21 @@
 						"type": "string"
 					},
 					"description": "%manifest.settings.workspace.patterns.desc%"
+				},
+				"ids-le.workspace.scanIncludeRefusals": {
+					"type": "boolean",
+					"default": false,
+					"description": "%manifest.settings.workspace.refusals.desc%"
+				},
+				"ids-le.workspace.scanProblemsEnabled": {
+					"type": "boolean",
+					"default": false,
+					"description": "%manifest.settings.workspace.problems.desc%"
+				},
+				"ids-le.workspace.scanRespectGitignore": {
+					"type": "boolean",
+					"default": true,
+					"description": "%manifest.settings.workspace.gitignore.desc%"
 				}
 			}
 		},

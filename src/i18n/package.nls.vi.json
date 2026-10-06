@@ -30,5 +30,8 @@
 	"manifest.settings.workspace.excludes.desc": "Mẫu glob của các tệp mà lượt quét thư mục hoặc không gian làm việc bỏ qua",
 	"manifest.settings.workspace.max-files.desc": "Số tệp tối đa mà một lượt quét thư mục hoặc không gian làm việc đọc",
 	"manifest.settings.workspace.max-results.desc": "Số kết quả tối đa mà một lượt quét thư mục hoặc không gian làm việc báo cáo trước khi ngừng đọc",
-	"manifest.settings.workspace.patterns.desc": "Mẫu glob của các tệp mà lượt quét thư mục hoặc không gian làm việc đọc"
+	"manifest.settings.workspace.patterns.desc": "Mẫu glob của các tệp mà lượt quét thư mục hoặc không gian làm việc đọc",
+	"manifest.settings.workspace.gitignore.desc": "Bỏ qua các tệp mà các tệp .gitignore của dự án bỏ qua",
+	"manifest.settings.workspace.problems.desc": "Cũng hiển thị trong bảng Sự cố những gì lượt quét thư mục hoặc không gian làm việc không đọc được",
+	"manifest.settings.workspace.refusals.desc": "Liệt kê từng kết quả mà lượt quét thư mục hoặc không gian làm việc không đọc được, không chỉ số lượng theo tệp"
 }

@@ -23,12 +23,25 @@ export const CONFIG_DEFAULTS = Object.freeze({
 		'**/.git/**',
 		'**/dist/**',
 		'**/build/**',
+		'**/out/**',
 		'**/target/**',
+		'**/coverage/**',
+		'**/vendor/**',
+		'**/.next/**',
+		'**/.vscode-test/**',
+		'**/.venv/**',
+		'**/__pycache__/**',
 		'**/*.min.js',
+		'**/*.map',
+		'**/*.lock',
+		'**/package-lock.json',
 	]) as readonly string[],
+	workspaceScanIncludeRefusals: false,
 	workspaceScanMaxFiles: 5000,
 	workspaceScanMaxResults: 10000,
 	workspaceScanPatterns: Object.freeze(['**/*']) as readonly string[],
+	workspaceScanProblemsEnabled: false,
+	workspaceScanRespectGitignore: true,
 });
 
 export function readConfig(): Configuration {
@@ -98,6 +111,21 @@ export function readConfig(): Configuration {
 			config,
 			'workspace.scanPatterns',
 			CONFIG_DEFAULTS.workspaceScanPatterns,
+		),
+		workspaceScanIncludeRefusals: readBoolean(
+			config,
+			'workspace.scanIncludeRefusals',
+			CONFIG_DEFAULTS.workspaceScanIncludeRefusals,
+		),
+		workspaceScanProblemsEnabled: readBoolean(
+			config,
+			'workspace.scanProblemsEnabled',
+			CONFIG_DEFAULTS.workspaceScanProblemsEnabled,
+		),
+		workspaceScanRespectGitignore: readBoolean(
+			config,
+			'workspace.scanRespectGitignore',
+			CONFIG_DEFAULTS.workspaceScanRespectGitignore,
 		),
 	});
 }
