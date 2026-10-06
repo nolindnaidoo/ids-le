@@ -1,5 +1,5 @@
 import * as assert from 'node:assert';
-import { mkdtempSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import * as vscode from 'vscode';
@@ -81,5 +81,42 @@ describe('IDs-LE integration', function () {
 			providers.map((p) => p.id),
 			['ids-le'],
 		);
+	});
+	it('scans a folder from disk: a section per file, excludes honoured, binaries left unread, refusals in Problems', async () => {
+		const root = mkdtempSync(join(tmpdir(), 'ids-le-scan-'));
+		mkdirSync(join(root, 'api'));
+		mkdirSync(join(root, 'node_modules'));
+		const uuid = 'f47ac10b-58cc-4372-a567-0e02b2c3d479';
+		const bad = 'f47ac10b-58cc-4372-1567-0e02b2c3d479';
+		writeFileSync(join(root, 'api', 'a.json'), JSON.stringify({ id: uuid }));
+		writeFileSync(join(root, 'api', 'b.txt'), `first ${uuid}\nthen ${bad}\n`);
+		writeFileSync(join(root, 'node_modules', 'dep.json'), JSON.stringify({ id: uuid }));
+		writeFileSync(join(root, 'logo.bin'), Buffer.from([0x89, 0x50, 0x00, 0x47]));
+		writeFileSync(join(root, 'empty.md'), 'nothing here');
+
+		// As the Explorer calls it: with the folder that was clicked.
+		await vscode.commands.executeCommand('ids-le.scanFolder', vscode.Uri.file(root));
+
+		const report = vscode.workspace.textDocuments.find(
+			(doc) => doc.languageId === 'markdown' && doc.getText().includes('workspace report'),
+		);
+		assert.ok(report, 'no workspace report was opened');
+		const text = report.getText();
+		assert.match(text, /3 file\(s\) read · 2 named, 1 could not be named/);
+		const sections = (text.match(/^## .*$/gm) ?? []).map((line) => line.replace(/`[^`]*[\\/]api[\\/]/, '`api/'));
+		assert.deepStrictEqual(sections, ['## `api/a.json` · json (1)', '## `api/b.txt` · text (2)']);
+		assert.ok(!text.includes('node_modules'), 'an excluded folder was read');
+		assert.match(text, /> 1 file\(s\) that are not UTF-8 text were not read\./);
+
+		const problems = vscode.languages
+			.getDiagnostics()
+			.filter(([, list]) => list.some((d) => d.source === 'ids-le'));
+		assert.strictEqual(problems.length, 1, 'expected problems for one file');
+		const [uri, list] = problems[0] as [vscode.Uri, vscode.Diagnostic[]];
+		assert.ok(uri.path.endsWith('/api/b.txt'));
+		assert.strictEqual(list.length, 1);
+		assert.strictEqual(list[0]?.severity, vscode.DiagnosticSeverity.Warning);
+		assert.strictEqual(list[0]?.range.start.line, 1);
+		assert.strictEqual(list[0]?.range.start.character, 5);
 	});
 });
