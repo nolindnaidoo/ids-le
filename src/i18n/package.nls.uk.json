@@ -27,11 +27,14 @@
 	"manifest.settings.telemetry.desc": "Увімкнути лише локальні журнали телеметрії на панелі «Вивід»",
 	"manifest.capability.untrusted-workspaces.desc": "Обмежена функціональність у ненадійних робочих областях",
 	"manifest.mcp.label": "Витягування ідентифікаторів IDs-LE для режиму агента",
-	"manifest.settings.workspace.excludes.desc": "Glob-шаблони файлів, які пропускає сканування папки або робочої області",
+	"manifest.settings.workspace.excludes.desc": "Glob-шаблони додаткових файлів, які пропускає сканування папки або робочої області, окрім вбудованого списку. Приклад: **/fixtures/**",
 	"manifest.settings.workspace.max-files.desc": "Найбільша кількість файлів, яку читає одне сканування папки або робочої області",
 	"manifest.settings.workspace.max-results.desc": "Найбільша кількість результатів, яку повідомляє одне сканування папки або робочої області, перш ніж припинити читання",
 	"manifest.settings.workspace.patterns.desc": "Glob-шаблони файлів, які читає сканування папки або робочої області",
 	"manifest.settings.workspace.gitignore.desc": "Пропускати файли, які пропускають файли .gitignore проєкту",
 	"manifest.settings.workspace.problems.desc": "Показувати на панелі «Проблеми» також те, що сканування папки або робочої області не змогло прочитати",
-	"manifest.settings.workspace.refusals.desc": "Перелічувати кожен результат, який сканування папки або робочої області не змогло прочитати, а не лише їх кількість за файлами"
+	"manifest.settings.workspace.refusals.desc": "Перелічувати кожен результат, який сканування папки або робочої області не змогло прочитати, а не лише їх кількість за файлами",
+	"manifest.settings.workspace.always-include.desc": "Glob-шаблони файлів, які сканування папки або робочої області читає, навіть якщо вбудований список або .gitignore їх пропустили б. Приклад: **/vendor/**",
+	"manifest.settings.workspace.binary.desc": "Пропускати зображення, шрифти, архіви та інші нетекстові файли",
+	"manifest.settings.workspace.default-excludes.desc": "Пропускати папки залежностей, результати збирання, кеші та lock-файли, наприклад node_modules, dist, .next і package-lock.json"
 }

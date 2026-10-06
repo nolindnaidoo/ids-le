@@ -26,5 +26,9 @@
 	"File": "文件",
 	"What could not be read is counted per file and not listed. The {0} setting lists each one.": "无法读取的内容仅按文件计数而不逐条列出。设置 {0} 可逐条列出。",
 	"Named": "已命名",
-	"Could not be named": "无法命名"
+	"Could not be named": "无法命名",
+	"dependency folders, build output, caches and lockfiles": "依赖文件夹、构建输出、缓存和锁文件",
+	"images, fonts, archives and other binary files": "图像、字体、压缩包和其他二进制文件",
+	"{0} file(s) ignored by .gitignore": ".gitignore 忽略的 {0} 个文件",
+	"Not read: {0}. The {1} settings change this.": "未读取：{0}。可通过 {1} 设置更改。"
 }

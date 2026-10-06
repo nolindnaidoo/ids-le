@@ -26,5 +26,9 @@
 	"File": "Archivo",
 	"What could not be read is counted per file and not listed. The {0} setting lists each one.": "Lo que no se pudo leer se cuenta por archivo y no se enumera. El ajuste {0} enumera cada uno.",
 	"Named": "Con nombre",
-	"Could not be named": "No se pudo nombrar"
+	"Could not be named": "No se pudo nombrar",
+	"dependency folders, build output, caches and lockfiles": "carpetas de dependencias, resultados de compilación, cachés y archivos de bloqueo",
+	"images, fonts, archives and other binary files": "imágenes, fuentes, archivos comprimidos y otros archivos binarios",
+	"{0} file(s) ignored by .gitignore": "{0} archivo(s) ignorado(s) por .gitignore",
+	"Not read: {0}. The {1} settings change this.": "No leído: {0}. Los ajustes {1} cambian esto."
 }

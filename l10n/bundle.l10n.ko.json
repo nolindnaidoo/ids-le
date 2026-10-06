@@ -26,5 +26,9 @@
 	"File": "파일",
 	"What could not be read is counted per file and not listed. The {0} setting lists each one.": "읽지 못한 항목은 파일별로 개수만 세고 나열하지 않습니다. {0} 설정을 사용하면 하나씩 나열합니다.",
 	"Named": "이름 있음",
-	"Could not be named": "이름을 지정할 수 없음"
+	"Could not be named": "이름을 지정할 수 없음",
+	"dependency folders, build output, caches and lockfiles": "종속성 폴더, 빌드 출력, 캐시, 잠금 파일",
+	"images, fonts, archives and other binary files": "이미지, 글꼴, 압축 파일 및 기타 이진 파일",
+	"{0} file(s) ignored by .gitignore": ".gitignore가 무시한 파일 {0}개",
+	"Not read: {0}. The {1} settings change this.": "읽지 않음: {0}. {1} 설정에서 변경할 수 있습니다."
 }

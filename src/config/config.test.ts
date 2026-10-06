@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { _resetMockState, _setConfig } from '../__mocks__/vscode';
 import { KIND_NAMES } from '../extract';
+import { DEFAULT_EXCLUDED_FOLDERS } from '../workspace/defaults';
 import {
 	CONFIG_DEFAULTS,
 	isValidNotificationLevel,
@@ -31,7 +32,11 @@ describe('config defaults parity with package.json', () => {
 		'ids-le.showPositions': 'showPositions',
 		'ids-le.statusBar.enabled': 'statusBarEnabled',
 		'ids-le.telemetryEnabled': 'telemetryEnabled',
+		'ids-le.workspace.scanAlwaysInclude': 'workspaceScanAlwaysInclude',
 		'ids-le.workspace.scanExcludes': 'workspaceScanExcludes',
+		'ids-le.workspace.scanSkipBinaryFiles': 'workspaceScanSkipBinaryFiles',
+		'ids-le.workspace.scanUseDefaultExcludes':
+			'workspaceScanUseDefaultExcludes',
 		'ids-le.workspace.scanIncludeRefusals': 'workspaceScanIncludeRefusals',
 		'ids-le.workspace.scanProblemsEnabled': 'workspaceScanProblemsEnabled',
 		'ids-le.workspace.scanRespectGitignore': 'workspaceScanRespectGitignore',
@@ -72,6 +77,21 @@ describe('the README states the scan limits the code uses', () => {
 		expect(readme).toContain(
 			`It stops at ${grouped(CONFIG_DEFAULTS.workspaceScanMaxFiles)} files or ${grouped(CONFIG_DEFAULTS.workspaceScanMaxResults)} listed identifiers.`,
 		);
+	});
+});
+
+describe('the README lists the folders a scan skips', () => {
+	it('exactly as the code has them', () => {
+		const readme = readFileSync(
+			join(__dirname, '..', '..', 'README.md'),
+			'utf8',
+		);
+		const listed =
+			/<!-- built-in-folders -->\n(.*)\n<!-- \/built-in-folders -->/
+				.exec(readme)?.[1]
+				?.split(', ')
+				.map((entry) => entry.replace(/`/g, ''));
+		expect(listed).toEqual([...DEFAULT_EXCLUDED_FOLDERS, '*.egg-info']);
 	});
 });
 

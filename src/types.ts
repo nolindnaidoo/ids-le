@@ -21,7 +21,12 @@ export interface Configuration {
 	readonly telemetryEnabled: boolean;
 	/** List each run that could not be named in a folder scan, not only how many. */
 	readonly workspaceScanIncludeRefusals: boolean;
+	/** Globs read whatever the excludes and `.gitignore` say. */
+	readonly workspaceScanAlwaysInclude: readonly string[];
+	/** Globs left out on top of the built-in list. */
 	readonly workspaceScanExcludes: readonly string[];
+	readonly workspaceScanSkipBinaryFiles: boolean;
+	readonly workspaceScanUseDefaultExcludes: boolean;
 	/** Publish a folder scan's refusals to the Problems panel. */
 	readonly workspaceScanProblemsEnabled: boolean;
 	readonly workspaceScanRespectGitignore: boolean;

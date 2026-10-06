@@ -26,5 +26,9 @@
 	"File": "Файл",
 	"What could not be read is counted per file and not listed. The {0} setting lists each one.": "То, что не удалось прочитать, подсчитывается по файлам и не перечисляется. Параметр {0} перечисляет каждое.",
 	"Named": "Названо",
-	"Could not be named": "Не удалось назвать"
+	"Could not be named": "Не удалось назвать",
+	"dependency folders, build output, caches and lockfiles": "папки зависимостей, результаты сборки, кэши и lock-файлы",
+	"images, fonts, archives and other binary files": "изображения, шрифты, архивы и другие двоичные файлы",
+	"{0} file(s) ignored by .gitignore": "файлов, игнорируемых .gitignore: {0}",
+	"Not read: {0}. The {1} settings change this.": "Не прочитано: {0}. Это меняют параметры {1}."
 }

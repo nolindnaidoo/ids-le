@@ -146,7 +146,7 @@ export function formatWorkspaceReport({
 		lines.push('');
 	}
 
-	const notes = unreadNotes(summary, limits);
+	const notes = unreadNotes(summary, limits, code('ids-le.workspace.*'));
 	if (notes.length > 0) lines.push(...notes.map((note) => `> ${note}`), '');
 	return lines.join('\n');
 }

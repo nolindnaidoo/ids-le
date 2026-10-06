@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { excludeGlobs } from './defaults';
 import { createIgnore, type IgnoreFile, parseIgnoreFile } from './ignore';
 
 /**
@@ -14,8 +15,14 @@ import { createIgnore, type IgnoreFile, parseIgnoreFile } from './ignore';
 export interface ScanLimits {
 	/** Globs of the files to read, relative to the root. */
 	readonly patterns: readonly string[];
-	/** Globs of the files to leave out. */
+	/** Globs of the files to leave out, on top of the built-in ones. */
 	readonly excludes: readonly string[];
+	/** Leave out the built-in list: dependency folders, build output, caches. */
+	readonly useDefaultExcludes: boolean;
+	/** Leave out files whose extension says they are not text. */
+	readonly skipBinaryFiles: boolean;
+	/** Globs of files to read whatever the excludes and `.gitignore` say. */
+	readonly alwaysInclude: readonly string[];
 	/** The most files one scan reads. */
 	readonly maxFiles: number;
 	/** A file larger than this is not read. Undefined reads any size. */
@@ -41,6 +48,8 @@ export interface ScanSummary {
 	readonly notText: number;
 	/** More files matched than `maxFiles` allows. */
 	readonly fileLimitReached: boolean;
+	/** Files a `.gitignore` left out. */
+	readonly ignored: number;
 	/** The caller asked to stop before the last file. */
 	readonly stoppedEarly: boolean;
 	readonly cancelled: boolean;
@@ -59,9 +68,18 @@ export interface ScanSummary {
 export async function listFiles(
 	root: vscode.Uri | undefined,
 	limits: ScanLimits,
-): Promise<{ files: vscode.Uri[]; fileLimitReached: boolean }> {
-	const exclude =
-		limits.excludes.length === 0 ? undefined : `{${limits.excludes.join(',')}}`;
+): Promise<{
+	files: vscode.Uri[];
+	fileLimitReached: boolean;
+	ignored: number;
+}> {
+	const globs = excludeGlobs({
+		userExcludes: limits.excludes,
+		useDefaults: limits.useDefaultExcludes,
+		skipBinaryFiles: limits.skipBinaryFiles,
+	});
+	const exclude = globs.length === 0 ? undefined : `{${globs.join(',')}}`;
+	let ignoredCount = 0;
 	const roots =
 		root === undefined
 			? (vscode.workspace.workspaceFolders ?? []).map((folder) => folder.uri)
@@ -78,8 +96,29 @@ export async function listFiles(
 				exclude,
 			)) {
 				const key = uri.toString();
-				if (seen.has(key) || ignored?.(comparable(uri.path))) continue;
+				if (seen.has(key)) continue;
 				seen.add(key);
+				if (ignored?.(comparable(uri.path))) {
+					ignoredCount++;
+					continue;
+				}
+				out.push(uri);
+			}
+		}
+	}
+	// Asked for by name, so read whatever left them out above. A path that
+	// was counted as ignored and is wanted is read, and uncounted.
+	const wanted = new Set(out.map((uri) => uri.toString()));
+	for (const base of roots) {
+		for (const pattern of limits.alwaysInclude) {
+			for (const uri of await vscode.workspace.findFiles(
+				new vscode.RelativePattern(base, pattern),
+				null,
+			)) {
+				const key = uri.toString();
+				if (wanted.has(key)) continue;
+				wanted.add(key);
+				if (seen.has(key)) ignoredCount--;
 				out.push(uri);
 			}
 		}
@@ -88,6 +127,7 @@ export async function listFiles(
 	return {
 		files: out.slice(0, limits.maxFiles),
 		fileLimitReached: out.length > limits.maxFiles,
+		ignored: ignoredCount,
 	};
 }
 
@@ -172,7 +212,7 @@ export async function scanFiles(
 	token: vscode.CancellationToken,
 	onProgress: (done: number, total: number) => void,
 	each: (file: ScannedFile) => boolean | undefined,
-): Promise<Omit<ScanSummary, 'fileLimitReached'>> {
+): Promise<Omit<ScanSummary, 'fileLimitReached' | 'ignored'>> {
 	let read = 0;
 	let tooLarge = 0;
 	let notText = 0;
@@ -244,8 +284,29 @@ function comparable(path: string): string {
 export function unreadNotes(
 	summary: ScanSummary,
 	limits: ScanLimits,
+	settings: string,
 ): string[] {
 	const notes: string[] = [];
+	// What was never looked at, so a filtered scan is not read as a full one.
+	const left: string[] = [];
+	if (limits.useDefaultExcludes)
+		left.push(
+			vscode.l10n.t('dependency folders, build output, caches and lockfiles'),
+		);
+	if (limits.skipBinaryFiles)
+		left.push(vscode.l10n.t('images, fonts, archives and other binary files'));
+	if (limits.respectGitignore)
+		left.push(
+			vscode.l10n.t('{0} file(s) ignored by .gitignore', summary.ignored),
+		);
+	if (left.length > 0)
+		notes.push(
+			vscode.l10n.t(
+				'Not read: {0}. The {1} settings change this.',
+				left.join('; '),
+				settings,
+			),
+		);
 	if (summary.fileLimitReached) {
 		notes.push(
 			vscode.l10n.t(

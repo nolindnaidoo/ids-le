@@ -21,10 +21,16 @@ repository while it held the CLI alone.
   report opens with a table of every file that holds an identifier, then has
   a section per file, and ends with a line for each thing the scan left
   unread.
-- A scan skips what the project's `.gitignore` files skip, as well as
-  `node_modules`, build output, caches and lockfiles.
-  `ids-le.workspace.scanRespectGitignore`, `ids-le.workspace.scanPatterns`
-  and `ids-le.workspace.scanExcludes` change which files are read.
+- A scan skips three things by default, each with its own switch:
+  dependency folders, build output, caches and lockfiles
+  (`ids-le.workspace.scanUseDefaultExcludes`), whatever the project's
+  `.gitignore` files skip (`ids-le.workspace.scanRespectGitignore`), and
+  images, fonts, archives and other files that are not text
+  (`ids-le.workspace.scanSkipBinaryFiles`). `ids-le.workspace.scanExcludes`
+  skips more, and `ids-le.workspace.scanAlwaysInclude` reads a path whatever
+  the switches say. The report names which of these were on.
+  `ids-le.workspace.scanPatterns` chooses the files to read in the first
+  place.
 - `ids-le.workspace.scanMaxFiles` caps how many files are read and
   `ids-le.workspace.scanMaxResults` caps how many identifiers are listed. A
   file over the safety size, or one that is not UTF-8 text, is left unread,
