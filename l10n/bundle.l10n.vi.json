@@ -26,5 +26,9 @@
 	"File": "Tệp",
 	"What could not be read is counted per file and not listed. The {0} setting lists each one.": "Những gì không đọc được chỉ được đếm theo tệp và không được liệt kê. Cài đặt {0} sẽ liệt kê từng mục.",
 	"Named": "Đã đặt tên",
-	"Could not be named": "Không thể đặt tên"
+	"Could not be named": "Không thể đặt tên",
+	"dependency folders, build output, caches and lockfiles": "thư mục phụ thuộc, đầu ra bản dựng, bộ nhớ đệm và lockfile",
+	"images, fonts, archives and other binary files": "hình ảnh, phông chữ, tệp nén và các tệp nhị phân khác",
+	"{0} file(s) ignored by .gitignore": "{0} tệp bị .gitignore bỏ qua",
+	"Not read: {0}. The {1} settings change this.": "Không đọc: {0}. Các cài đặt {1} thay đổi điều này."
 }

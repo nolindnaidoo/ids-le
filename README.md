@@ -172,7 +172,43 @@ The report opens with a table of every file that holds something, then has a sec
 > 2 file(s) larger than the safety limit were not read.
 ```
 
-**What a scan reads.** Files come from disk, so an unsaved edit is not seen. It skips whatever the project's `.gitignore` files skip, and `node_modules`, build output, caches and lockfiles. A file over the safety size, or one that is not UTF-8 text, is left unread. It stops at 5,000 files or 10,000 listed identifiers. The report ends with a line for each thing it left out, so a short report is never mistaken for a clean project.
+**What a scan reads.** Files come from disk, so an unsaved edit is not seen. A file over the safety size, or one that is not UTF-8 text, is left unread. It stops at 5,000 files or 10,000 listed identifiers. The report ends with a line for each thing it left out, so a short report is never mistaken for a clean project.
+
+**What it skips, and how to change that.** Three switches are on by default, and each can be turned off on its own in Settings:
+
+| Switch | Skips |
+|---|---|
+| `scanUseDefaultExcludes` | Dependency folders, build output, tool caches and lockfiles. The full list is below |
+| `scanRespectGitignore` | Whatever the project's `.gitignore` files skip |
+| `scanSkipBinaryFiles` | Images, fonts, archives and other files that are not text |
+
+Two lists adjust the result without turning a switch off. To skip more, add a pattern to `scanExcludes`. To read something a switch would skip, add it to `scanAlwaysInclude`:
+
+```jsonc
+{
+	// Also skip the test fixtures.
+	"ids-le.workspace.scanExcludes": ["**/fixtures/**"],
+	// Read the vendored code, though the built-in list skips it.
+	"ids-le.workspace.scanAlwaysInclude": ["**/vendor/**"]
+}
+```
+
+`IDs-LE: Open Settings` opens all of these in the Settings editor.
+
+<details>
+<summary>The built-in list</summary>
+
+Folders, wherever they appear:
+
+<!-- built-in-folders -->
+`.git`, `.hg`, `.svn`, `node_modules`, `bower_components`, `jspm_packages`, `.pnpm-store`, `.yarn`, `vendor`, `site-packages`, `Pods`, `Carthage`, `dist`, `build`, `out`, `target`, `_build`, `_site`, `dist-newstyle`, `zig-out`, `storybook-static`, `cdk.out`, `DerivedData`, `CMakeFiles`, `.next`, `.nuxt`, `.output`, `.svelte-kit`, `.angular`, `.astro`, `.docusaurus`, `.vuepress`, `.expo`, `.turbo`, `.parcel-cache`, `.cache`, `.sass-cache`, `.jekyll-cache`, `.dart_tool`, `.pub-cache`, `.gradle`, `.kotlin`, `.cxx`, `.externalNativeBuild`, `.swiftpm`, `.build`, `.bundle`, `.stack-work`, `.zig-cache`, `.godot`, `elm-stuff`, `.vercel`, `.netlify`, `.serverless`, `.aws-sam`, `.terraform`, `.venv`, `venv`, `__pycache__`, `.tox`, `.nox`, `.mypy_cache`, `.pytest_cache`, `.ruff_cache`, `.ipynb_checkpoints`, `.eggs`, `coverage`, `htmlcov`, `.nyc_output`, `.vscode-test`, `.idea`, `.vs`, `xcuserdata`, `*.egg-info`
+<!-- /built-in-folders -->
+
+Files: `*.min.js`, `*.min.css`, `*.map`, `*.snap`, `*.lock`, `package-lock.json`, `pnpm-lock.yaml`, `npm-shrinkwrap.json`, `go.sum`.
+
+Not on the list, because they are ordinary folders in many projects: `bin`, `obj`, `tmp`, `logs`, `public`, `generated`. A project that generates those ignores them in git, and the scan reads `.gitignore`.
+
+</details>
 
 **What it could not name.** Across a project these run to thousands, mostly digests in generated files. So a scan counts them per file in the table and does not list them. `ids-le.workspace.scanIncludeRefusals` lists each one with its reason, and `ids-le.workspace.scanProblemsEnabled` also puts them in the Problems panel, where each is a line you can click.
 
@@ -272,8 +308,11 @@ No command is bound to a key by default. Give any of them one under **Keyboard S
 | `ids-le.copyToClipboardEnabled` | `false` | Also copy the report to the clipboard |
 | `ids-le.clipboardIncludesPositions` | `true` | Include the line and column in that copy |
 | `ids-le.workspace.scanPatterns` | `["**/*"]` | The files a folder or workspace scan reads |
-| `ids-le.workspace.scanExcludes` | `node_modules`, `.git`, build output, caches, lockfiles | The files it skips |
-| `ids-le.workspace.scanRespectGitignore` | `true` | Also skip what the project's `.gitignore` files skip |
+| `ids-le.workspace.scanUseDefaultExcludes` | `true` | Skip dependency folders, build output, caches and lockfiles |
+| `ids-le.workspace.scanRespectGitignore` | `true` | Skip what the project's `.gitignore` files skip |
+| `ids-le.workspace.scanSkipBinaryFiles` | `true` | Skip images, fonts, archives and other files that are not text |
+| `ids-le.workspace.scanExcludes` | `[]` | More files to skip, as glob patterns |
+| `ids-le.workspace.scanAlwaysInclude` | `[]` | Files to read even when one of the three above would skip them |
 | `ids-le.workspace.scanMaxFiles` | `5000` | The most files one scan reads |
 | `ids-le.workspace.scanMaxResults` | `10000` | The most identifiers one scan lists before it stops reading |
 | `ids-le.workspace.scanIncludeRefusals` | `false` | List each run that could not be named, not only how many per file |
@@ -331,12 +370,12 @@ a build only tells you how busy the runner was.
 <!-- coverage:start -->
 | Metric | Coverage |
 | --- | --- |
-| Statements | 90.44% |
-| Branches | 84.39% |
-| Functions | 93.33% |
-| Lines | 92.13% |
+| Statements | 90.61% |
+| Branches | 84.32% |
+| Functions | 93.40% |
+| Lines | 92.41% |
 
-141 test cases across 13 files, plus an integration suite that runs
+152 test cases across 13 files, plus an integration suite that runs
 in a real VS Code extension host and an end-to-end test that installs the
 built `.vsix` into a clean profile.
 

@@ -27,11 +27,14 @@
 	"manifest.settings.telemetry.desc": "Rein lokale Telemetrieprotokolle im Ausgabebereich aktivieren",
 	"manifest.capability.untrusted-workspaces.desc": "Eingeschränkte Funktionalität in nicht vertrauenswürdigen Arbeitsbereichen",
 	"manifest.mcp.label": "IDs-LE-Extraktion von Kennungen für den Agentenmodus",
-	"manifest.settings.workspace.excludes.desc": "Glob-Muster der Dateien, die ein Ordner- oder Arbeitsbereichsscan überspringt",
+	"manifest.settings.workspace.excludes.desc": "Glob-Muster weiterer Dateien, die ein Ordner- oder Arbeitsbereichsscan zusätzlich zur integrierten Liste überspringt. Beispiel: **/fixtures/**",
 	"manifest.settings.workspace.max-files.desc": "Die Höchstzahl der Dateien, die ein Ordner- oder Arbeitsbereichsscan liest",
 	"manifest.settings.workspace.max-results.desc": "Die Höchstzahl der Ergebnisse, die ein Ordner- oder Arbeitsbereichsscan meldet, bevor er das Lesen beendet",
 	"manifest.settings.workspace.patterns.desc": "Glob-Muster der Dateien, die ein Ordner- oder Arbeitsbereichsscan liest",
 	"manifest.settings.workspace.gitignore.desc": "Dateien auslassen, die die .gitignore-Dateien des Projekts auslassen",
 	"manifest.settings.workspace.problems.desc": "Auch im Problembereich anzeigen, was ein Ordner- oder Arbeitsbereichsscan nicht lesen konnte",
-	"manifest.settings.workspace.refusals.desc": "Jedes Ergebnis auflisten, das ein Ordner- oder Arbeitsbereichsscan nicht lesen konnte, nicht nur die Anzahl pro Datei"
+	"manifest.settings.workspace.refusals.desc": "Jedes Ergebnis auflisten, das ein Ordner- oder Arbeitsbereichsscan nicht lesen konnte, nicht nur die Anzahl pro Datei",
+	"manifest.settings.workspace.always-include.desc": "Glob-Muster der Dateien, die ein Ordner- oder Arbeitsbereichsscan auch dann liest, wenn die integrierte Liste oder .gitignore sie überspringen würde. Beispiel: **/vendor/**",
+	"manifest.settings.workspace.binary.desc": "Bilder, Schriftarten, Archive und andere Dateien überspringen, die kein Text sind",
+	"manifest.settings.workspace.default-excludes.desc": "Abhängigkeitsordner, Build-Ausgaben, Caches und Lockfiles überspringen, etwa node_modules, dist, .next und package-lock.json"
 }

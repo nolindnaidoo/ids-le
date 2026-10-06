@@ -26,5 +26,9 @@
 	"File": "File",
 	"What could not be read is counted per file and not listed. The {0} setting lists each one.": "Yang tidak dapat dibaca dihitung per file dan tidak dicantumkan. Pengaturan {0} mencantumkan masing-masing.",
 	"Named": "Bernama",
-	"Could not be named": "Tidak dapat dinamai"
+	"Could not be named": "Tidak dapat dinamai",
+	"dependency folders, build output, caches and lockfiles": "folder dependensi, keluaran build, cache, dan lockfile",
+	"images, fonts, archives and other binary files": "gambar, font, arsip, dan file biner lainnya",
+	"{0} file(s) ignored by .gitignore": "{0} file yang diabaikan oleh .gitignore",
+	"Not read: {0}. The {1} settings change this.": "Tidak dibaca: {0}. Pengaturan {1} mengubah hal ini."
 }

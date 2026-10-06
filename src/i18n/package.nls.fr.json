@@ -27,11 +27,14 @@
 	"manifest.settings.telemetry.desc": "Activer les journaux de télémétrie uniquement locaux dans le panneau Sortie",
 	"manifest.capability.untrusted-workspaces.desc": "Fonctionnalités limitées dans les espaces de travail non approuvés",
 	"manifest.mcp.label": "Extraction d’identifiants d’IDs-LE pour le mode agent",
-	"manifest.settings.workspace.excludes.desc": "Motifs glob des fichiers ignorés par une analyse de dossier ou d'espace de travail",
+	"manifest.settings.workspace.excludes.desc": "Motifs glob d'autres fichiers ignorés par une analyse de dossier ou d'espace de travail, en plus de la liste intégrée. Exemple : **/fixtures/**",
 	"manifest.settings.workspace.max-files.desc": "Le nombre maximal de fichiers lus par une analyse de dossier ou d'espace de travail",
 	"manifest.settings.workspace.max-results.desc": "Le nombre maximal de résultats signalés par une analyse de dossier ou d'espace de travail avant l'arrêt de la lecture",
 	"manifest.settings.workspace.patterns.desc": "Motifs glob des fichiers lus par une analyse de dossier ou d'espace de travail",
 	"manifest.settings.workspace.gitignore.desc": "Ignorer les fichiers que les fichiers .gitignore du projet ignorent",
 	"manifest.settings.workspace.problems.desc": "Afficher aussi dans le panneau Problèmes ce qu'une analyse de dossier ou d'espace de travail n'a pas pu lire",
-	"manifest.settings.workspace.refusals.desc": "Lister chaque résultat qu'une analyse de dossier ou d'espace de travail n'a pas pu lire, pas seulement leur nombre par fichier"
+	"manifest.settings.workspace.refusals.desc": "Lister chaque résultat qu'une analyse de dossier ou d'espace de travail n'a pas pu lire, pas seulement leur nombre par fichier",
+	"manifest.settings.workspace.always-include.desc": "Motifs glob des fichiers qu'une analyse de dossier ou d'espace de travail lit même si la liste intégrée ou .gitignore les ignorerait. Exemple : **/vendor/**",
+	"manifest.settings.workspace.binary.desc": "Ignorer les images, polices, archives et autres fichiers qui ne sont pas du texte",
+	"manifest.settings.workspace.default-excludes.desc": "Ignorer les dossiers de dépendances, les sorties de build, les caches et les fichiers de verrouillage, comme node_modules, dist, .next et package-lock.json"
 }

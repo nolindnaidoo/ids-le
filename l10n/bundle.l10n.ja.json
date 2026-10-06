@@ -26,5 +26,9 @@
 	"File": "ファイル",
 	"What could not be read is counted per file and not listed. The {0} setting lists each one.": "読み取れなかったものはファイルごとに件数のみ表示され、一覧には表示されません。設定 {0} で個別に一覧表示できます。",
 	"Named": "名前あり",
-	"Could not be named": "名前を付けられません"
+	"Could not be named": "名前を付けられません",
+	"dependency folders, build output, caches and lockfiles": "依存関係フォルダー、ビルド出力、キャッシュ、ロックファイル",
+	"images, fonts, archives and other binary files": "画像、フォント、アーカイブ、その他のバイナリファイル",
+	"{0} file(s) ignored by .gitignore": ".gitignore で無視された {0} 個のファイル",
+	"Not read: {0}. The {1} settings change this.": "読み取られていないもの: {0}。設定 {1} で変更できます。"
 }

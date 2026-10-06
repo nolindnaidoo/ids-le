@@ -115,7 +115,9 @@ describe('IDs-LE integration', function () {
 		assert.match(text, /\| `api\/b\.txt` \| 1 \| 1 \|/);
 		assert.deepStrictEqual(text.match(/^## .*$/gm), ['## `api/a.json` · json (1)', '## `api/b.txt` · text (1)']);
 		assert.ok(!text.includes('node_modules'), 'an excluded folder was read');
-		assert.match(text, /> 1 file\(s\) that are not UTF-8 text were not read\./);
+		// `.bin` is on the list of extensions that are not text, so the file is
+		// never opened, and the report says which filters were on.
+		assert.match(text, /> Not read: dependency folders, build output, caches and lockfiles; images, fonts, archives and other binary files; 1 file\(s\) ignored by \.gitignore\./);
 
 		const problems = vscode.languages
 			.getDiagnostics()

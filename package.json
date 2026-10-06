@@ -206,40 +206,26 @@
 				},
 				"ids-le.workspace.scanExcludes": {
 					"type": "array",
-					"default": [
-						"**/node_modules/**",
-						"**/.git/**",
-						"**/dist/**",
-						"**/build/**",
-						"**/out/**",
-						"**/target/**",
-						"**/coverage/**",
-						"**/vendor/**",
-						"**/.next/**",
-						"**/.vscode-test/**",
-						"**/.venv/**",
-						"**/__pycache__/**",
-						"**/*.min.js",
-						"**/*.map",
-						"**/*.lock",
-						"**/package-lock.json"
-					],
+					"default": [],
 					"items": {
 						"type": "string"
 					},
-					"description": "%manifest.settings.workspace.excludes.desc%"
+					"description": "%manifest.settings.workspace.excludes.desc%",
+					"order": 104
 				},
 				"ids-le.workspace.scanMaxFiles": {
 					"type": "number",
 					"default": 5000,
 					"minimum": 1,
-					"description": "%manifest.settings.workspace.max-files.desc%"
+					"description": "%manifest.settings.workspace.max-files.desc%",
+					"order": 106
 				},
 				"ids-le.workspace.scanMaxResults": {
 					"type": "number",
 					"default": 10000,
 					"minimum": 1,
-					"description": "%manifest.settings.workspace.max-results.desc%"
+					"description": "%manifest.settings.workspace.max-results.desc%",
+					"order": 107
 				},
 				"ids-le.workspace.scanPatterns": {
 					"type": "array",
@@ -249,22 +235,47 @@
 					"items": {
 						"type": "string"
 					},
-					"description": "%manifest.settings.workspace.patterns.desc%"
+					"description": "%manifest.settings.workspace.patterns.desc%",
+					"order": 100
 				},
 				"ids-le.workspace.scanIncludeRefusals": {
 					"type": "boolean",
 					"default": false,
-					"description": "%manifest.settings.workspace.refusals.desc%"
+					"description": "%manifest.settings.workspace.refusals.desc%",
+					"order": 108
 				},
 				"ids-le.workspace.scanProblemsEnabled": {
 					"type": "boolean",
 					"default": false,
-					"description": "%manifest.settings.workspace.problems.desc%"
+					"description": "%manifest.settings.workspace.problems.desc%",
+					"order": 109
 				},
 				"ids-le.workspace.scanRespectGitignore": {
 					"type": "boolean",
 					"default": true,
-					"description": "%manifest.settings.workspace.gitignore.desc%"
+					"description": "%manifest.settings.workspace.gitignore.desc%",
+					"order": 102
+				},
+				"ids-le.workspace.scanAlwaysInclude": {
+					"type": "array",
+					"default": [],
+					"items": {
+						"type": "string"
+					},
+					"description": "%manifest.settings.workspace.always-include.desc%",
+					"order": 105
+				},
+				"ids-le.workspace.scanSkipBinaryFiles": {
+					"type": "boolean",
+					"default": true,
+					"description": "%manifest.settings.workspace.binary.desc%",
+					"order": 103
+				},
+				"ids-le.workspace.scanUseDefaultExcludes": {
+					"type": "boolean",
+					"default": true,
+					"description": "%manifest.settings.workspace.default-excludes.desc%",
+					"order": 101
 				}
 			}
 		},

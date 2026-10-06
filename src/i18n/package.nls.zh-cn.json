@@ -27,11 +27,14 @@
 	"manifest.settings.telemetry.desc": "启用仅限本地的遥测日志,输出到“输出”面板",
 	"manifest.capability.untrusted-workspaces.desc": "在不受信任的工作区中功能受限",
 	"manifest.mcp.label": "面向智能体模式的 IDs-LE 标识符提取",
-	"manifest.settings.workspace.excludes.desc": "文件夹或工作区扫描要跳过的文件的 glob 模式",
+	"manifest.settings.workspace.excludes.desc": "文件夹或工作区扫描在内置列表之外额外跳过的文件的 glob 模式。示例：**/fixtures/**",
 	"manifest.settings.workspace.max-files.desc": "一次文件夹或工作区扫描最多读取的文件数",
 	"manifest.settings.workspace.max-results.desc": "一次文件夹或工作区扫描在停止读取前最多报告的结果数",
 	"manifest.settings.workspace.patterns.desc": "文件夹或工作区扫描要读取的文件的 glob 模式",
 	"manifest.settings.workspace.gitignore.desc": "跳过项目的 .gitignore 文件所忽略的文件",
 	"manifest.settings.workspace.problems.desc": "同时在“问题”面板中显示文件夹或工作区扫描无法读取的内容",
-	"manifest.settings.workspace.refusals.desc": "逐条列出文件夹或工作区扫描无法读取的结果，而不仅是每个文件的数量"
+	"manifest.settings.workspace.refusals.desc": "逐条列出文件夹或工作区扫描无法读取的结果，而不仅是每个文件的数量",
+	"manifest.settings.workspace.always-include.desc": "即使内置列表或 .gitignore 会跳过，文件夹或工作区扫描仍会读取的文件的 glob 模式。示例：**/vendor/**",
+	"manifest.settings.workspace.binary.desc": "跳过图像、字体、压缩包等非文本文件",
+	"manifest.settings.workspace.default-excludes.desc": "跳过依赖文件夹、构建输出、缓存和锁文件，例如 node_modules、dist、.next 和 package-lock.json"
 }

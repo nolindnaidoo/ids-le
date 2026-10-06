@@ -27,11 +27,14 @@
 	"manifest.settings.telemetry.desc": "Ativar logs de telemetria apenas locais no painel Saída",
 	"manifest.capability.untrusted-workspaces.desc": "Funcionalidade limitada em espaços de trabalho não confiáveis",
 	"manifest.mcp.label": "Extração de identificadores do IDs-LE para o modo agente",
-	"manifest.settings.workspace.excludes.desc": "Padrões glob dos arquivos ignorados por uma verificação de pasta ou de espaço de trabalho",
+	"manifest.settings.workspace.excludes.desc": "Padrões glob de mais arquivos ignorados por uma verificação de pasta ou de espaço de trabalho, além da lista integrada. Exemplo: **/fixtures/**",
 	"manifest.settings.workspace.max-files.desc": "O máximo de arquivos lidos por uma verificação de pasta ou de espaço de trabalho",
 	"manifest.settings.workspace.max-results.desc": "O máximo de resultados informados por uma verificação de pasta ou de espaço de trabalho antes de parar de ler",
 	"manifest.settings.workspace.patterns.desc": "Padrões glob dos arquivos lidos por uma verificação de pasta ou de espaço de trabalho",
 	"manifest.settings.workspace.gitignore.desc": "Ignorar os arquivos que os arquivos .gitignore do projeto ignoram",
 	"manifest.settings.workspace.problems.desc": "Mostrar também no painel Problemas o que uma verificação de pasta ou de espaço de trabalho não conseguiu ler",
-	"manifest.settings.workspace.refusals.desc": "Listar cada resultado que uma verificação de pasta ou de espaço de trabalho não conseguiu ler, não apenas quantos por arquivo"
+	"manifest.settings.workspace.refusals.desc": "Listar cada resultado que uma verificação de pasta ou de espaço de trabalho não conseguiu ler, não apenas quantos por arquivo",
+	"manifest.settings.workspace.always-include.desc": "Padrões glob dos arquivos que uma verificação de pasta ou de espaço de trabalho lê mesmo quando a lista integrada ou o .gitignore os ignoraria. Exemplo: **/vendor/**",
+	"manifest.settings.workspace.binary.desc": "Ignorar imagens, fontes, arquivos compactados e outros arquivos que não são texto",
+	"manifest.settings.workspace.default-excludes.desc": "Ignorar pastas de dependências, saídas de build, caches e lockfiles, como node_modules, dist, .next e package-lock.json"
 }

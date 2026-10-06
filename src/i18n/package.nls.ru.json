@@ -27,11 +27,14 @@
 	"manifest.settings.telemetry.desc": "Включить только локальные журналы телеметрии на панели «Вывод»",
 	"manifest.capability.untrusted-workspaces.desc": "Ограниченная функциональность в недоверенных рабочих областях",
 	"manifest.mcp.label": "Извлечение идентификаторов IDs-LE для режима агента",
-	"manifest.settings.workspace.excludes.desc": "Glob-шаблоны файлов, которые пропускает сканирование папки или рабочей области",
+	"manifest.settings.workspace.excludes.desc": "Glob-шаблоны дополнительных файлов, которые пропускает сканирование папки или рабочей области, помимо встроенного списка. Пример: **/fixtures/**",
 	"manifest.settings.workspace.max-files.desc": "Наибольшее число файлов, которое читает одно сканирование папки или рабочей области",
 	"manifest.settings.workspace.max-results.desc": "Наибольшее число результатов, которое сообщает одно сканирование папки или рабочей области, прежде чем прекратить чтение",
 	"manifest.settings.workspace.patterns.desc": "Glob-шаблоны файлов, которые читает сканирование папки или рабочей области",
 	"manifest.settings.workspace.gitignore.desc": "Пропускать файлы, которые пропускают файлы .gitignore проекта",
 	"manifest.settings.workspace.problems.desc": "Показывать на панели «Проблемы» также то, что сканирование папки или рабочей области не смогло прочитать",
-	"manifest.settings.workspace.refusals.desc": "Перечислять каждый результат, который сканирование папки или рабочей области не смогло прочитать, а не только их число по файлам"
+	"manifest.settings.workspace.refusals.desc": "Перечислять каждый результат, который сканирование папки или рабочей области не смогло прочитать, а не только их число по файлам",
+	"manifest.settings.workspace.always-include.desc": "Glob-шаблоны файлов, которые сканирование папки или рабочей области читает, даже если встроенный список или .gitignore их пропустили бы. Пример: **/vendor/**",
+	"manifest.settings.workspace.binary.desc": "Пропускать изображения, шрифты, архивы и другие нетекстовые файлы",
+	"manifest.settings.workspace.default-excludes.desc": "Пропускать папки зависимостей, результаты сборки, кэши и lock-файлы, например node_modules, dist, .next и package-lock.json"
 }

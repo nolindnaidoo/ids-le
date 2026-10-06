@@ -39,6 +39,9 @@ export async function scanWorkspace(
 	const limits: ScanLimits = {
 		patterns: config.workspaceScanPatterns,
 		excludes: config.workspaceScanExcludes,
+		useDefaultExcludes: config.workspaceScanUseDefaultExcludes,
+		skipBinaryFiles: config.workspaceScanSkipBinaryFiles,
+		alwaysInclude: config.workspaceScanAlwaysInclude,
 		maxFiles: config.workspaceScanMaxFiles,
 		maxFileBytes: config.safetyEnabled
 			? config.safetyFileSizeWarnBytes
@@ -53,7 +56,10 @@ export async function scanWorkspace(
 			cancellable: true,
 		},
 		async (progress, token) => {
-			const { files, fileLimitReached } = await listFiles(root, limits);
+			const { files, fileLimitReached, ignored } = await listFiles(
+				root,
+				limits,
+			);
 			const found: Scanned[] = [];
 			const nowMs = Date.now();
 			let total = 0;
@@ -95,7 +101,7 @@ export async function scanWorkspace(
 			// A cancelled scan read part of the tree. Reporting that as the
 			// project's identifiers would understate it without saying so.
 			if (scanned.cancelled) return;
-			const summary: ScanSummary = { ...scanned, fileLimitReached };
+			const summary: ScanSummary = { ...scanned, fileLimitReached, ignored };
 
 			// Each scan replaces the last one's problems, and a scan that
 			// publishes none still clears them.

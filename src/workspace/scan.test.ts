@@ -15,7 +15,10 @@ import {
 
 const LIMITS: ScanLimits = {
 	patterns: ['**/*'],
-	excludes: ['**/node_modules/**'],
+	excludes: [],
+	useDefaultExcludes: true,
+	skipBinaryFiles: true,
+	alwaysInclude: [],
 	maxFiles: 10,
 	maxFileBytes: undefined,
 	respectGitignore: true,
@@ -150,6 +153,90 @@ describe('listFiles', () => {
 	});
 });
 
+describe('what a scan leaves out', () => {
+	const TREE = {
+		'/w/src/main.ts': 'x',
+		'/w/node_modules/dep/index.js': 'x',
+		'/w/.next/cache/a.json': 'x',
+		'/w/app/DerivedData/x.txt': 'x',
+		'/w/pkg.egg-info/PKG-INFO': 'x',
+		'/w/package-lock.json': 'x',
+		'/w/yarn.lock': 'x',
+		'/w/lib.min.js': 'x',
+		'/w/logo.png': 'x',
+		'/w/font.woff2': 'x',
+		'/w/icon.svg': 'x',
+		'/w/vendor/lib.go': 'x',
+		'/w/fixtures/big.json': 'x',
+	};
+	const paths = async (limits: ScanLimits) =>
+		(await listFiles(undefined, { ...limits, maxFiles: 100 })).files.map(
+			(uri) => uri.path,
+		);
+
+	it('is dependency folders, build output, caches, lockfiles and binary files by default', async () => {
+		openWorkspace(TREE);
+		// SVG is text, and a fixtures folder is nobody's build output.
+		expect(await paths(LIMITS)).toEqual([
+			'/w/fixtures/big.json',
+			'/w/icon.svg',
+			'/w/src/main.ts',
+		]);
+	});
+
+	it('reads the built-in list when it is switched off, and binaries when that is', async () => {
+		openWorkspace(TREE);
+		const noDefaults = await paths({ ...LIMITS, useDefaultExcludes: false });
+		expect(noDefaults).toContain('/w/node_modules/dep/index.js');
+		expect(noDefaults).toContain('/w/yarn.lock');
+		expect(noDefaults).not.toContain('/w/logo.png');
+
+		const withBinaries = await paths({ ...LIMITS, skipBinaryFiles: false });
+		expect(withBinaries).toContain('/w/logo.png');
+		expect(withBinaries).not.toContain('/w/yarn.lock');
+	});
+
+	it("adds the user's own excludes to the built-in ones", async () => {
+		openWorkspace(TREE);
+		expect(await paths({ ...LIMITS, excludes: ['**/fixtures/**'] })).toEqual([
+			'/w/icon.svg',
+			'/w/src/main.ts',
+		]);
+	});
+
+	it('reads what is asked for by name, whatever the excludes and .gitignore say', async () => {
+		openWorkspace({
+			...TREE,
+			'/w/.gitignore': 'secret.env\n',
+			'/w/secret.env': 'x',
+		});
+		const listed = await listFiles(undefined, {
+			...LIMITS,
+			alwaysInclude: ['**/vendor/**', '**/secret.env'],
+		});
+		expect(listed.files.map((uri) => uri.path)).toEqual([
+			'/w/.gitignore',
+			'/w/fixtures/big.json',
+			'/w/icon.svg',
+			'/w/secret.env',
+			'/w/src/main.ts',
+			'/w/vendor/lib.go',
+		]);
+		// It was ignored, then asked for: read, and not counted as ignored.
+		expect(listed.ignored).toBe(0);
+	});
+
+	it('counts what .gitignore left out', async () => {
+		openWorkspace({
+			'/w/.gitignore': '*.tmp\n',
+			'/w/a.tmp': 'x',
+			'/w/b.tmp': 'x',
+			'/w/c.txt': 'x',
+		});
+		expect((await listFiles(undefined, LIMITS)).ignored).toBe(2);
+	});
+});
+
 describe('decodeText', () => {
 	it('reads UTF-8 and refuses what is not text', () => {
 		expect(decodeText(new TextEncoder().encode('héllo'))).toBe('héllo');
@@ -237,18 +324,60 @@ describe('scanFiles', () => {
 	});
 });
 
+describe('the note on what was never looked at', () => {
+	const summary = {
+		read: 3,
+		tooLarge: 0,
+		notText: 0,
+		fileLimitReached: false,
+		ignored: 4,
+		stoppedEarly: false,
+		cancelled: false,
+	};
+
+	it('names every filter that was on, and where to change them', () => {
+		expect(unreadNotes(summary, LIMITS, '`x.workspace.*`')).toEqual([
+			'Not read: dependency folders, build output, caches and lockfiles; images, fonts, archives and other binary files; 4 file(s) ignored by .gitignore. The `x.workspace.*` settings change this.',
+		]);
+	});
+
+	it('names only the ones that were', () => {
+		expect(
+			unreadNotes(
+				summary,
+				{ ...LIMITS, useDefaultExcludes: false, skipBinaryFiles: false },
+				'`x.*`',
+			),
+		).toEqual([
+			'Not read: 4 file(s) ignored by .gitignore. The `x.*` settings change this.',
+		]);
+	});
+});
+
 describe('unreadNotes', () => {
 	const read = {
 		read: 3,
 		tooLarge: 0,
 		notText: 0,
 		fileLimitReached: false,
+		ignored: 0,
 		stoppedEarly: false,
 		cancelled: false,
 	};
 
 	it('is empty when everything was read', () => {
-		expect(unreadNotes(read, LIMITS)).toEqual([]);
+		expect(
+			unreadNotes(
+				read,
+				{
+					...LIMITS,
+					useDefaultExcludes: false,
+					skipBinaryFiles: false,
+					respectGitignore: false,
+				},
+				'`x.*`',
+			),
+		).toEqual([]);
 	});
 
 	it('has a line for each thing left unread', () => {
@@ -261,7 +390,13 @@ describe('unreadNotes', () => {
 					fileLimitReached: true,
 					stoppedEarly: true,
 				},
-				LIMITS,
+				{
+					...LIMITS,
+					useDefaultExcludes: false,
+					skipBinaryFiles: false,
+					respectGitignore: false,
+				},
+				'`x.*`',
 			),
 		).toEqual([
 			'More files matched than the limit of 10. The rest were not read.',

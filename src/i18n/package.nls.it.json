@@ -27,11 +27,14 @@
 	"manifest.settings.telemetry.desc": "Abilita i log di telemetria solo locali nel pannello Output",
 	"manifest.capability.untrusted-workspaces.desc": "Funzionalità limitate nelle aree di lavoro non attendibili",
 	"manifest.mcp.label": "Estrazione di identificatori di IDs-LE per la modalità agente",
-	"manifest.settings.workspace.excludes.desc": "Pattern glob dei file ignorati da una scansione di cartella o dell'area di lavoro",
+	"manifest.settings.workspace.excludes.desc": "Pattern glob di altri file ignorati da una scansione di cartella o dell'area di lavoro, oltre all'elenco integrato. Esempio: **/fixtures/**",
 	"manifest.settings.workspace.max-files.desc": "Il numero massimo di file letti da una scansione di cartella o dell'area di lavoro",
 	"manifest.settings.workspace.max-results.desc": "Il numero massimo di risultati riportati da una scansione di cartella o dell'area di lavoro prima di interrompere la lettura",
 	"manifest.settings.workspace.patterns.desc": "Pattern glob dei file letti da una scansione di cartella o dell'area di lavoro",
 	"manifest.settings.workspace.gitignore.desc": "Escludi i file esclusi dai file .gitignore del progetto",
 	"manifest.settings.workspace.problems.desc": "Mostra anche nel pannello Problemi ciò che una scansione di cartella o dell'area di lavoro non è riuscita a leggere",
-	"manifest.settings.workspace.refusals.desc": "Elenca ogni risultato che una scansione di cartella o dell'area di lavoro non è riuscita a leggere, non solo quanti per file"
+	"manifest.settings.workspace.refusals.desc": "Elenca ogni risultato che una scansione di cartella o dell'area di lavoro non è riuscita a leggere, non solo quanti per file",
+	"manifest.settings.workspace.always-include.desc": "Pattern glob dei file che una scansione di cartella o dell'area di lavoro legge anche quando l'elenco integrato o .gitignore li escluderebbe. Esempio: **/vendor/**",
+	"manifest.settings.workspace.binary.desc": "Ignora immagini, font, archivi e altri file che non sono testo",
+	"manifest.settings.workspace.default-excludes.desc": "Ignora cartelle delle dipendenze, output di build, cache e lockfile, come node_modules, dist, .next e package-lock.json"
 }

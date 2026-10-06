@@ -27,11 +27,14 @@
 	"manifest.settings.telemetry.desc": "출력 패널에 로컬 전용 원격 분석 로그 사용",
 	"manifest.capability.untrusted-workspaces.desc": "신뢰할 수 없는 작업 영역에서는 기능이 제한됩니다",
 	"manifest.mcp.label": "에이전트 모드용 IDs-LE 식별자 추출",
-	"manifest.settings.workspace.excludes.desc": "폴더 또는 작업 영역 검사에서 건너뛰는 파일의 glob 패턴",
+	"manifest.settings.workspace.excludes.desc": "폴더 또는 작업 영역 검사에서 기본 제공 목록 외에 추가로 건너뛰는 파일의 glob 패턴. 예: **/fixtures/**",
 	"manifest.settings.workspace.max-files.desc": "폴더 또는 작업 영역 검사 한 번에 읽는 최대 파일 수",
 	"manifest.settings.workspace.max-results.desc": "폴더 또는 작업 영역 검사 한 번이 읽기를 멈추기 전에 보고하는 최대 결과 수",
 	"manifest.settings.workspace.patterns.desc": "폴더 또는 작업 영역 검사에서 읽는 파일의 glob 패턴",
 	"manifest.settings.workspace.gitignore.desc": "프로젝트의 .gitignore 파일이 제외하는 파일을 제외합니다",
 	"manifest.settings.workspace.problems.desc": "폴더 또는 작업 영역 검사에서 읽지 못한 항목을 문제 패널에도 표시합니다",
-	"manifest.settings.workspace.refusals.desc": "폴더 또는 작업 영역 검사에서 읽지 못한 결과를 파일별 개수뿐 아니라 하나씩 나열합니다"
+	"manifest.settings.workspace.refusals.desc": "폴더 또는 작업 영역 검사에서 읽지 못한 결과를 파일별 개수뿐 아니라 하나씩 나열합니다",
+	"manifest.settings.workspace.always-include.desc": "기본 제공 목록이나 .gitignore가 건너뛰더라도 폴더 또는 작업 영역 검사에서 읽는 파일의 glob 패턴. 예: **/vendor/**",
+	"manifest.settings.workspace.binary.desc": "이미지, 글꼴, 압축 파일 등 텍스트가 아닌 파일을 건너뜁니다",
+	"manifest.settings.workspace.default-excludes.desc": "node_modules, dist, .next, package-lock.json 등 종속성 폴더, 빌드 출력, 캐시, 잠금 파일을 건너뜁니다"
 }

@@ -26,5 +26,9 @@
 	"File": "Fichier",
 	"What could not be read is counted per file and not listed. The {0} setting lists each one.": "Ce qui n'a pas pu être lu est compté par fichier et non listé. Le paramètre {0} liste chacun.",
 	"Named": "Nommés",
-	"Could not be named": "Impossible à nommer"
+	"Could not be named": "Impossible à nommer",
+	"dependency folders, build output, caches and lockfiles": "dossiers de dépendances, sorties de build, caches et fichiers de verrouillage",
+	"images, fonts, archives and other binary files": "images, polices, archives et autres fichiers binaires",
+	"{0} file(s) ignored by .gitignore": "{0} fichier(s) ignoré(s) par .gitignore",
+	"Not read: {0}. The {1} settings change this.": "Non lu : {0}. Les paramètres {1} permettent de changer cela."
 }

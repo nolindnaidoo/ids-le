@@ -218,7 +218,8 @@ describe('ids-le.scanWorkspace and ids-le.scanFolder', () => {
 		'/w/api/b.txt': `first ${UUID}\nthen ${BAD}`,
 		'/w/empty.md': 'nothing here',
 		'/w/node_modules/dep.json': JSON.stringify({ id: UUID }),
-		'/w/logo.png': new Uint8Array([0x89, 0x50, 0x00, 0x47]),
+		// No extension to go by, so it is read and found not to be text.
+		'/w/blob': new Uint8Array([0x89, 0x50, 0x00, 0x47]),
 	};
 
 	function open(): void {
@@ -253,8 +254,11 @@ describe('ids-le.scanWorkspace and ids-le.scanFolder', () => {
 		expect(text).toContain('`ids-le.workspace.scanIncludeRefusals`');
 		// A named identifier says its kind here, since nothing groups by it.
 		expect(text).toContain(`- **1:8** · \`${UUID}\` · uuid`);
-		// Left out by the default excludes, and never opened as text.
+		// Left out by the built-in excludes, and the report says they were on.
 		expect(text).not.toContain('node_modules');
+		expect(text).toContain(
+			'> Not read: dependency folders, build output, caches and lockfiles; images, fonts, archives and other binary files; 0 file(s) ignored by .gitignore. The `ids-le.workspace.*` settings change this.',
+		);
 		expect(text).toContain(
 			'> 1 file(s) that are not UTF-8 text were not read.',
 		);

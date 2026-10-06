@@ -27,11 +27,14 @@
 	"manifest.settings.telemetry.desc": "Activar registros de telemetría solo locales en el panel de salida",
 	"manifest.capability.untrusted-workspaces.desc": "Funcionalidad limitada en áreas de trabajo que no son de confianza",
 	"manifest.mcp.label": "Extracción de identificadores de IDs-LE para el modo agente",
-	"manifest.settings.workspace.excludes.desc": "Patrones glob de los archivos que omite un análisis de carpeta o de área de trabajo",
+	"manifest.settings.workspace.excludes.desc": "Patrones glob de más archivos que omite un análisis de carpeta o de área de trabajo, además de la lista integrada. Ejemplo: **/fixtures/**",
 	"manifest.settings.workspace.max-files.desc": "El máximo de archivos que lee un análisis de carpeta o de área de trabajo",
 	"manifest.settings.workspace.max-results.desc": "El máximo de resultados que informa un análisis de carpeta o de área de trabajo antes de dejar de leer",
 	"manifest.settings.workspace.patterns.desc": "Patrones glob de los archivos que lee un análisis de carpeta o de área de trabajo",
 	"manifest.settings.workspace.gitignore.desc": "Omitir los archivos que omiten los archivos .gitignore del proyecto",
 	"manifest.settings.workspace.problems.desc": "Mostrar también en el panel Problemas lo que un análisis de carpeta o de área de trabajo no pudo leer",
-	"manifest.settings.workspace.refusals.desc": "Enumerar cada resultado que un análisis de carpeta o de área de trabajo no pudo leer, no solo cuántos por archivo"
+	"manifest.settings.workspace.refusals.desc": "Enumerar cada resultado que un análisis de carpeta o de área de trabajo no pudo leer, no solo cuántos por archivo",
+	"manifest.settings.workspace.always-include.desc": "Patrones glob de los archivos que un análisis de carpeta o de área de trabajo lee aunque la lista integrada o .gitignore los omitirían. Ejemplo: **/vendor/**",
+	"manifest.settings.workspace.binary.desc": "Omitir imágenes, fuentes, archivos comprimidos y otros archivos que no son texto",
+	"manifest.settings.workspace.default-excludes.desc": "Omitir carpetas de dependencias, resultados de compilación, cachés y archivos de bloqueo, como node_modules, dist, .next y package-lock.json"
 }

@@ -277,21 +277,35 @@ function isDirectory(path: string): boolean {
 export const workspace = {
 	workspaceFolders: undefined as WorkspaceFolder[] | undefined,
 	getWorkspaceFolder: (_uri: Uri) => undefined as WorkspaceFolder | undefined,
-	// Globs are matched loosely: an exclude leaves out any path holding its
-	// literal part, and an include is every file under the pattern's base.
-	findFiles: async (include: string | RelativePattern, exclude?: string, maxResults?: number) => {
+	// Globs are read as the editor reads the ones this code sends: `**/`
+	// for any depth, `/**` for everything beneath, `*` within one segment.
+	findFiles: async (include: string | RelativePattern, exclude?: string | null, maxResults?: number) => {
+		const toRegExp = (glob: string) =>
+			new RegExp(
+				`^${glob
+					.split(/(\*\*\/|\/\*\*|\*)/)
+					.map((part) =>
+						part === '**/'
+							? '(?:.*/)?'
+							: part === '/**'
+								? '/.*'
+								: part === '*'
+									? '[^/]*'
+									: part.replace(/[.+?^${}()|[\]\\]/g, '\\$&'),
+					)
+					.join('')}$`,
+			);
 		const excluded = (exclude ?? '')
 			.replace(/^\{|\}$/g, '')
 			.split(',')
 			.filter(Boolean)
-			.map((glob) => glob.replace(/\*\*\//g, '').replace(/\/\*\*$/g, '').replace(/^\*/, ''));
+			.map(toRegExp);
 		const base = typeof include === 'string' ? '' : `${include.baseUri.path}/`;
-		const glob = typeof include === 'string' ? include : include.pattern;
-		const named = /^\*\*\/([^*?/]+)$/.exec(glob)?.[1];
+		const wanted = toRegExp(typeof include === 'string' ? include : include.pattern);
 		return [...workspaceFiles.keys()]
 			.filter((path) => path.startsWith(base))
-			.filter((path) => named === undefined || path.endsWith(`/${named}`))
-			.filter((path) => !excluded.some((part) => path.includes(part)))
+			.filter((path) => wanted.test(path.slice(base.length)))
+			.filter((path) => !excluded.some((glob) => glob.test(path.slice(1))))
 			.slice(0, maxResults)
 			.map((path) => Uri.file(path));
 	},
