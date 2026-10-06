@@ -185,6 +185,11 @@ describe('what a scan leaves out', () => {
 		'/w/icon.svg': 'x',
 		'/w/vendor/lib.go': 'x',
 		'/w/fixtures/big.json': 'x',
+		'/w/ios/App.xcodeproj/project.pbxproj': 'x',
+		'/w/android/local.properties': 'x',
+		'/w/ios/Flutter/ephemeral/x.txt': 'x',
+		'/w/fastlane/report.xml': 'x',
+		'/w/docs/report.xml': 'x',
 	};
 	const paths = async (limits: ScanLimits) =>
 		(await listFiles(undefined, { ...limits, maxFiles: 100 })).files.map(
@@ -194,7 +199,9 @@ describe('what a scan leaves out', () => {
 	it('is dependency folders, build output, caches, lockfiles and binary files by default', async () => {
 		openWorkspace(TREE);
 		// SVG is text, and a fixtures folder is nobody's build output.
+		// And a report.xml is skipped under fastlane, not anywhere else.
 		expect(await paths(LIMITS)).toEqual([
+			'/w/docs/report.xml',
 			'/w/fixtures/big.json',
 			'/w/icon.svg',
 			'/w/src/main.ts',
@@ -216,6 +223,7 @@ describe('what a scan leaves out', () => {
 	it("adds the user's own excludes to the built-in ones", async () => {
 		openWorkspace(TREE);
 		expect(await paths({ ...LIMITS, excludes: ['**/fixtures/**'] })).toEqual([
+			'/w/docs/report.xml',
 			'/w/icon.svg',
 			'/w/src/main.ts',
 		]);
@@ -233,6 +241,7 @@ describe('what a scan leaves out', () => {
 		});
 		expect(listed.files.map((uri) => uri.path)).toEqual([
 			'/w/.gitignore',
+			'/w/docs/report.xml',
 			'/w/fixtures/big.json',
 			'/w/icon.svg',
 			'/w/secret.env',

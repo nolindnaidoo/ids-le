@@ -3,7 +3,11 @@ import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { _resetMockState, _setConfig } from '../__mocks__/vscode';
 import { KIND_NAMES } from '../extract';
-import { DEFAULT_EXCLUDED_FOLDERS } from '../workspace/defaults';
+import {
+	DEFAULT_EXCLUDED_FILES,
+	DEFAULT_EXCLUDED_FOLDERS,
+	DEFAULT_EXCLUDED_PATHS,
+} from '../workspace/defaults';
 import {
 	CONFIG_DEFAULTS,
 	isValidNotificationLevel,
@@ -92,6 +96,21 @@ describe('the README lists the folders a scan skips', () => {
 				?.split(', ')
 				.map((entry) => entry.replace(/`/g, ''));
 		expect(listed).toEqual([...DEFAULT_EXCLUDED_FOLDERS, '*.egg-info']);
+	});
+
+	it('and the files, exactly as the code has them', () => {
+		const readme = readFileSync(
+			join(__dirname, '..', '..', 'README.md'),
+			'utf8',
+		);
+		const listed = /<!-- built-in-files -->\n(.*)\n<!-- \/built-in-files -->/
+			.exec(readme)?.[1]
+			?.split(', ')
+			.map((entry) => entry.replace(/`/g, ''));
+		expect(listed).toEqual([
+			...DEFAULT_EXCLUDED_FILES,
+			...DEFAULT_EXCLUDED_PATHS,
+		]);
 	});
 });
 
