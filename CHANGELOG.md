@@ -17,8 +17,9 @@ repository while it held the CLI alone.
 - Scan a folder or the whole workspace. `IDs-LE: Scan Workspace for IDs`
   reads every file in the workspace from disk. `IDs-LE: Scan Folder for IDs`
   does the same for one folder, from the command palette or from a folder in
-  the Explorer. The report opens with a table of every file that holds an
-  identifier, then has a section per file, and ends with what the scan left
+  the Explorer. Files are read from disk, so an unsaved edit is not seen. The
+  report opens with a table of every file that holds an identifier, then has
+  a section per file, and ends with a line for each thing the scan left
   unread.
 - A scan skips what the project's `.gitignore` files skip, as well as
   `node_modules`, build output, caches and lockfiles.
@@ -33,6 +34,7 @@ repository while it held the CLI alone.
   `ids-le.workspace.scanProblemsEnabled` also shows them in the Problems
   panel. Both are off by default: across a project they run to thousands,
   mostly digests in generated files.
+- The positions settings apply to a scan as they do to Extract.
 
 ## [1.1.0] - 2026-10-05
 
@@ -41,7 +43,9 @@ repository while it held the CLI alone.
 - Positions are now a setting. `ids-le.showPositions` decides whether the
   report gives the line and column of each identifier, and
   `ids-le.clipboardIncludesPositions` decides the same for the copy on the
-  clipboard. Both are on by default, so the report is what it was.
+  clipboard. Both are on by default, so the report is what it was. With
+  `showPositions` off, a row that read `**3:13** · f47ac10b-…` reads
+  `f47ac10b-…`, and nothing else about the report changes.
 
 ### Changed
 
