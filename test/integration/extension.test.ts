@@ -104,8 +104,9 @@ describe('IDs-LE integration', function () {
 		await vscode.commands.executeCommand('ids-le.scanFolder', vscode.Uri.file(root));
 		await settings.update('workspace.scanProblemsEnabled', undefined, vscode.ConfigurationTarget.Global);
 
+		// This scan's report, whatever other reports the session has open.
 		const report = vscode.workspace.textDocuments.find(
-			(doc) => doc.languageId === 'markdown' && doc.getText().includes('workspace report'),
+			(doc) => doc.languageId === 'markdown' && doc.getText().includes('ids-le-scan-'),
 		);
 		assert.ok(report, 'no workspace report was opened');
 		const text = report.getText();
