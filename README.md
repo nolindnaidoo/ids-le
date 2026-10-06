@@ -36,11 +36,12 @@
 
 A support ticket quotes `6a7bb780a1b2c3d4e5f60718` and asks when the record was made. A regex says ObjectId, minted 2026-08-12. It is the front of a git commit hash, and the date is noise that happens to land in a plausible year.
 
-Open a document, run `IDs-LE: Extract IDs`, and every identifier in it is listed by kind with its line and column, the document's own key path for it, whether it is valid, and — for the six schemes that carry a clock — the instant it was minted, as ISO-8601 UTC. The report opens beside the editor. Works in VS Code and in VS Code–based editors like Cursor and VSCodium (installable from Open VSX).
+Open a document, run `IDs-LE: Extract IDs`, and every identifier in it is listed by kind with its line and column, the document's own key path for it, whether it is valid, and — for the six schemes that carry a clock — the instant it was minted, as ISO-8601 UTC. The report opens beside the editor. `IDs-LE: Scan Workspace for IDs` does the same for every file in a project, and `IDs-LE: Scan Folder for IDs` for one folder. Works in VS Code and in VS Code–based editors like Cursor and VSCodium (installable from Open VSX).
 
 - **Reading a log or a dump** — which of these are UUID v7s, and when was each minted?
 - **Reviewing a config** — the placeholder nil UUID that escaped into production
 - **Before trusting a hex string** — whether the document actually says it is an identifier
+- **Across a project** — every file that holds an identifier, and how many, in one table
 
 **A run it cannot name honestly is reported with the reason, never dropped.** **It rewrites nothing.**
 
@@ -144,6 +145,54 @@ The key path is evidence, not decoration. ObjectId and Snowflake are named
 only under a field the document calls an id, so a run that is named in the
 `.json` comes back `ambiguous_kind` in the `.md` beside it — same row, same
 position, same decode, and a reason instead of a name.
+
+## Across a folder or a workspace
+
+Extract reads the document you have open. A scan reads many files from disk and gives one report.
+
+- **The whole workspace**: run `IDs-LE: Scan Workspace for IDs` from the command palette.
+- **One folder**: right-click it in the Explorer and choose `Scan Folder for IDs`, or run `IDs-LE: Scan Folder for IDs` and pick one.
+
+The report opens with a table of every file that holds something, then has a section per file:
+
+```markdown
+# IDs-LE workspace report
+
+`my-project` · 113 file(s) read · 2 named, 3 could not be named
+
+| File | Named | Could not be named |
+|---|---|---|
+| `lib/transcripts.ts` | 2 | 3 |
+
+## `lib/transcripts.ts` · text (2)
+
+- **55:40** · `019ff344-cc00-7abc-8def-0123456789ab` · uuid · v7 · 2026-08-12T00:00:00.000Z
+- **56:24** · `01KZSM9K00ABCDEFGH12345678` · ulid · 2026-08-12T00:00:00.000Z
+
+> 2 file(s) larger than the safety limit were not read.
+```
+
+**What a scan reads.** Files come from disk, so an unsaved edit is not seen. It skips whatever the project's `.gitignore` files skip, and `node_modules`, build output, caches and lockfiles. A file over the safety size, or one that is not UTF-8 text, is left unread. It stops at 5,000 files or 10,000 listed identifiers. The report ends with a line for each thing it left out, so a short report is never mistaken for a clean project.
+
+**What it could not name.** Across a project these run to thousands, mostly digests in generated files. So a scan counts them per file in the table and does not list them. `ids-le.workspace.scanIncludeRefusals` lists each one with its reason, and `ids-le.workspace.scanProblemsEnabled` also puts them in the Problems panel, where each is a line you can click.
+
+The settings that shape a scan are under [Settings](#settings).
+
+## Positions
+
+Each row leads with the line and column of the identifier:
+
+```markdown
+- **3:13** · `f47ac10b-58cc-4372-a567-0e02b2c3d479` · key `service.id` · v4
+```
+
+Turn `ids-le.showPositions` off and the same row is:
+
+```markdown
+- `f47ac10b-58cc-4372-a567-0e02b2c3d479` · key `service.id` · v4
+```
+
+Nothing else changes: the same rows, the same counts. The copy on the clipboard is a separate choice, `ids-le.clipboardIncludesPositions`, so a report can show positions on screen and paste without them. Both apply to a scan as they do to Extract.
 
 ## Use it from an AI agent
 
@@ -287,7 +336,7 @@ a build only tells you how busy the runner was.
 | Functions | 93.33% |
 | Lines | 92.13% |
 
-139 test cases across 13 files, plus an integration suite that runs
+141 test cases across 13 files, plus an integration suite that runs
 in a real VS Code extension host and an end-to-end test that installs the
 built `.vsix` into a clean profile.
 

@@ -55,6 +55,26 @@ describe('config defaults parity with package.json', () => {
 	});
 });
 
+describe('the README states the scan limits the code uses', () => {
+	const readme = readFileSync(join(__dirname, '..', '..', 'README.md'), 'utf8');
+	const grouped = (n: number) => n.toLocaleString('en-US');
+
+	it('in the settings table', () => {
+		expect(readme).toContain(
+			`| \`ids-le.workspace.scanMaxFiles\` | \`${CONFIG_DEFAULTS.workspaceScanMaxFiles}\` |`,
+		);
+		expect(readme).toContain(
+			`| \`ids-le.workspace.scanMaxResults\` | \`${CONFIG_DEFAULTS.workspaceScanMaxResults}\` |`,
+		);
+	});
+
+	it('in the prose', () => {
+		expect(readme).toContain(
+			`It stops at ${grouped(CONFIG_DEFAULTS.workspaceScanMaxFiles)} files or ${grouped(CONFIG_DEFAULTS.workspaceScanMaxResults)} listed identifiers.`,
+		);
+	});
+});
+
 describe('readConfig', () => {
 	afterEach(() => _resetMockState());
 
