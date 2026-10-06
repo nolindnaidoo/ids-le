@@ -15,17 +15,24 @@ repository while it held the CLI alone.
 ### Added
 
 - Scan a folder or the whole workspace. `IDs-LE: Scan Workspace for IDs`
-  reads every file in the workspace from disk and reports the identifiers in
-  one section per file. `IDs-LE: Scan Folder for IDs` does the same for one
-  folder, from the command palette or from a folder in the Explorer. The runs
-  that could not be named also appear in the Problems panel, each on its own
-  line.
-- Four settings shape a scan: `ids-le.workspace.scanPatterns` and
-  `ids-le.workspace.scanExcludes` choose the files,
-  `ids-le.workspace.scanMaxFiles` caps how many are read, and
-  `ids-le.workspace.scanMaxResults` caps how many identifiers are reported.
-  A file over the safety size, or one that is not UTF-8 text, is left unread,
+  reads every file in the workspace from disk. `IDs-LE: Scan Folder for IDs`
+  does the same for one folder, from the command palette or from a folder in
+  the Explorer. The report opens with a table of every file that holds an
+  identifier, then has a section per file, and ends with what the scan left
+  unread.
+- A scan skips what the project's `.gitignore` files skip, as well as
+  `node_modules`, build output, caches and lockfiles.
+  `ids-le.workspace.scanRespectGitignore`, `ids-le.workspace.scanPatterns`
+  and `ids-le.workspace.scanExcludes` change which files are read.
+- `ids-le.workspace.scanMaxFiles` caps how many files are read and
+  `ids-le.workspace.scanMaxResults` caps how many identifiers are listed. A
+  file over the safety size, or one that is not UTF-8 text, is left unread,
   and the report says how many were.
+- Runs that could not be named are counted per file in a scan, not listed.
+  `ids-le.workspace.scanIncludeRefusals` lists each one, and
+  `ids-le.workspace.scanProblemsEnabled` also shows them in the Problems
+  panel. Both are off by default: across a project they run to thousands,
+  mostly digests in generated files.
 
 ## [1.1.0] - 2026-10-05
 

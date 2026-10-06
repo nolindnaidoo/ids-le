@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { readConfig } from '../config/config';
-import { counts, extract, type Found, resolveFormat } from '../extract';
+import { extract, type Found, resolveFormat } from '../extract';
 import { type FileRows, formatWorkspaceReport } from '../report/format';
 import {
 	listFiles,
@@ -43,6 +43,7 @@ export async function scanWorkspace(
 		maxFileBytes: config.safetyEnabled
 			? config.safetyFileSizeWarnBytes
 			: undefined,
+		respectGitignore: config.workspaceScanRespectGitignore,
 	};
 
 	await vscode.window.withProgress(
@@ -53,10 +54,11 @@ export async function scanWorkspace(
 		},
 		async (progress, token) => {
 			const { files, fileLimitReached } = await listFiles(root, limits);
-			const found: (FileRows & { uri: vscode.Uri })[] = [];
+			const found: Scanned[] = [];
 			const nowMs = Date.now();
 			let total = 0;
 			const scanned = await scanFiles(
+				root,
 				files,
 				limits,
 				token,
@@ -66,11 +68,26 @@ export async function scanWorkspace(
 					}),
 				({ uri, file, text }) => {
 					const format = resolveFormat(undefined, baseName(file));
-					const rows = extract(text, format, {
+					const all = extract(text, format, {
 						clock: { nowMs },
 						kind: config.kind === 'all' ? undefined : config.kind,
-					}).slice(0, config.workspaceScanMaxResults - total);
-					if (rows.length > 0) found.push({ uri, file, format, rows });
+					});
+					if (all.length === 0) return true;
+					const named = all.filter((row) => row.valid);
+					// The limit is on what the report lists. A lockfile's
+					// thousand digests are counted either way.
+					const rows = (
+						config.workspaceScanIncludeRefusals ? all : named
+					).slice(0, config.workspaceScanMaxResults - total);
+					found.push({
+						uri,
+						file,
+						format,
+						rows,
+						named: named.length,
+						refused: all.length - named.length,
+						refusals: all.filter((row) => !row.valid),
+					});
 					total += rows.length;
 					return total < config.workspaceScanMaxResults;
 				},
@@ -80,7 +97,9 @@ export async function scanWorkspace(
 			if (scanned.cancelled) return;
 			const summary: ScanSummary = { ...scanned, fileLimitReached };
 
-			publish(diagnostics, found);
+			// Each scan replaces the last one's problems, and a scan that
+			// publishes none still clears them.
+			publish(diagnostics, config.workspaceScanProblemsEnabled ? found : []);
 			const where =
 				root === undefined
 					? undefined
@@ -91,6 +110,7 @@ export async function scanWorkspace(
 					files: found,
 					summary,
 					limits,
+					refusalsListed: config.workspaceScanIncludeRefusals,
 					positions,
 				});
 			await showReport(
@@ -100,7 +120,8 @@ export async function scanWorkspace(
 				report(config.clipboardIncludesPositions),
 			);
 
-			const [named, refused] = counts(found.flatMap((entry) => entry.rows));
+			const named = found.reduce((sum, entry) => sum + entry.named, 0);
+			const refused = found.reduce((sum, entry) => sum + entry.refused, 0);
 			deps.telemetry.event('workspace-scanned', {
 				files: String(summary.read),
 				named: String(named),
@@ -144,19 +165,24 @@ async function askForFolder(): Promise<vscode.Uri | undefined> {
 	return chosen?.[0];
 }
 
+type Scanned = FileRows & {
+	readonly uri: vscode.Uri;
+	readonly refusals: readonly Found[];
+};
+
 /**
  * The runs that could not be named, in the Problems panel.
  *
- * Only those: a named identifier is not a problem, and a project's every UUID
- * as a warning would bury the ones that are. Each scan replaces the last.
+ * Only those: a named identifier is not a problem. And only when asked for:
+ * across a project they run to thousands, mostly digests in generated files,
+ * and a panel full of them hides whatever else is there.
  */
 function publish(
 	diagnostics: vscode.DiagnosticCollection,
-	found: readonly (FileRows & { uri: vscode.Uri })[],
+	found: readonly Scanned[],
 ): void {
 	diagnostics.clear();
-	for (const { uri, rows } of found) {
-		const refusals = rows.filter((row) => !row.valid);
+	for (const { uri, refusals } of found) {
 		if (refusals.length === 0) continue;
 		diagnostics.set(uri, refusals.map(problem));
 	}

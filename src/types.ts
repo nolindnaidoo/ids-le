@@ -19,7 +19,12 @@ export interface Configuration {
 	readonly showPositions: boolean;
 	readonly statusBarEnabled: boolean;
 	readonly telemetryEnabled: boolean;
+	/** List each run that could not be named in a folder scan, not only how many. */
+	readonly workspaceScanIncludeRefusals: boolean;
 	readonly workspaceScanExcludes: readonly string[];
+	/** Publish a folder scan's refusals to the Problems panel. */
+	readonly workspaceScanProblemsEnabled: boolean;
+	readonly workspaceScanRespectGitignore: boolean;
 	readonly workspaceScanMaxFiles: number;
 	/** The most identifiers one folder scan reports before it stops reading. */
 	readonly workspaceScanMaxResults: number;

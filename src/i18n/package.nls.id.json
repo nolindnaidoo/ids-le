@@ -30,5 +30,8 @@
 	"manifest.settings.workspace.excludes.desc": "Pola glob file yang dilewati oleh pemindaian folder atau ruang kerja",
 	"manifest.settings.workspace.max-files.desc": "Jumlah file terbanyak yang dibaca oleh satu pemindaian folder atau ruang kerja",
 	"manifest.settings.workspace.max-results.desc": "Jumlah hasil terbanyak yang dilaporkan oleh satu pemindaian folder atau ruang kerja sebelum berhenti membaca",
-	"manifest.settings.workspace.patterns.desc": "Pola glob file yang dibaca oleh pemindaian folder atau ruang kerja"
+	"manifest.settings.workspace.patterns.desc": "Pola glob file yang dibaca oleh pemindaian folder atau ruang kerja",
+	"manifest.settings.workspace.gitignore.desc": "Lewati file yang dilewati oleh file .gitignore proyek",
+	"manifest.settings.workspace.problems.desc": "Tampilkan juga di panel Masalah apa yang tidak dapat dibaca oleh pemindaian folder atau ruang kerja",
+	"manifest.settings.workspace.refusals.desc": "Cantumkan setiap hasil yang tidak dapat dibaca oleh pemindaian folder atau ruang kerja, bukan hanya jumlahnya per file"
 }

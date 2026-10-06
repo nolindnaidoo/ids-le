@@ -30,5 +30,8 @@
 	"manifest.settings.workspace.excludes.desc": "Patrones glob de los archivos que omite un análisis de carpeta o de área de trabajo",
 	"manifest.settings.workspace.max-files.desc": "El máximo de archivos que lee un análisis de carpeta o de área de trabajo",
 	"manifest.settings.workspace.max-results.desc": "El máximo de resultados que informa un análisis de carpeta o de área de trabajo antes de dejar de leer",
-	"manifest.settings.workspace.patterns.desc": "Patrones glob de los archivos que lee un análisis de carpeta o de área de trabajo"
+	"manifest.settings.workspace.patterns.desc": "Patrones glob de los archivos que lee un análisis de carpeta o de área de trabajo",
+	"manifest.settings.workspace.gitignore.desc": "Omitir los archivos que omiten los archivos .gitignore del proyecto",
+	"manifest.settings.workspace.problems.desc": "Mostrar también en el panel Problemas lo que un análisis de carpeta o de área de trabajo no pudo leer",
+	"manifest.settings.workspace.refusals.desc": "Enumerar cada resultado que un análisis de carpeta o de área de trabajo no pudo leer, no solo cuántos por archivo"
 }

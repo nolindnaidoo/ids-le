@@ -30,5 +30,8 @@
 	"manifest.settings.workspace.excludes.desc": "フォルダーまたはワークスペースのスキャンで除外するファイルの glob パターン",
 	"manifest.settings.workspace.max-files.desc": "フォルダーまたはワークスペースの 1 回のスキャンで読み取るファイルの最大数",
 	"manifest.settings.workspace.max-results.desc": "フォルダーまたはワークスペースの 1 回のスキャンが読み取りを止めるまでに報告する結果の最大数",
-	"manifest.settings.workspace.patterns.desc": "フォルダーまたはワークスペースのスキャンで読み取るファイルの glob パターン"
+	"manifest.settings.workspace.patterns.desc": "フォルダーまたはワークスペースのスキャンで読み取るファイルの glob パターン",
+	"manifest.settings.workspace.gitignore.desc": "プロジェクトの .gitignore で除外されているファイルを除外します",
+	"manifest.settings.workspace.problems.desc": "フォルダーまたはワークスペースのスキャンで読み取れなかったものを問題パネルにも表示します",
+	"manifest.settings.workspace.refusals.desc": "フォルダーまたはワークスペースのスキャンで読み取れなかった結果を、ファイルごとの件数だけでなく個別に一覧表示します"
 }

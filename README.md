@@ -223,9 +223,12 @@ No command is bound to a key by default. Give any of them one under **Keyboard S
 | `ids-le.copyToClipboardEnabled` | `false` | Also copy the report to the clipboard |
 | `ids-le.clipboardIncludesPositions` | `true` | Include the line and column in that copy |
 | `ids-le.workspace.scanPatterns` | `["**/*"]` | The files a folder or workspace scan reads |
-| `ids-le.workspace.scanExcludes` | `node_modules`, `.git`, `dist`, `build`, `target`, `*.min.js` | The files it skips |
+| `ids-le.workspace.scanExcludes` | `node_modules`, `.git`, build output, caches, lockfiles | The files it skips |
+| `ids-le.workspace.scanRespectGitignore` | `true` | Also skip what the project's `.gitignore` files skip |
 | `ids-le.workspace.scanMaxFiles` | `5000` | The most files one scan reads |
-| `ids-le.workspace.scanMaxResults` | `10000` | The most identifiers one scan reports before it stops reading |
+| `ids-le.workspace.scanMaxResults` | `10000` | The most identifiers one scan lists before it stops reading |
+| `ids-le.workspace.scanIncludeRefusals` | `false` | List each run that could not be named, not only how many per file |
+| `ids-le.workspace.scanProblemsEnabled` | `false` | Also show the runs that could not be named in the Problems panel |
 | `ids-le.safety.enabled` | `true` | Warn before extracting from a large file |
 | `ids-le.safety.fileSizeWarnBytes` | `1000000` | The size that warning starts at |
 | `ids-le.notificationsLevel` | `silent` | `all` = every notification, `important` = warnings + errors, `silent` = errors only |
@@ -279,12 +282,12 @@ a build only tells you how busy the runner was.
 <!-- coverage:start -->
 | Metric | Coverage |
 | --- | --- |
-| Statements | 89.91% |
-| Branches | 83.44% |
-| Functions | 92.63% |
-| Lines | 91.64% |
+| Statements | 90.44% |
+| Branches | 84.35% |
+| Functions | 93.29% |
+| Lines | 92.13% |
 
-122 test cases across 12 files, plus an integration suite that runs
+138 test cases across 13 files, plus an integration suite that runs
 in a real VS Code extension host and an end-to-end test that installs the
 built `.vsix` into a clean profile.
 

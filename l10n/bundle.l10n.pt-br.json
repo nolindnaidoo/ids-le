@@ -22,5 +22,9 @@
 	"The results limit was reached. The rest of the files were not read.": "O limite de resultados foi atingido. Os demais arquivos não foram lidos.",
 	"{0} file(s) larger than the safety limit were not read.": "{0} arquivo(s) maiores que o limite de segurança não foram lidos.",
 	"{0} file(s) that are not UTF-8 text were not read.": "{0} arquivo(s) que não são texto UTF-8 não foram lidos.",
-	"{0} identifier(s) in {1} file(s)": "{0} identificador(es) em {1} arquivo(s)"
+	"{0} identifier(s) in {1} file(s)": "{0} identificador(es) em {1} arquivo(s)",
+	"File": "Arquivo",
+	"What could not be read is counted per file and not listed. The {0} setting lists each one.": "O que não pôde ser lido é contado por arquivo e não listado. A configuração {0} lista cada um.",
+	"Named": "Nomeados",
+	"Could not be named": "Não foi possível nomear"
 }

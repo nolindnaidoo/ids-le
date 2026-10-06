@@ -240,11 +240,17 @@ describe('ids-le.scanWorkspace and ids-le.scanFolder', () => {
 		const text = report();
 		expect(text).toContain('# IDs-LE workspace report');
 		expect(text).toContain('3 file(s) read · 2 named, 1 could not be named');
-		const sections = text.match(/^## .*$/gm);
-		expect(sections).toEqual([
+		// The table names every file that holds something, with both counts.
+		expect(text).toContain('| File | Named | Could not be named |');
+		expect(text).toContain('| `/w/api/a.json` | 1 | 0 |');
+		expect(text).toContain('| `/w/api/b.txt` | 1 | 1 |');
+		// What could not be named is counted there and not listed below.
+		expect(text.match(/^## .*$/gm)).toEqual([
 			'## `/w/api/a.json` · json (1)',
-			'## `/w/api/b.txt` · text (2)',
+			'## `/w/api/b.txt` · text (1)',
 		]);
+		expect(text).not.toContain(BAD);
+		expect(text).toContain('`ids-le.workspace.scanIncludeRefusals`');
 		// A named identifier says its kind here, since nothing groups by it.
 		expect(text).toContain(`- **1:8** · \`${UUID}\` · uuid`);
 		// Left out by the default excludes, and never opened as text.
@@ -255,8 +261,25 @@ describe('ids-le.scanWorkspace and ids-le.scanFolder', () => {
 		expect(flashes).toEqual(['2 identifier(s) in 2 file(s)']);
 	});
 
-	it('puts the runs that could not be named in the Problems panel, and only those', async () => {
+	it('lists each run that could not be named when asked to', async () => {
 		open();
+		_setConfig('ids-le.workspace.scanIncludeRefusals', true);
+		await runCommand('ids-le.scanWorkspace');
+
+		expect(report()).toContain('## `/w/api/b.txt` · text (2)');
+		expect(report()).toContain(BAD);
+		expect(report()).not.toContain('scanIncludeRefusals');
+	});
+
+	it('leaves the Problems panel alone unless asked', async () => {
+		open();
+		await runCommand('ids-le.scanWorkspace');
+		expect(_diagnostics().size).toBe(0);
+	});
+
+	it('puts the runs that could not be named in the Problems panel when asked, and only those', async () => {
+		open();
+		_setConfig('ids-le.workspace.scanProblemsEnabled', true);
 		await runCommand('ids-le.scanWorkspace');
 
 		const problems = _diagnostics();
@@ -274,9 +297,8 @@ describe('ids-le.scanWorkspace and ids-le.scanFolder', () => {
 		await runCommand('ids-le.scanFolder', Uri.file('/w/web'));
 
 		expect(report()).toContain('`/w/web` · 1 file(s) read · 1 named');
-		expect(report().match(/^## .*$/gm)).toEqual([
-			'## `/w/web/c.txt` · text (1)',
-		]);
+		// Paths are relative to the folder that was picked.
+		expect(report().match(/^## .*$/gm)).toEqual(['## `c.txt` · text (1)']);
 	});
 
 	it('asks for a folder from the palette, and does nothing when none is picked', async () => {
@@ -292,11 +314,11 @@ describe('ids-le.scanWorkspace and ids-le.scanFolder', () => {
 
 	it('stops at the results limit and says the rest was not read', async () => {
 		open();
-		_setConfig('ids-le.workspace.scanMaxResults', 2);
+		_setConfig('ids-le.workspace.scanMaxResults', 1);
 		await runCommand('ids-le.scanWorkspace');
 
 		const text = report();
-		expect(text).toContain('## `/w/api/b.txt` · text (1)');
+		expect(text.match(/^## .*$/gm)).toEqual(['## `/w/api/a.json` · json (1)']);
 		expect(text).toContain(
 			'> The results limit was reached. The rest of the files were not read.',
 		);

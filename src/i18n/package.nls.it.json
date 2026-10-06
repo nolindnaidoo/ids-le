@@ -30,5 +30,8 @@
 	"manifest.settings.workspace.excludes.desc": "Pattern glob dei file ignorati da una scansione di cartella o dell'area di lavoro",
 	"manifest.settings.workspace.max-files.desc": "Il numero massimo di file letti da una scansione di cartella o dell'area di lavoro",
 	"manifest.settings.workspace.max-results.desc": "Il numero massimo di risultati riportati da una scansione di cartella o dell'area di lavoro prima di interrompere la lettura",
-	"manifest.settings.workspace.patterns.desc": "Pattern glob dei file letti da una scansione di cartella o dell'area di lavoro"
+	"manifest.settings.workspace.patterns.desc": "Pattern glob dei file letti da una scansione di cartella o dell'area di lavoro",
+	"manifest.settings.workspace.gitignore.desc": "Escludi i file esclusi dai file .gitignore del progetto",
+	"manifest.settings.workspace.problems.desc": "Mostra anche nel pannello Problemi ciò che una scansione di cartella o dell'area di lavoro non è riuscita a leggere",
+	"manifest.settings.workspace.refusals.desc": "Elenca ogni risultato che una scansione di cartella o dell'area di lavoro non è riuscita a leggere, non solo quanti per file"
 }

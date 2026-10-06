@@ -94,17 +94,26 @@ describe('IDs-LE integration', function () {
 		writeFileSync(join(root, 'logo.bin'), Buffer.from([0x89, 0x50, 0x00, 0x47]));
 		writeFileSync(join(root, 'empty.md'), 'nothing here');
 
+		writeFileSync(join(root, '.gitignore'), 'generated/\n');
+		mkdirSync(join(root, 'generated'));
+		writeFileSync(join(root, 'generated', 'g.json'), JSON.stringify({ id: uuid }));
+		const settings = vscode.workspace.getConfiguration('ids-le');
+		await settings.update('workspace.scanProblemsEnabled', true, vscode.ConfigurationTarget.Global);
+
 		// As the Explorer calls it: with the folder that was clicked.
 		await vscode.commands.executeCommand('ids-le.scanFolder', vscode.Uri.file(root));
+		await settings.update('workspace.scanProblemsEnabled', undefined, vscode.ConfigurationTarget.Global);
 
 		const report = vscode.workspace.textDocuments.find(
 			(doc) => doc.languageId === 'markdown' && doc.getText().includes('workspace report'),
 		);
 		assert.ok(report, 'no workspace report was opened');
 		const text = report.getText();
-		assert.match(text, /3 file\(s\) read · 2 named, 1 could not be named/);
-		const sections = (text.match(/^## .*$/gm) ?? []).map((line) => line.replace(/`[^`]*[\\/]api[\\/]/, '`api/'));
-		assert.deepStrictEqual(sections, ['## `api/a.json` · json (1)', '## `api/b.txt` · text (2)']);
+		// The .gitignore itself is read, and what it names is not.
+		assert.match(text, /4 file\(s\) read · 2 named, 1 could not be named/);
+		assert.ok(!text.includes('generated'), 'a file ignored by .gitignore was read');
+		assert.match(text, /\| `api\/b\.txt` \| 1 \| 1 \|/);
+		assert.deepStrictEqual(text.match(/^## .*$/gm), ['## `api/a.json` · json (1)', '## `api/b.txt` · text (1)']);
 		assert.ok(!text.includes('node_modules'), 'an excluded folder was read');
 		assert.match(text, /> 1 file\(s\) that are not UTF-8 text were not read\./);
 

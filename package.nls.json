@@ -30,5 +30,8 @@
 	"manifest.settings.workspace.excludes.desc": "Glob patterns of the files a folder or workspace scan skips",
 	"manifest.settings.workspace.max-files.desc": "The most files one folder or workspace scan reads",
 	"manifest.settings.workspace.max-results.desc": "The most results one folder or workspace scan reports before it stops reading",
-	"manifest.settings.workspace.patterns.desc": "Glob patterns of the files a folder or workspace scan reads"
+	"manifest.settings.workspace.patterns.desc": "Glob patterns of the files a folder or workspace scan reads",
+	"manifest.settings.workspace.gitignore.desc": "Leave out the files the project's .gitignore files leave out",
+	"manifest.settings.workspace.problems.desc": "Also show what a folder or workspace scan could not read in the Problems panel",
+	"manifest.settings.workspace.refusals.desc": "List each result a folder or workspace scan could not read, not only how many per file"
 }

@@ -22,5 +22,9 @@
 	"The results limit was reached. The rest of the files were not read.": "已达到结果上限。其余文件未读取。",
 	"{0} file(s) larger than the safety limit were not read.": "{0} 个超过安全上限的文件未读取。",
 	"{0} file(s) that are not UTF-8 text were not read.": "{0} 个非 UTF-8 文本的文件未读取。",
-	"{0} identifier(s) in {1} file(s)": "{1} 个文件中有 {0} 个标识符"
+	"{0} identifier(s) in {1} file(s)": "{1} 个文件中有 {0} 个标识符",
+	"File": "文件",
+	"What could not be read is counted per file and not listed. The {0} setting lists each one.": "无法读取的内容仅按文件计数而不逐条列出。设置 {0} 可逐条列出。",
+	"Named": "已命名",
+	"Could not be named": "无法命名"
 }

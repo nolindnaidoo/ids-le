@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { createIgnore, type IgnoreFile, parseIgnoreFile } from './ignore';
 
 /**
  * Reading many files from disk, for a command that runs over a folder or the
@@ -19,11 +20,13 @@ export interface ScanLimits {
 	readonly maxFiles: number;
 	/** A file larger than this is not read. Undefined reads any size. */
 	readonly maxFileBytes: number | undefined;
+	/** Leave out what the project's `.gitignore` files leave out. */
+	readonly respectGitignore: boolean;
 }
 
 export interface ScannedFile {
 	readonly uri: vscode.Uri;
-	/** The path as a report shows it: relative to the workspace. */
+	/** The path as a report shows it: relative to the folder that was scanned. */
 	readonly file: string;
 	readonly text: string;
 }
@@ -49,6 +52,9 @@ export interface ScanSummary {
  * `findFiles` promises no order, so two scans of one tree would list files
  * differently. The comparison is plain rather than `localeCompare`: the order
  * must not change with the editor's display language.
+ *
+ * Nothing is capped until the ignore rules have been applied. Capping first
+ * spent the whole limit on build output that was about to be thrown away.
  */
 export async function listFiles(
 	root: vscode.Uri | undefined,
@@ -56,21 +62,26 @@ export async function listFiles(
 ): Promise<{ files: vscode.Uri[]; fileLimitReached: boolean }> {
 	const exclude =
 		limits.excludes.length === 0 ? undefined : `{${limits.excludes.join(',')}}`;
+	const roots =
+		root === undefined
+			? (vscode.workspace.workspaceFolders ?? []).map((folder) => folder.uri)
+			: [root];
 	const seen = new Set<string>();
 	const out: vscode.Uri[] = [];
-	for (const pattern of limits.patterns) {
-		const include =
-			root === undefined ? pattern : new vscode.RelativePattern(root, pattern);
-		// One more than the limit, which is how a scan knows it was cut short.
-		for (const uri of await vscode.workspace.findFiles(
-			include,
-			exclude,
-			limits.maxFiles + 1,
-		)) {
-			const key = uri.toString();
-			if (seen.has(key)) continue;
-			seen.add(key);
-			out.push(uri);
+	for (const base of roots) {
+		const ignored = limits.respectGitignore
+			? createIgnore(await ignoreFilesFor(base, exclude))
+			: undefined;
+		for (const pattern of limits.patterns) {
+			for (const uri of await vscode.workspace.findFiles(
+				new vscode.RelativePattern(base, pattern),
+				exclude,
+			)) {
+				const key = uri.toString();
+				if (seen.has(key) || ignored?.(uri.path)) continue;
+				seen.add(key);
+				out.push(uri);
+			}
 		}
 	}
 	out.sort((a, b) => (a.path < b.path ? -1 : Number(a.path > b.path)));
@@ -78,6 +89,55 @@ export async function listFiles(
 		files: out.slice(0, limits.maxFiles),
 		fileLimitReached: out.length > limits.maxFiles,
 	};
+}
+
+/**
+ * Every `.gitignore` that says something about the files under `base`: the
+ * ones beneath it, and the ones above it up to the top of its repository.
+ */
+async function ignoreFilesFor(
+	base: vscode.Uri,
+	exclude: string | undefined,
+): Promise<IgnoreFile[]> {
+	const found: vscode.Uri[] = await vscode.workspace.findFiles(
+		new vscode.RelativePattern(base, '**/.gitignore'),
+		exclude,
+	);
+	// Upwards from the folder. The repository's top is where `.git` is, and
+	// rules above that belong to something else.
+	let directory = base;
+	for (let level = 0; level < MAX_ANCESTORS; level++) {
+		if (level > 0) found.push(vscode.Uri.joinPath(directory, '.gitignore'));
+		if (await exists(vscode.Uri.joinPath(directory, '.git'))) break;
+		const parent = vscode.Uri.joinPath(directory, '..');
+		if (parent.path === directory.path) break;
+		directory = parent;
+	}
+
+	const files: IgnoreFile[] = [];
+	for (const uri of found) {
+		try {
+			const text = decodeText(await vscode.workspace.fs.readFile(uri));
+			if (text === undefined) continue;
+			files.push(
+				parseIgnoreFile(uri.path.slice(0, uri.path.lastIndexOf('/')), text),
+			);
+		} catch {
+			// Most directories on the way up have no .gitignore.
+		}
+	}
+	return files;
+}
+
+const MAX_ANCESTORS = 32;
+
+async function exists(uri: vscode.Uri): Promise<boolean> {
+	try {
+		await vscode.workspace.fs.stat(uri);
+		return true;
+	} catch {
+		return false;
+	}
 }
 
 /**
@@ -103,6 +163,7 @@ export function decodeText(bytes: Uint8Array): string | undefined {
  * limit on its own results.
  */
 export async function scanFiles(
+	root: vscode.Uri | undefined,
 	files: readonly vscode.Uri[],
 	limits: ScanLimits,
 	token: vscode.CancellationToken,
@@ -139,7 +200,7 @@ export async function scanFiles(
 		}
 
 		read++;
-		const file = vscode.workspace.asRelativePath(uri, false);
+		const file = labelOf(root, uri);
 		if (each({ uri, file, text }) === false) {
 			return {
 				read,
@@ -151,6 +212,13 @@ export async function scanFiles(
 		}
 	}
 	return { read, tooLarge, notText, stoppedEarly: false, cancelled: false };
+}
+
+/** A folder that was picked is the reader's frame of reference, wherever the workspace is. */
+function labelOf(root: vscode.Uri | undefined, uri: vscode.Uri): string {
+	if (root !== undefined && uri.path.startsWith(`${root.path}/`))
+		return uri.path.slice(root.path.length + 1);
+	return vscode.workspace.asRelativePath(uri, false);
 }
 
 /** The lines a report adds for whatever a scan left unread. Empty when it read everything. */

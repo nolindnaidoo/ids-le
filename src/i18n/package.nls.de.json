@@ -30,5 +30,8 @@
 	"manifest.settings.workspace.excludes.desc": "Glob-Muster der Dateien, die ein Ordner- oder Arbeitsbereichsscan überspringt",
 	"manifest.settings.workspace.max-files.desc": "Die Höchstzahl der Dateien, die ein Ordner- oder Arbeitsbereichsscan liest",
 	"manifest.settings.workspace.max-results.desc": "Die Höchstzahl der Ergebnisse, die ein Ordner- oder Arbeitsbereichsscan meldet, bevor er das Lesen beendet",
-	"manifest.settings.workspace.patterns.desc": "Glob-Muster der Dateien, die ein Ordner- oder Arbeitsbereichsscan liest"
+	"manifest.settings.workspace.patterns.desc": "Glob-Muster der Dateien, die ein Ordner- oder Arbeitsbereichsscan liest",
+	"manifest.settings.workspace.gitignore.desc": "Dateien auslassen, die die .gitignore-Dateien des Projekts auslassen",
+	"manifest.settings.workspace.problems.desc": "Auch im Problembereich anzeigen, was ein Ordner- oder Arbeitsbereichsscan nicht lesen konnte",
+	"manifest.settings.workspace.refusals.desc": "Jedes Ergebnis auflisten, das ein Ordner- oder Arbeitsbereichsscan nicht lesen konnte, nicht nur die Anzahl pro Datei"
 }

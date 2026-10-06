@@ -22,5 +22,9 @@
 	"The results limit was reached. The rest of the files were not read.": "Đã đạt giới hạn kết quả. Các tệp còn lại không được đọc.",
 	"{0} file(s) larger than the safety limit were not read.": "{0} tệp lớn hơn giới hạn an toàn không được đọc.",
 	"{0} file(s) that are not UTF-8 text were not read.": "{0} tệp không phải văn bản UTF-8 không được đọc.",
-	"{0} identifier(s) in {1} file(s)": "{0} mã định danh trong {1} tệp"
+	"{0} identifier(s) in {1} file(s)": "{0} mã định danh trong {1} tệp",
+	"File": "Tệp",
+	"What could not be read is counted per file and not listed. The {0} setting lists each one.": "Những gì không đọc được chỉ được đếm theo tệp và không được liệt kê. Cài đặt {0} sẽ liệt kê từng mục.",
+	"Named": "Đã đặt tên",
+	"Could not be named": "Không thể đặt tên"
 }

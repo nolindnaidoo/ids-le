@@ -30,5 +30,8 @@
 	"manifest.settings.workspace.excludes.desc": "Glob-шаблони файлів, які пропускає сканування папки або робочої області",
 	"manifest.settings.workspace.max-files.desc": "Найбільша кількість файлів, яку читає одне сканування папки або робочої області",
 	"manifest.settings.workspace.max-results.desc": "Найбільша кількість результатів, яку повідомляє одне сканування папки або робочої області, перш ніж припинити читання",
-	"manifest.settings.workspace.patterns.desc": "Glob-шаблони файлів, які читає сканування папки або робочої області"
+	"manifest.settings.workspace.patterns.desc": "Glob-шаблони файлів, які читає сканування папки або робочої області",
+	"manifest.settings.workspace.gitignore.desc": "Пропускати файли, які пропускають файли .gitignore проєкту",
+	"manifest.settings.workspace.problems.desc": "Показувати на панелі «Проблеми» також те, що сканування папки або робочої області не змогло прочитати",
+	"manifest.settings.workspace.refusals.desc": "Перелічувати кожен результат, який сканування папки або робочої області не змогло прочитати, а не лише їх кількість за файлами"
 }
