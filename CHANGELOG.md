@@ -10,6 +10,23 @@ separate product on its own cadence and keeps its own
 [CHANGELOG](crate/CHANGELOG.md). The entries below 1.0.0 describe this
 repository while it held the CLI alone.
 
+## [Unreleased]
+
+### Added
+
+- Scan a folder or the whole workspace. `IDs-LE: Scan Workspace for IDs`
+  reads every file in the workspace from disk and reports the identifiers in
+  one section per file. `IDs-LE: Scan Folder for IDs` does the same for one
+  folder, from the command palette or from a folder in the Explorer. The runs
+  that could not be named also appear in the Problems panel, each on its own
+  line.
+- Four settings shape a scan: `ids-le.workspace.scanPatterns` and
+  `ids-le.workspace.scanExcludes` choose the files,
+  `ids-le.workspace.scanMaxFiles` caps how many are read, and
+  `ids-le.workspace.scanMaxResults` caps how many identifiers are reported.
+  A file over the safety size, or one that is not UTF-8 text, is left unread,
+  and the report says how many were.
+
 ## [1.1.0] - 2026-10-05
 
 ### Added

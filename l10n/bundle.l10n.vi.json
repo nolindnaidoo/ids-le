@@ -11,5 +11,16 @@
 	"key": "khóa",
 	"{0} identifier(s)": "{0} định danh",
 	"{0} named, {1} could not be named": "{0} đã nhận diện, {1} không nhận diện được",
-	"{0} run(s) could not be named; the report gives each reason": "{0} giá trị không nhận diện được; báo cáo nêu lý do của từng giá trị"
+	"{0} run(s) could not be named; the report gives each reason": "{0} giá trị không nhận diện được; báo cáo nêu lý do của từng giá trị",
+	"No workspace open. Please open a workspace folder first.": "Chưa mở không gian làm việc nào. Vui lòng mở một thư mục không gian làm việc trước.",
+	"Scanning files...": "Đang quét tệp...",
+	"{0} of {1} files": "{0} trên {1} tệp",
+	"{0} file(s) read": "Đã đọc {0} tệp",
+	"Scan Folder": "Quét thư mục",
+	"{0} workspace report": "Báo cáo không gian làm việc của {0}",
+	"More files matched than the limit of {0}. The rest were not read.": "Số tệp khớp vượt quá giới hạn {0}. Phần còn lại không được đọc.",
+	"The results limit was reached. The rest of the files were not read.": "Đã đạt giới hạn kết quả. Các tệp còn lại không được đọc.",
+	"{0} file(s) larger than the safety limit were not read.": "{0} tệp lớn hơn giới hạn an toàn không được đọc.",
+	"{0} file(s) that are not UTF-8 text were not read.": "{0} tệp không phải văn bản UTF-8 không được đọc.",
+	"{0} identifier(s) in {1} file(s)": "{0} mã định danh trong {1} tệp"
 }

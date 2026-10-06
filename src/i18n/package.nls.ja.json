@@ -1,6 +1,8 @@
 {
 	"manifest.command.category": "IDs-LE",
 	"manifest.command.extract.title": "ID を抽出",
+	"manifest.command.scan-workspace.title": "ワークスペースの ID をスキャン",
+	"manifest.command.scan-folder.title": "フォルダーの ID をスキャン",
 	"manifest.command.settings.title": "設定を開く",
 	"manifest.command.help.title": "ヘルプとトラブルシューティング",
 	"manifest.settings.title": "IDs-LE の設定",
@@ -24,5 +26,9 @@
 	"manifest.settings.statusbar.enabled.desc": "すばやくアクセスできるようステータスバーに IDs-LE の項目を表示する",
 	"manifest.settings.telemetry.desc": "出力パネルへのローカル限定のテレメトリログを有効にする",
 	"manifest.capability.untrusted-workspaces.desc": "信頼されていないワークスペースでは機能が制限されます",
-	"manifest.mcp.label": "エージェントモード向けの IDs-LE 識別子抽出"
+	"manifest.mcp.label": "エージェントモード向けの IDs-LE 識別子抽出",
+	"manifest.settings.workspace.excludes.desc": "フォルダーまたはワークスペースのスキャンで除外するファイルの glob パターン",
+	"manifest.settings.workspace.max-files.desc": "フォルダーまたはワークスペースの 1 回のスキャンで読み取るファイルの最大数",
+	"manifest.settings.workspace.max-results.desc": "フォルダーまたはワークスペースの 1 回のスキャンが読み取りを止めるまでに報告する結果の最大数",
+	"manifest.settings.workspace.patterns.desc": "フォルダーまたはワークスペースのスキャンで読み取るファイルの glob パターン"
 }

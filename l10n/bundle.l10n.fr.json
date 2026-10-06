@@ -11,5 +11,16 @@
 	"key": "clé",
 	"{0} identifier(s)": "{0} identifiant(s)",
 	"{0} named, {1} could not be named": "{0} nommés, {1} non nommés",
-	"{0} run(s) could not be named; the report gives each reason": "{0} valeur(s) n’ont pas pu être nommées ; le rapport donne chaque raison"
+	"{0} run(s) could not be named; the report gives each reason": "{0} valeur(s) n’ont pas pu être nommées ; le rapport donne chaque raison",
+	"No workspace open. Please open a workspace folder first.": "Aucun espace de travail ouvert. Ouvrez d'abord un dossier d'espace de travail.",
+	"Scanning files...": "Analyse des fichiers...",
+	"{0} of {1} files": "{0} sur {1} fichiers",
+	"{0} file(s) read": "{0} fichier(s) lu(s)",
+	"Scan Folder": "Analyser le dossier",
+	"{0} workspace report": "Rapport d'espace de travail {0}",
+	"More files matched than the limit of {0}. The rest were not read.": "Plus de fichiers correspondent que la limite de {0}. Les autres n'ont pas été lus.",
+	"The results limit was reached. The rest of the files were not read.": "La limite de résultats a été atteinte. Les autres fichiers n'ont pas été lus.",
+	"{0} file(s) larger than the safety limit were not read.": "{0} fichier(s) dépassant la limite de sécurité n'ont pas été lus.",
+	"{0} file(s) that are not UTF-8 text were not read.": "{0} fichier(s) qui ne sont pas du texte UTF-8 n'ont pas été lus.",
+	"{0} identifier(s) in {1} file(s)": "{0} identifiant(s) dans {1} fichier(s)"
 }

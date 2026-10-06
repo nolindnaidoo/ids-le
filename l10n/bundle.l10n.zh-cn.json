@@ -11,5 +11,16 @@
 	"key": "键",
 	"{0} identifier(s)": "{0} 个标识符",
 	"{0} named, {1} could not be named": "已识别 {0} 个,{1} 个无法识别",
-	"{0} run(s) could not be named; the report gives each reason": "{0} 个值无法识别;报告中给出了每个值的原因"
+	"{0} run(s) could not be named; the report gives each reason": "{0} 个值无法识别;报告中给出了每个值的原因",
+	"No workspace open. Please open a workspace folder first.": "未打开工作区。请先打开一个工作区文件夹。",
+	"Scanning files...": "正在扫描文件...",
+	"{0} of {1} files": "第 {0} 个文件，共 {1} 个",
+	"{0} file(s) read": "已读取 {0} 个文件",
+	"Scan Folder": "扫描文件夹",
+	"{0} workspace report": "{0} 工作区报告",
+	"More files matched than the limit of {0}. The rest were not read.": "匹配的文件超过了 {0} 个的上限。其余文件未读取。",
+	"The results limit was reached. The rest of the files were not read.": "已达到结果上限。其余文件未读取。",
+	"{0} file(s) larger than the safety limit were not read.": "{0} 个超过安全上限的文件未读取。",
+	"{0} file(s) that are not UTF-8 text were not read.": "{0} 个非 UTF-8 文本的文件未读取。",
+	"{0} identifier(s) in {1} file(s)": "{1} 个文件中有 {0} 个标识符"
 }

@@ -1,6 +1,8 @@
 {
 	"manifest.command.category": "IDs-LE",
 	"manifest.command.extract.title": "Ekstrak ID",
+	"manifest.command.scan-workspace.title": "Pindai Ruang Kerja untuk ID",
+	"manifest.command.scan-folder.title": "Pindai Folder untuk ID",
 	"manifest.command.settings.title": "Buka Pengaturan",
 	"manifest.command.help.title": "Bantuan & Pemecahan Masalah",
 	"manifest.settings.title": "Pengaturan IDs-LE",
@@ -24,5 +26,9 @@
 	"manifest.settings.statusbar.enabled.desc": "Tampilkan entri IDs-LE di bilah status untuk akses cepat",
 	"manifest.settings.telemetry.desc": "Aktifkan log telemetri yang hanya lokal di panel Output",
 	"manifest.capability.untrusted-workspaces.desc": "Fungsionalitas terbatas di ruang kerja yang tidak tepercaya",
-	"manifest.mcp.label": "Ekstraksi pengenal IDs-LE untuk mode agen"
+	"manifest.mcp.label": "Ekstraksi pengenal IDs-LE untuk mode agen",
+	"manifest.settings.workspace.excludes.desc": "Pola glob file yang dilewati oleh pemindaian folder atau ruang kerja",
+	"manifest.settings.workspace.max-files.desc": "Jumlah file terbanyak yang dibaca oleh satu pemindaian folder atau ruang kerja",
+	"manifest.settings.workspace.max-results.desc": "Jumlah hasil terbanyak yang dilaporkan oleh satu pemindaian folder atau ruang kerja sebelum berhenti membaca",
+	"manifest.settings.workspace.patterns.desc": "Pola glob file yang dibaca oleh pemindaian folder atau ruang kerja"
 }

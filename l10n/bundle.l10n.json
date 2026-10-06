@@ -11,5 +11,16 @@
 	"key": "key",
 	"{0} identifier(s)": "{0} identifier(s)",
 	"{0} named, {1} could not be named": "{0} named, {1} could not be named",
-	"{0} run(s) could not be named; the report gives each reason": "{0} run(s) could not be named; the report gives each reason"
+	"{0} run(s) could not be named; the report gives each reason": "{0} run(s) could not be named; the report gives each reason",
+	"No workspace open. Please open a workspace folder first.": "No workspace open. Please open a workspace folder first.",
+	"Scanning files...": "Scanning files...",
+	"{0} of {1} files": "{0} of {1} files",
+	"{0} file(s) read": "{0} file(s) read",
+	"Scan Folder": "Scan Folder",
+	"{0} workspace report": "{0} workspace report",
+	"More files matched than the limit of {0}. The rest were not read.": "More files matched than the limit of {0}. The rest were not read.",
+	"The results limit was reached. The rest of the files were not read.": "The results limit was reached. The rest of the files were not read.",
+	"{0} file(s) larger than the safety limit were not read.": "{0} file(s) larger than the safety limit were not read.",
+	"{0} file(s) that are not UTF-8 text were not read.": "{0} file(s) that are not UTF-8 text were not read.",
+	"{0} identifier(s) in {1} file(s)": "{0} identifier(s) in {1} file(s)"
 }

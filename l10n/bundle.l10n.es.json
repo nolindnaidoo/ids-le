@@ -11,5 +11,16 @@
 	"key": "clave",
 	"{0} identifier(s)": "{0} identificador(es)",
 	"{0} named, {1} could not be named": "{0} nombrados, {1} sin nombrar",
-	"{0} run(s) could not be named; the report gives each reason": "{0} valor(es) no se pudieron nombrar; el informe indica cada motivo"
+	"{0} run(s) could not be named; the report gives each reason": "{0} valor(es) no se pudieron nombrar; el informe indica cada motivo",
+	"No workspace open. Please open a workspace folder first.": "No hay ningún área de trabajo abierta. Abra primero una carpeta de área de trabajo.",
+	"Scanning files...": "Analizando archivos...",
+	"{0} of {1} files": "{0} de {1} archivos",
+	"{0} file(s) read": "{0} archivo(s) leído(s)",
+	"Scan Folder": "Analizar carpeta",
+	"{0} workspace report": "Informe del área de trabajo de {0}",
+	"More files matched than the limit of {0}. The rest were not read.": "Coincidieron más archivos que el límite de {0}. El resto no se leyó.",
+	"The results limit was reached. The rest of the files were not read.": "Se alcanzó el límite de resultados. El resto de los archivos no se leyó.",
+	"{0} file(s) larger than the safety limit were not read.": "{0} archivo(s) mayores que el límite de seguridad no se leyeron.",
+	"{0} file(s) that are not UTF-8 text were not read.": "{0} archivo(s) que no son texto UTF-8 no se leyeron.",
+	"{0} identifier(s) in {1} file(s)": "{0} identificador(es) en {1} archivo(s)"
 }

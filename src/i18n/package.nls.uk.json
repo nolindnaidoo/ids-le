@@ -1,6 +1,8 @@
 {
 	"manifest.command.category": "IDs-LE",
 	"manifest.command.extract.title": "Витягти ідентифікатори",
+	"manifest.command.scan-workspace.title": "Шукати ідентифікатори в робочій області",
+	"manifest.command.scan-folder.title": "Шукати ідентифікатори в папці",
 	"manifest.command.settings.title": "Відкрити налаштування",
 	"manifest.command.help.title": "Довідка та усунення проблем",
 	"manifest.settings.title": "Налаштування IDs-LE",
@@ -24,5 +26,9 @@
 	"manifest.settings.statusbar.enabled.desc": "Показувати елемент IDs-LE у рядку стану для швидкого доступу",
 	"manifest.settings.telemetry.desc": "Увімкнути лише локальні журнали телеметрії на панелі «Вивід»",
 	"manifest.capability.untrusted-workspaces.desc": "Обмежена функціональність у ненадійних робочих областях",
-	"manifest.mcp.label": "Витягування ідентифікаторів IDs-LE для режиму агента"
+	"manifest.mcp.label": "Витягування ідентифікаторів IDs-LE для режиму агента",
+	"manifest.settings.workspace.excludes.desc": "Glob-шаблони файлів, які пропускає сканування папки або робочої області",
+	"manifest.settings.workspace.max-files.desc": "Найбільша кількість файлів, яку читає одне сканування папки або робочої області",
+	"manifest.settings.workspace.max-results.desc": "Найбільша кількість результатів, яку повідомляє одне сканування папки або робочої області, перш ніж припинити читання",
+	"manifest.settings.workspace.patterns.desc": "Glob-шаблони файлів, які читає сканування папки або робочої області"
 }

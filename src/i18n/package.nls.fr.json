@@ -1,6 +1,8 @@
 {
 	"manifest.command.category": "IDs-LE",
 	"manifest.command.extract.title": "Extraire les identifiants",
+	"manifest.command.scan-workspace.title": "Rechercher les ID dans l'espace de travail",
+	"manifest.command.scan-folder.title": "Rechercher les ID dans le dossier",
 	"manifest.command.settings.title": "Ouvrir les paramètres",
 	"manifest.command.help.title": "Aide et dépannage",
 	"manifest.settings.title": "Paramètres d’IDs-LE",
@@ -24,5 +26,9 @@
 	"manifest.settings.statusbar.enabled.desc": "Afficher l’entrée IDs-LE dans la barre d’état pour un accès rapide",
 	"manifest.settings.telemetry.desc": "Activer les journaux de télémétrie uniquement locaux dans le panneau Sortie",
 	"manifest.capability.untrusted-workspaces.desc": "Fonctionnalités limitées dans les espaces de travail non approuvés",
-	"manifest.mcp.label": "Extraction d’identifiants d’IDs-LE pour le mode agent"
+	"manifest.mcp.label": "Extraction d’identifiants d’IDs-LE pour le mode agent",
+	"manifest.settings.workspace.excludes.desc": "Motifs glob des fichiers ignorés par une analyse de dossier ou d'espace de travail",
+	"manifest.settings.workspace.max-files.desc": "Le nombre maximal de fichiers lus par une analyse de dossier ou d'espace de travail",
+	"manifest.settings.workspace.max-results.desc": "Le nombre maximal de résultats signalés par une analyse de dossier ou d'espace de travail avant l'arrêt de la lecture",
+	"manifest.settings.workspace.patterns.desc": "Motifs glob des fichiers lus par une analyse de dossier ou d'espace de travail"
 }

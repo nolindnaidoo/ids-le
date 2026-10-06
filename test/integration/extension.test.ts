@@ -36,7 +36,13 @@ describe('IDs-LE integration', function () {
 		const extension = vscode.extensions.getExtension(EXTENSION_ID);
 		await extension?.activate();
 		const commands = await vscode.commands.getCommands(true);
-		for (const id of ['ids-le.extract', 'ids-le.openSettings', 'ids-le.help']) {
+		for (const id of [
+			'ids-le.extract',
+			'ids-le.scanWorkspace',
+			'ids-le.scanFolder',
+			'ids-le.openSettings',
+			'ids-le.help',
+		]) {
 			assert.ok(commands.includes(id), `missing command: ${id}`);
 		}
 	});

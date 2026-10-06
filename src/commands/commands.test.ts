@@ -3,14 +3,18 @@ import {
 	_clipboardText,
 	_createDocument,
 	_createExtensionContext,
+	_diagnostics,
 	_openedDocuments,
 	_registeredCommands,
 	_resetMockState,
+	_respondToOpenDialog,
 	_setActiveEditor,
 	_setConfig,
 	_setWorkspaceFiles,
 	_shownMessages,
 	executedBuiltins,
+	Uri,
+	workspace,
 } from '../__mocks__/vscode';
 import { registerOpenSettingsCommand } from '../config/settings';
 import type { Telemetry } from '../telemetry/telemetry';
@@ -29,10 +33,10 @@ function makeDeps() {
 	};
 }
 
-async function runCommand(id: string): Promise<void> {
+async function runCommand(id: string, ...args: unknown[]): Promise<void> {
 	const handler = _registeredCommands().get(id);
 	if (!handler) throw new Error(`command not registered: ${id}`);
-	await handler();
+	await handler(...args);
 }
 
 function report(): string {
@@ -203,5 +207,115 @@ describe('settings and help', () => {
 		]) {
 			expect(generateHelpContent()).toContain(word);
 		}
+	});
+});
+
+describe('ids-le.scanWorkspace and ids-le.scanFolder', () => {
+	const UUID = 'f47ac10b-58cc-4372-a567-0e02b2c3d479';
+	const BAD = 'f47ac10b-58cc-4372-1567-0e02b2c3d479';
+	const TREE = {
+		'/w/api/a.json': JSON.stringify({ id: UUID }),
+		'/w/api/b.txt': `first ${UUID}\nthen ${BAD}`,
+		'/w/empty.md': 'nothing here',
+		'/w/node_modules/dep.json': JSON.stringify({ id: UUID }),
+		'/w/logo.png': new Uint8Array([0x89, 0x50, 0x00, 0x47]),
+	};
+
+	function open(): void {
+		_setWorkspaceFiles(TREE);
+		workspace.workspaceFolders = [{ uri: Uri.file('/w'), name: 'w', index: 0 }];
+	}
+
+	it('warns when no workspace is open', async () => {
+		_setConfig('ids-le.notificationsLevel', 'all');
+		await runCommand('ids-le.scanWorkspace');
+		expect(_shownMessages()[0]).toMatchObject({ kind: 'warning' });
+		expect(_openedDocuments()).toHaveLength(0);
+	});
+
+	it('reports every file that holds an identifier, one section each, in path order', async () => {
+		open();
+		await runCommand('ids-le.scanWorkspace');
+
+		const text = report();
+		expect(text).toContain('# IDs-LE workspace report');
+		expect(text).toContain('3 file(s) read · 2 named, 1 could not be named');
+		const sections = text.match(/^## .*$/gm);
+		expect(sections).toEqual([
+			'## `/w/api/a.json` · json (1)',
+			'## `/w/api/b.txt` · text (2)',
+		]);
+		// A named identifier says its kind here, since nothing groups by it.
+		expect(text).toContain(`- **1:8** · \`${UUID}\` · uuid`);
+		// Left out by the default excludes, and never opened as text.
+		expect(text).not.toContain('node_modules');
+		expect(text).toContain(
+			'> 1 file(s) that are not UTF-8 text were not read.',
+		);
+		expect(flashes).toEqual(['2 identifier(s) in 2 file(s)']);
+	});
+
+	it('puts the runs that could not be named in the Problems panel, and only those', async () => {
+		open();
+		await runCommand('ids-le.scanWorkspace');
+
+		const problems = _diagnostics();
+		expect([...problems.keys()]).toEqual(['/w/api/b.txt']);
+		const [problem] = problems.get('/w/api/b.txt') ?? [];
+		expect(problem?.severity).toBe(1);
+		expect(problem?.source).toBe('ids-le');
+		expect(problem?.range.start).toMatchObject({ line: 1, character: 5 });
+		expect(problem?.range.end.character).toBe(5 + BAD.length);
+	});
+
+	it('scans only the folder it is handed', async () => {
+		open();
+		_setWorkspaceFiles({ ...TREE, '/w/web/c.txt': UUID });
+		await runCommand('ids-le.scanFolder', Uri.file('/w/web'));
+
+		expect(report()).toContain('`/w/web` · 1 file(s) read · 1 named');
+		expect(report().match(/^## .*$/gm)).toEqual([
+			'## `/w/web/c.txt` · text (1)',
+		]);
+	});
+
+	it('asks for a folder from the palette, and does nothing when none is picked', async () => {
+		open();
+		_respondToOpenDialog(() => undefined);
+		await runCommand('ids-le.scanFolder');
+		expect(_openedDocuments()).toHaveLength(0);
+
+		_respondToOpenDialog(() => [Uri.file('/w/api')]);
+		await runCommand('ids-le.scanFolder');
+		expect(report()).toContain('`/w/api` · 2 file(s) read');
+	});
+
+	it('stops at the results limit and says the rest was not read', async () => {
+		open();
+		_setConfig('ids-le.workspace.scanMaxResults', 2);
+		await runCommand('ids-le.scanWorkspace');
+
+		const text = report();
+		expect(text).toContain('## `/w/api/b.txt` · text (1)');
+		expect(text).toContain(
+			'> The results limit was reached. The rest of the files were not read.',
+		);
+	});
+
+	it('says when more files matched than the file limit', async () => {
+		open();
+		_setConfig('ids-le.workspace.scanMaxFiles', 1);
+		await runCommand('ids-le.scanWorkspace');
+		expect(report()).toContain(
+			'> More files matched than the limit of 1. The rest were not read.',
+		);
+	});
+
+	it('honours the positions settings as Extract does', async () => {
+		open();
+		_setConfig('ids-le.showPositions', false);
+		await runCommand('ids-le.scanWorkspace');
+		expect(report()).not.toMatch(/\*\*\d+:\d+\*\*/);
+		expect(report()).toContain(`- \`${UUID}\` · uuid`);
 	});
 });
