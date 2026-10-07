@@ -14,6 +14,14 @@ repository while it held the CLI alone.
 
 ### Added
 
+- A rating prompt. After 10 successful uses across 3 separate days, one
+  notification asks whether you would rate the extension, with *Rate*,
+  *Later* and *Don't Ask Again*. *Rate* opens the registry your copy was
+  installed from: the VS Code Marketplace or Open VSX. *Later*, or dismissing
+  it, asks once more 30 uses on; that second ask is the last. It never appears
+  on activation or after a failed run, and it is never shown if you have set
+  `notificationsLevel` to `important` or `silent` yourself. The answer follows
+  you through Settings Sync. Translated into all 12 locales.
 - Scan a folder or the whole workspace. `IDs-LE: Scan Workspace for IDs`
   reads every file in the workspace from disk. `IDs-LE: Scan Folder for IDs`
   does the same for one folder, from the command palette or from a folder in
