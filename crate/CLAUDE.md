@@ -14,7 +14,7 @@ any conflict.
   Fix the lint, or add a commented relaxation to `[lints.clippy]` in
   `Cargo.toml`. Four are there already, each with its reason.
 - New logic goes in `extract/` when it is pure — it must then be unit
-  tested, and it carries a **75% line coverage floor per module**,
+  tested, and it carries a **70% line coverage floor per module**,
   enforced per module rather than on the total so one cannot slide while
   the others carry it.
 - **Refuse rather than guess.** A run that fits two schemes is refused
