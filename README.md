@@ -27,6 +27,10 @@
 
 ---
 
+<p align="center">
+  <img src="assets/demos/editor.gif" alt="IDs-LE in VS Code" style="max-width: 100%; height: auto;" />
+</p>
+
 > **Useful?** A star or rating is how other developers find it —
 > [★ GitHub](https://github.com/nolindnaidoo/ids-le) ·
 > [★ Open VSX](https://open-vsx.org/extension/nolindnaidoo/ids-le/reviews) ·
@@ -244,6 +248,10 @@ The same engine runs as an [MCP](https://modelcontextprotocol.io) server, so an 
 | **Claude Code** | `claude mcp add ids-le -- npx -y ids-le-mcp` |
 | **Cursor, Windsurf, anything else** | point it at `npx ids-le-mcp` |
 
+<p align="center">
+  <img src="assets/demos/mcp.gif" alt="An agent in Claude Code calling the ids-le MCP server" style="max-width: 100%; height: auto;" />
+</p>
+
 ```
 extract_ids(content, format?, filename?, kind?, maxResults?)
 ```
@@ -277,7 +285,7 @@ echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | npx -y ids-le-mcp
 The same extraction runs over a whole tree from a terminal or a CI step: a Rust CLI in [`crate/`](crate/README.md), sharing one corpus with the extension — [`crate/fixtures/`](crate/fixtures/) — so the two can never read an identifier differently.
 
 <p align="center">
-  <img src="assets/demo.gif" alt="ids-le in a terminal" style="max-width: 100%; height: auto;" />
+  <img src="assets/demos/cli.gif" alt="ids-le in a terminal" style="max-width: 100%; height: auto;" />
 </p>
 
 ```bash

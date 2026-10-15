@@ -15,6 +15,8 @@
   </a>
 </p>
 
+![An agent in Claude Code calling the ids-le MCP server](https://raw.githubusercontent.com/nolindnaidoo/ids-le/main/assets/demos/mcp.gif)
+
 An [MCP](https://modelcontextprotocol.io) server that finds every identifier
 in a document — UUID at every version, ULID, NanoID, MongoDB ObjectId and
 Snowflake — with its line, column and key path, whether it is valid, and the
