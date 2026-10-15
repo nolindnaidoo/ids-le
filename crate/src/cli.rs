@@ -1,10 +1,11 @@
 //! The terminal surface.
 //!
-//! stdout is always protocol — one JSON report per line, one line per
-//! file. stderr is always for the human, and is a projection of the same
+//! stdout is protocol — one JSON report per line, one line per file —
+//! whenever something is reading it, and silent when it is a terminal.
+//! stderr is always for the human, and is a projection of the same
 //! reports rather than parallel prose.
 
-use std::io::{Read, Write};
+use std::io::{IsTerminal, Read, Write};
 use std::path::PathBuf;
 use std::process::ExitCode;
 
@@ -27,6 +28,9 @@ It refuses rather than guesses. A run that fits two schemes, a UUID whose
 variant bits are wrong, the nil UUID, a v4 that is plainly not random, a
 timestamp before 1990 — each is a row in the report with a named reason,
 never a dropped row and never a silent answer.
+
+One JSON report per line on stdout when it is piped or redirected, every
+row listed on stderr.
 
 Options:
   --kind <kind>        report only one of uuid, ulid, nanoid, objectid,
@@ -112,17 +116,30 @@ fn execute(args: &[String]) -> Result<u8, String> {
         scan::partition(scanned)
     };
 
-    write_reports(&reports)?;
+    let stdout = std::io::stdout();
+    let terminal = stdout.is_terminal();
+    write_reports(&mut stdout.lock(), &reports, terminal)
+        .map_err(|error| format!("could not write the report: {error}"))?;
     summarise(&reports, binary);
     Ok(scan::exit_code(&reports, options.strict))
 }
 
-fn write_reports(reports: &[FileReport]) -> Result<(), String> {
-    let mut stdout = std::io::stdout().lock();
+/// A terminal gets nothing here. The stderr listing already shows every
+/// row a person reads, and the JSON beside it on the same screen is the
+/// same answer a second time in a form nobody reads by eye. Anything
+/// that can parse — a pipe, a file, a subprocess — still gets every
+/// report, so no script sees a difference.
+fn write_reports(
+    out: &mut impl Write,
+    reports: &[FileReport],
+    terminal: bool,
+) -> std::io::Result<()> {
+    if terminal {
+        return Ok(());
+    }
     for report in reports {
         let line = serde_json::to_string(report).expect("a report serializes");
-        writeln!(stdout, "{line}")
-            .map_err(|error| format!("could not write the report: {error}"))?;
+        writeln!(out, "{line}")?;
     }
     Ok(())
 }
@@ -256,6 +273,35 @@ fn plural(count: usize, one: &str, many: &str) -> String {
 mod tests {
     use super::*;
     use crate::extract::SUPPORTED_FORMATS;
+
+    fn sample_reports() -> Vec<FileReport> {
+        let options = parse(&["x".into()]).expect("a valid command line");
+        vec![scan::scan_content(
+            "{\"id\":\"f47ac10b-58cc-4372-a567-0e02b2c3d479\"}",
+            "a.json".into(),
+            "json",
+            options.scan,
+        )]
+    }
+
+    #[test]
+    fn a_pipe_gets_one_report_per_line() {
+        let reports = sample_reports();
+        let mut out = Vec::new();
+        write_reports(&mut out, &reports, false).expect("a write");
+        let text = String::from_utf8(out).expect("utf-8");
+        assert_eq!(text.lines().count(), reports.len());
+        assert!(text.starts_with('{'), "{text}");
+    }
+
+    /// The summary on stderr already covers a person at a terminal.
+    #[test]
+    fn a_terminal_gets_no_json() {
+        let reports = sample_reports();
+        let mut out = Vec::new();
+        write_reports(&mut out, &reports, true).expect("a write");
+        assert_eq!(String::from_utf8(out).expect("utf-8"), "");
+    }
 
     #[test]
     fn every_documented_flag_is_parsed_and_the_reverse() {

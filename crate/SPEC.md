@@ -147,9 +147,13 @@ These are the stated limits, not oversights.
 
 ## The report
 
-stdout is protocol: one JSON object per line, one line per file. stderr
-is for the human and is a projection of the same reports — never a
-parallel source of truth.
+stdout is protocol: one JSON object per line, one line per file. When
+stdout is a pipe, a file or a subprocess it carries every report. When it
+is a terminal it carries nothing, because the stderr listing already
+shows every row a person reads there, and the same answer repeated as
+JSON on the same screen is noise. No script can tell the difference,
+since a script is never a terminal. stderr is for the human and is a
+projection of the same reports — never a parallel source of truth.
 
 ```json
 {

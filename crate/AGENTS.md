@@ -125,7 +125,9 @@ Inside `extract/`:
   reads as "this tree is clean".
 - **stdout is protocol, stderr is human. There is no `--json` flag.** One
   mode, nothing to misremember, and the human summary is a projection of
-  the same report so the two cannot drift.
+  the same report so the two cannot drift. stdout stays silent when it is
+  a terminal, because the stderr listing already covers a person reading
+  it. Anything that can parse gets every report.
 - **No dependency per identifier kind, and no date library.** `serde`,
   `serde_json` and `ignore` are the whole tree. `uuid` was considered for
   the version/variant bits and rejected: those are two nibbles, and the
