@@ -110,9 +110,10 @@ ids-le --hidden src/           # include .env
 cat config.yaml | ids-le --stdin --format yaml
 ```
 
-stdout is protocol — one JSON object per line, one line per file. stderr
-is for you. There is no `--json` flag: one mode, and the human summary is
-a projection of the same reports so the two cannot drift.
+stdout is protocol — one JSON object per line, one line per file, printed
+when stdout is piped or redirected and left out at a terminal. stderr is
+for you. There is no `--json` flag: one mode, and the human summary is a
+projection of the same reports so the two cannot drift.
 
 ```json
 {

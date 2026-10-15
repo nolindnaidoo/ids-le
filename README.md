@@ -289,7 +289,7 @@ The same extraction runs over a whole tree from a terminal or a CI step: a Rust 
 </p>
 
 ```bash
-ids-le src/                    # a tree, one JSON line per file
+ids-le src/                    # a tree; one JSON line per file on stdout when piped
 ids-le --kind uuid src/        # one scheme; refusals still reported
 ids-le --strict src/           # exit 2 on anything that could not be named
 ids-le --hidden src/           # include .env
