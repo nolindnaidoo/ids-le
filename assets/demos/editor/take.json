@@ -1,0 +1,16 @@
+{
+  "files": [
+    "records.json"
+  ],
+  "steps": [
+    {
+      "wait": 1500
+    },
+    {
+      "command": "IDs-LE: Extract IDs"
+    },
+    {
+      "wait": 5000
+    }
+  ]
+}
