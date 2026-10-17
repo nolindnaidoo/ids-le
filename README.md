@@ -17,6 +17,9 @@
   <a href="https://www.npmjs.com/package/ids-le-mcp">
     <img src="https://img.shields.io/npm/v/ids-le-mcp?style=for-the-badge&label=MCP%20server&color=blue&logo=npm" alt="ids-le-mcp on npm" />
   </a>
+  <a href="https://www.npmjs.com/package/ids-le">
+    <img src="https://img.shields.io/npm/v/ids-le?style=for-the-badge&label=npm%20CLI&color=blue&logo=npm" alt="ids-le on npm" />
+  </a>
   <a href="https://crates.io/crates/ids-le">
     <img src="https://img.shields.io/crates/v/ids-le?style=for-the-badge&label=Rust%20CLI&color=blue&logo=rust" alt="ids-le on crates.io" />
   </a>
@@ -288,6 +291,22 @@ The same extraction runs over a whole tree from a terminal or a CI step: a Rust 
 <p align="center">
   <img src="assets/demos/cli.gif" alt="ids-le in a terminal" style="max-width: 100%; height: auto;" />
 </p>
+
+**Install it from npm** ([`ids-le`](https://www.npmjs.com/package/ids-le)) **or from crates.io** ([`ids-le`](https://crates.io/crates/ids-le)). Both install the same `ids-le` command.
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/ids-le">
+    <img src="https://img.shields.io/npm/v/ids-le?style=for-the-badge&label=npm%20CLI&color=blue&logo=npm" alt="ids-le on npm" />
+  </a>
+  <a href="https://crates.io/crates/ids-le">
+    <img src="https://img.shields.io/crates/v/ids-le?style=for-the-badge&label=Rust%20CLI&color=blue&logo=rust" alt="ids-le on crates.io" />
+  </a>
+</p>
+
+```bash
+npm install -g ids-le   # or run it once: npx ids-le
+cargo install ids-le
+```
 
 ```bash
 ids-le src/                    # a tree; one JSON line per file on stdout when piped
