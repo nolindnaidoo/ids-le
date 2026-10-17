@@ -1,6 +1,6 @@
 {
 	"name": "ids-le",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "Find every identifier in a codebase: UUID, ULID, NanoID, MongoDB ObjectId and Snowflake, with the key path and the decoded time. Refuses rather than guesses.",
 	"keywords": [
 		"uuid",
