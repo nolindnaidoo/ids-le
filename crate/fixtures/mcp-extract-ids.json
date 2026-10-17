@@ -608,5 +608,74 @@
     },
     "expectedError": "guid is not a kind; it is one of uuid, ulid, nanoid, objectid, snowflake",
     "name": "an unknown kind is refused"
+  },
+  {
+    "arguments": {
+      "format": "json",
+      "kind": "uuid\u0085"
+    },
+    "expected": {
+      "data": {
+        "fileType": "json",
+        "ids": [
+          {
+            "column": 12,
+            "key": "service.id",
+            "kind": "uuid",
+            "line": 3,
+            "valid": true,
+            "value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+            "variant": "rfc4122",
+            "version": 4
+          },
+          {
+            "column": 19,
+            "key": "service.requestId",
+            "kind": "uuid",
+            "line": 4,
+            "timestamp": "2026-08-12T00:00:00.000Z",
+            "valid": true,
+            "value": "019ff344-cc00-7abc-8def-0123456789ab",
+            "variant": "rfc4122",
+            "version": 7
+          },
+          {
+            "column": 19,
+            "detail": "the nil UUID: 128 zero bits, which RFC 9562 defines as naming nothing",
+            "key": "placeholder",
+            "kind": "uuid",
+            "line": 14,
+            "refused": "nil_or_max",
+            "valid": false,
+            "value": "00000000-0000-0000-0000-000000000000"
+          }
+        ],
+        "named": 2,
+        "refused": 1
+      },
+      "diagnostics": [
+        {
+          "code": "refused",
+          "message": "1 run(s) could not be named; each is returned with `valid: false` and a reason",
+          "severity": "warning"
+        }
+      ],
+      "meta": {
+        "count": 3,
+        "tool": "extract_ids",
+        "truncated": false
+      },
+      "ok": true
+    },
+    "file": "ids.json",
+    "name": "a kind is trimmed as Rust trims, U+0085 included"
+  },
+  {
+    "arguments": {
+      "content": "x",
+      "kind": "uuid\ufeff"
+    },
+    "expectedError": "uuid\ufeff is not a kind; it is one of uuid, ulid, nanoid, objectid, snowflake",
+    "name": "U+FEFF is not whitespace to Rust, so a kind behind one is refused"
   }
 ]

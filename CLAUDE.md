@@ -66,6 +66,14 @@ artifact users actually install.
   walk, exit codes, `--strict` and one JSON line per file, none of which has an
   editor equivalent. That is not drift, and nothing holds them equal — see
   `crate/SPEC.md`.
+- **The npm command line is the crate's surface, not the extension's.**
+  `src/cli/` builds the npm package `ids-le`, which installs the same
+  command the crate does, so it is held to the Rust CLI byte for byte by
+  `bun run check:cli-parity` (after `bun run build:cli` and a `cargo build`
+  in `crate/`), MCP replies included. A change to the crate's flags, walk,
+  exit codes or output changes `src/cli/` in the same commit.
+  `--version` is compared too, because every surface carries one version;
+  see AGENTS.md, Release.
 - **`src/extract/` reads no clock.** The command and the MCP tool read now once
   and pass a `Clock` down, as the crate's `scan.rs` does; the corpus and the
   tests pin one. A plausibility window that moved with the wall clock would fail

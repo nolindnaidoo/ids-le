@@ -302,6 +302,15 @@ Directories are walked with ripgrep's `ignore`, so what this reads and
 what ripgrep reads are the same answer. A file named explicitly is always
 read, ignore rules included. Symlinks are never followed.
 
+**Held equal: this surface and the npm one.** The npm package `ids-le`
+installs a command named `ids-le`, built from the extension's `src/cli/`
+over the extension's port of this crate, and nobody running `ids-le` can
+tell which one they have. It is held to everything in this section byte
+for byte — flags, walk, identifiers, refusals, exit codes, stdout, stderr,
+and every reply `ids-le mcp` writes — by `scripts/check-cli-parity.ts`. A
+change to this surface changes `src/cli/` in the same commit. That
+includes `--version`: every surface in the repository carries one version.
+
 ## MCP
 
 `ids-le mcp` speaks the Model Context Protocol on stdio, protocol version
