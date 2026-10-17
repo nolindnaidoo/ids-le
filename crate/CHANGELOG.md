@@ -1,9 +1,27 @@
 # Changelog
 
-The Rust CLI and MCP server.
+The Rust CLI and MCP server. The VS Code extension, the npm MCP server
+and the npm command line have their own [CHANGELOG](../CHANGELOG.md).
+Up to 0.3.4 the crate was versioned on its own. From 1.2.0 every surface
+in this repository carries one version and releases from one tag.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.2.0] - 2026-10-17
+
+### Changed
+
+- **The version jumps from 0.3.4 to 1.2.0** to match the extension and
+  the npm command line `ids-le`, which installs the same command and is
+  held to this one byte for byte. Two binaries called `ids-le` printing
+  different versions for the same behaviour would mislead anyone comparing
+  them. The number changes no behaviour.
+
+### Added
+
+- Two `mcp-extract-ids.json` cases pin how a `kind` is trimmed: U+0085 is
+  whitespace to Rust and U+FEFF is not.
 
 ## [0.3.4] - 2026-10-15
 

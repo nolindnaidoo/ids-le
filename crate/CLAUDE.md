@@ -46,6 +46,12 @@ any conflict.
 - The gated suites are opt-in and CI sets them: `IDS_LE_BUDGET=1`,
   `IDS_LE_FUZZ_SECONDS`, `IDS_LE_FUZZ_SEED`, `IDS_LE_SCENARIOS=1`. A
   skipped case says so by name; a skip is never reported as a pass.
+- **The command line has a twin.** The npm package `ids-le`, built
+  from the extension's `src/cli/` over the ported engine, mirrors
+  `cli.rs`, `scan.rs`, `walk.rs` and `mcp/` byte for byte, and
+  `bun ../scripts/check-cli-parity.ts` fails on any difference. A change
+  to a flag, a message, the walk, an exit code or an MCP reply changes
+  `src/cli/` in the same commit.
 - Write a regression test for every bug you fix, and **observe it fail
   before the fix** rather than assuming it would have. Run the binary
   against a real tree, not only the suite — that is where this family's

@@ -6,6 +6,7 @@ import {
 	resolveFormat,
 	SUPPORTED_FORMATS,
 } from '../extract';
+import { trim } from '../extract/text';
 import {
 	capped,
 	DEFAULT_MAX_RESULTS,
@@ -35,7 +36,9 @@ function readKind(args: Record<string, unknown>): Kind | undefined {
 	if (!Object.hasOwn(args, 'kind')) return undefined;
 	const raw = args.kind;
 	if (typeof raw !== 'string') throw new Error('kind must be a string');
-	const name = raw.trim().toLowerCase();
+	// Rust's trim, as the crate's `Kind::from_name` reads it: U+0085 is
+	// whitespace there and U+FEFF is not, the reverse of JavaScript's.
+	const name = trim(raw).toLowerCase();
 	const kind = KIND_NAMES.find((candidate) => candidate === name);
 	if (kind === undefined)
 		throw new Error(

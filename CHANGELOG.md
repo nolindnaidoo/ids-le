@@ -5,12 +5,38 @@ All notable changes to IDs-LE will be documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-This file covers the **VS Code extension**. The Rust CLI in `crate/` is a
-separate product on its own cadence and keeps its own
-[CHANGELOG](crate/CHANGELOG.md). The entries below 1.0.0 describe this
+This file covers the **VS Code extension**, the npm MCP server and the
+npm command line. The Rust CLI in `crate/` keeps its own
+[CHANGELOG](crate/CHANGELOG.md). From 1.2.0 every surface carries one
+version and releases from one tag. The entries below 1.0.0 describe this
 repository while it held the CLI alone.
 
-## [Unreleased]
+## [1.2.0] - 2026-10-17
+
+### Changed
+
+- **One version for every surface.** The extension, the MCP server on
+  npm, the new npm command line and the Rust crate all release as 1.2.0
+  from the tag `v1.2.0`. The crate jumps from 0.3.4 to join them, and CI
+  now fails a commit where any of them disagree.
+
+### Added
+
+- An npm command line, `ids-le`, built in `cli/` from `src/cli/`. It is
+  the Rust CLI's surface over this extension's extraction engine: the same
+  flags, walk, identifiers, refusals, exit codes and JSON reports, and
+  `ids-le mcp` serves the same two tools with the same bytes.
+  `scripts/check-cli-parity.ts` runs both binaries over one tree on three
+  operating systems and fails on any byte of difference, and
+  `scripts/check-cli-pipes.ts` does the same with stdout or stderr closed
+  early. It is published as `ids-le` on npm, beside `ids-le-mcp`.
+
+### Fixed
+
+- `extract_ids` read its `kind` argument with JavaScript's trim, where the
+  crate's server uses Rust's. A kind ending in U+0085 was refused here and
+  accepted by the crate, and one behind U+FEFF the reverse. Both cases are
+  now in the shared fixture.
 
 ### Fixed
 

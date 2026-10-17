@@ -1,0 +1,47 @@
+{
+	"name": "ids-le",
+	"version": "1.2.0",
+	"description": "Find every identifier in a codebase: UUID, ULID, NanoID, MongoDB ObjectId and Snowflake, with the key path and the decoded time. Refuses rather than guesses.",
+	"keywords": [
+		"uuid",
+		"ulid",
+		"nanoid",
+		"objectid",
+		"snowflake",
+		"identifier",
+		"cli",
+		"ids-le",
+		"nolindnaidoo",
+		"letools"
+	],
+	"license": "MIT",
+	"author": {
+		"name": "Nolin Naidoo",
+		"url": "https://nolindnaidoo.com"
+	},
+	"homepage": "https://letools.dev/tools/ids-le",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/nolindnaidoo/ids-le.git",
+		"directory": "cli"
+	},
+	"bugs": {
+		"url": "https://github.com/nolindnaidoo/ids-le/issues"
+	},
+	"type": "commonjs",
+	"bin": {
+		"ids-le": "cli.js"
+	},
+	"files": [
+		"cli.js",
+		"README.md",
+		"LICENSE"
+	],
+	"engines": {
+		"node": ">=20"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	}
+}

@@ -98,7 +98,10 @@ The full table, and the boundaries the tool holds, are in
 ```console
 cargo install ids-le          # from crates.io
 cargo install --path crate    # from a checkout
+npm install -g ids-le         # the same command, for a machine with Node 20+
 ```
+
+The npm package is the same command line, held to this one byte for byte.
 
 ## Use it
 
