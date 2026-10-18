@@ -3,7 +3,7 @@
 	"publisher": "nolindnaidoo",
 	"displayName": "IDs-LE: UUID, ULID & Snowflake Decoder",
 	"description": "UUID decoder and extractor: find every UUID, ULID, NanoID, ObjectId and Snowflake ID, decode the time inside, and refuse the ambiguous ones",
-	"version": "1.2.1",
+	"version": "1.2.2",
 	"license": "MIT",
 	"author": {
 		"name": "nolindnaidoo",
