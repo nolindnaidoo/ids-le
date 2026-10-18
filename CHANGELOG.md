@@ -11,6 +11,17 @@ npm command line. The Rust CLI in `crate/` keeps its own
 version and releases from one tag. The entries below 1.0.0 describe this
 repository while it held the CLI alone.
 
+## [Unreleased]
+
+### Changed
+
+- **Activates once the window has started, instead of on 9 language
+  IDs.** vsce publishes every `onLanguage:` activation event as a marketplace
+  tag, and Open VSX scores tags, so 9 language names diluted the
+  keywords people search for. IDs-LE, its status bar item and its MCP server
+  are now ready in every window shortly after startup, rather than when the
+  first file in one of those languages opens.
+
 ## [1.2.2] - 2026-10-18
 
 ### Changed
