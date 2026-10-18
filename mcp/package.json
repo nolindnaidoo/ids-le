@@ -1,6 +1,6 @@
 {
 	"name": "ids-le-mcp",
-	"version": "1.2.2",
+	"version": "1.2.3",
 	"mcpName": "io.github.nolindnaidoo/ids-le",
 	"description": "Extract every UUID, ULID, NanoID, ObjectId and Snowflake, and decode the time inside.",
 	"keywords": [
