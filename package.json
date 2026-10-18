@@ -1,8 +1,8 @@
 {
 	"name": "ids-le",
 	"publisher": "nolindnaidoo",
-	"displayName": "IDs-LE",
-	"description": "Extract every UUID, ULID, NanoID, ObjectId and Snowflake, decode the time inside, and refuse the ambiguous ones by name",
+	"displayName": "IDs-LE: UUID, ULID & Snowflake Decoder",
+	"description": "UUID decoder and extractor: find every UUID, ULID, NanoID, ObjectId and Snowflake ID, decode the time inside, and refuse the ambiguous ones",
 	"version": "1.2.1",
 	"license": "MIT",
 	"author": {
@@ -27,18 +27,16 @@
 	],
 	"keywords": [
 		"uuid",
+		"guid",
 		"ulid",
 		"nanoid",
 		"objectid",
 		"snowflake",
-		"identifier",
+		"snowflake id",
+		"uuid decoder",
+		"ids",
 		"identifiers",
-		"guid",
-		"timestamp",
-		"decode",
-		"extract",
-		"mcp",
-		"model-context-protocol"
+		"extract uuid"
 	],
 	"icon": "src/assets/images/icon.png",
 	"l10n": "./l10n",
