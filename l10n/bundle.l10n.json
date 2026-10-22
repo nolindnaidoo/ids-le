@@ -35,5 +35,6 @@
 	"images, fonts, archives and other binary files": "images, fonts, archives and other binary files",
 	"{0} file(s) ignored by .gitignore": "{0} file(s) ignored by .gitignore",
 	"Not read: {0}. The {1} settings change this.": "Not read: {0}. The {1} settings change this.",
-	"{0} file(s) could not be read.": "{0} file(s) could not be read."
+	"{0} file(s) could not be read.": "{0} file(s) could not be read.",
+	"IDs-LE could not finish: {0}": "IDs-LE could not finish: {0}"
 }

@@ -35,5 +35,6 @@
 	"images, fonts, archives and other binary files": "изображения, шрифты, архивы и другие двоичные файлы",
 	"{0} file(s) ignored by .gitignore": "файлов, игнорируемых .gitignore: {0}",
 	"Not read: {0}. The {1} settings change this.": "Не прочитано: {0}. Это меняют параметры {1}.",
-	"{0} file(s) could not be read.": "Не удалось прочитать файлов: {0}."
+	"{0} file(s) could not be read.": "Не удалось прочитать файлов: {0}.",
+	"IDs-LE could not finish: {0}": "IDs-LE не удалось завершить: {0}"
 }

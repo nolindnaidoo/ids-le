@@ -35,5 +35,6 @@
 	"images, fonts, archives and other binary files": "gambar, font, arsip, dan file biner lainnya",
 	"{0} file(s) ignored by .gitignore": "{0} file yang diabaikan oleh .gitignore",
 	"Not read: {0}. The {1} settings change this.": "Tidak dibaca: {0}. Pengaturan {1} mengubah hal ini.",
-	"{0} file(s) could not be read.": "{0} file tidak dapat dibaca."
+	"{0} file(s) could not be read.": "{0} file tidak dapat dibaca.",
+	"IDs-LE could not finish: {0}": "IDs-LE tidak dapat menyelesaikan: {0}"
 }

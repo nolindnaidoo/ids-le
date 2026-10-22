@@ -4,6 +4,7 @@ import type { Notifier } from '../ui/notifier';
 import type { RatingPrompt } from '../ui/ratingPrompt';
 import type { StatusBar } from '../ui/statusBar';
 import { extractFromActiveDocument } from './extract';
+import { guarded } from './guard';
 import { scanFolder, scanWorkspace } from './scanWorkspace';
 
 export interface CommandDependencies {
@@ -20,17 +21,21 @@ export function registerCommands(
 	const diagnostics = vscode.languages.createDiagnosticCollection('ids-le');
 	context.subscriptions.push(
 		diagnostics,
-		vscode.commands.registerCommand('ids-le.extract', async () =>
-			extractFromActiveDocument(deps),
+		vscode.commands.registerCommand(
+			'ids-le.extract',
+			guarded(deps.notifier, async () => extractFromActiveDocument(deps)),
 		),
-		vscode.commands.registerCommand('ids-le.scanWorkspace', async () =>
-			scanWorkspace(deps, diagnostics),
+		vscode.commands.registerCommand(
+			'ids-le.scanWorkspace',
+			guarded(deps.notifier, async () => scanWorkspace(deps, diagnostics)),
 		),
 		// The Explorer hands over the folder that was clicked. From the
 		// palette there is none, and the command asks.
 		vscode.commands.registerCommand(
 			'ids-le.scanFolder',
-			async (picked?: vscode.Uri) => scanFolder(deps, diagnostics, picked),
+			guarded(deps.notifier, async (picked?: vscode.Uri) =>
+				scanFolder(deps, diagnostics, picked),
+			),
 		),
 	);
 }

@@ -35,5 +35,6 @@
 	"images, fonts, archives and other binary files": "이미지, 글꼴, 압축 파일 및 기타 이진 파일",
 	"{0} file(s) ignored by .gitignore": ".gitignore가 무시한 파일 {0}개",
 	"Not read: {0}. The {1} settings change this.": "읽지 않음: {0}. {1} 설정에서 변경할 수 있습니다.",
-	"{0} file(s) could not be read.": "파일 {0}개를 읽을 수 없습니다."
+	"{0} file(s) could not be read.": "파일 {0}개를 읽을 수 없습니다.",
+	"IDs-LE could not finish: {0}": "IDs-LE을(를) 완료할 수 없습니다: {0}"
 }
