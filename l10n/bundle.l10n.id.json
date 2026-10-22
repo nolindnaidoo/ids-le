@@ -34,5 +34,6 @@
 	"dependency folders, build output, caches and lockfiles": "folder dependensi, keluaran build, cache, dan lockfile",
 	"images, fonts, archives and other binary files": "gambar, font, arsip, dan file biner lainnya",
 	"{0} file(s) ignored by .gitignore": "{0} file yang diabaikan oleh .gitignore",
-	"Not read: {0}. The {1} settings change this.": "Tidak dibaca: {0}. Pengaturan {1} mengubah hal ini."
+	"Not read: {0}. The {1} settings change this.": "Tidak dibaca: {0}. Pengaturan {1} mengubah hal ini.",
+	"{0} file(s) could not be read.": "{0} file tidak dapat dibaca."
 }

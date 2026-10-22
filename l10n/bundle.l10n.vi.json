@@ -34,5 +34,6 @@
 	"dependency folders, build output, caches and lockfiles": "thư mục phụ thuộc, đầu ra bản dựng, bộ nhớ đệm và lockfile",
 	"images, fonts, archives and other binary files": "hình ảnh, phông chữ, tệp nén và các tệp nhị phân khác",
 	"{0} file(s) ignored by .gitignore": "{0} tệp bị .gitignore bỏ qua",
-	"Not read: {0}. The {1} settings change this.": "Không đọc: {0}. Các cài đặt {1} thay đổi điều này."
+	"Not read: {0}. The {1} settings change this.": "Không đọc: {0}. Các cài đặt {1} thay đổi điều này.",
+	"{0} file(s) could not be read.": "Không thể đọc {0} tệp."
 }

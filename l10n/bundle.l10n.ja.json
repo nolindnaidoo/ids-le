@@ -34,5 +34,6 @@
 	"dependency folders, build output, caches and lockfiles": "依存関係フォルダー、ビルド出力、キャッシュ、ロックファイル",
 	"images, fonts, archives and other binary files": "画像、フォント、アーカイブ、その他のバイナリファイル",
 	"{0} file(s) ignored by .gitignore": ".gitignore で無視された {0} 個のファイル",
-	"Not read: {0}. The {1} settings change this.": "読み取られていないもの: {0}。設定 {1} で変更できます。"
+	"Not read: {0}. The {1} settings change this.": "読み取られていないもの: {0}。設定 {1} で変更できます。",
+	"{0} file(s) could not be read.": "{0} 個のファイルを読み取れませんでした。"
 }
