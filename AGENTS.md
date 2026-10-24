@@ -216,6 +216,10 @@ most valuable line in the file, and it is what keeps the next person from
 - **Every declared setting must have a consumer, and every declared command must be registered.** The integration suite checks the second in a real host.
 - **nls catalogues stay in key-parity**, and every translation is in its own language — `letools-site`'s `check-locales` holds that across the family.
 - **The MCP server must never reference `vscode`**, and launching it needs `ELECTRON_RUN_AS_NODE=1`; `scripts/e2e-vsix.js` spawns the installed server exactly as `provider.ts` does.
+- **A number setting is read as a number.** `Number('')` and `Number(null)` are 0, so a cleared setting clamped to its floor instead of falling back to its default; `readNumber` checks the type as `readBoolean` does. `config.test.ts` stores `''`, `null`, `true` and text.
+- **A scan counts a file it could not read apart from one that is not text** (`unreadable` in `workspace/scan.ts`), so the report never calls a deleted file "not UTF-8 text". `scan.test.ts`. The file is one copy across the family, held by `letools-site`'s `check:fleet`.
+- **The MCP input buffer is bounded** at `MAX_FRAME_BYTES` in `mcp/transport.ts`. A frame past it is answered with a parse error and the rest of that line is dropped as it arrives, whether its newline comes late or in the same chunk. `mcp.test.ts` feeds a frame one byte over the limit and a ping after it, both ways. The file is one copy across the family, held by `letools-site`'s `check:fleet`.
+- **Every command body runs inside `commands/guard.ts`.** A rejection that escapes a command is reported by the editor in its own words, raw message and home directory included; through the guard it is one redacted, localized error after the command's own `finally` has run. `guard.test.ts` reads the source and fails on a `registerCommand` whose handler is not `guarded(...)`.
 
 ## Toolchain
 

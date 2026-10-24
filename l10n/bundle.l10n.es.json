@@ -34,5 +34,7 @@
 	"dependency folders, build output, caches and lockfiles": "carpetas de dependencias, resultados de compilación, cachés y archivos de bloqueo",
 	"images, fonts, archives and other binary files": "imágenes, fuentes, archivos comprimidos y otros archivos binarios",
 	"{0} file(s) ignored by .gitignore": "{0} archivo(s) ignorado(s) por .gitignore",
-	"Not read: {0}. The {1} settings change this.": "No leído: {0}. Los ajustes {1} cambian esto."
+	"Not read: {0}. The {1} settings change this.": "No leído: {0}. Los ajustes {1} cambian esto.",
+	"{0} file(s) could not be read.": "{0} archivo(s) no se pudieron leer.",
+	"IDs-LE could not finish: {0}": "IDs-LE no pudo terminar: {0}"
 }

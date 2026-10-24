@@ -146,8 +146,11 @@ function readNumber(
 	defaultValue: number,
 	minValue: number,
 ): number {
-	const value = Number(config.get(key, defaultValue));
-	if (!Number.isFinite(value)) return defaultValue;
+	// Read as a value, not coerced: `Number('')` and `Number(null)` are both 0,
+	// so a setting cleared to an empty string read as 0 and was clamped to the
+	// floor instead of falling back to the default.
+	const value = config.get<unknown>(key, defaultValue);
+	if (typeof value !== 'number' || !Number.isFinite(value)) return defaultValue;
 	return Math.max(minValue, value);
 }
 
