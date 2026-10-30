@@ -15,6 +15,11 @@ repository while it held the CLI alone.
 
 ### Fixed
 
+- The extension's MCP server, the one `ids-le-mcp` and the editor run, died
+  on an unhandled EPIPE with a Node stack trace when the client closed the
+  pipe, which a host logs as the server crashing. It exits 2 quietly at the
+  first reply it cannot write, as the crate's server and the npm command
+  line do.
 - The npm command line's MCP server dropped a frame that was not JSON, not
   UTF-8, not a JSON-RPC 2.0 request or led by a byte order mark without a
   word, where the extension's server answers a parse error; it answered a
